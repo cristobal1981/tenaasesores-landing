@@ -1,12 +1,15 @@
 "use client"
 
+import Image from "next/image"
 import {
   LazyMotion,
   domAnimation,
   m,
   useReducedMotion,
+  useScroll,
+  useTransform,
 } from "framer-motion"
-import type { ReactNode, CSSProperties } from "react"
+import type { ReactNode, CSSProperties, RefObject } from "react"
 
 interface FadeInProps {
   children: ReactNode
@@ -158,6 +161,43 @@ export function FloatingElement({
       style={style}
       aria-hidden
     />
+  )
+}
+
+interface ParallaxImageProps {
+  src: string
+  alt?: string
+  scrollTargetRef: RefObject<HTMLElement | null>
+  speed?: number
+}
+
+export function ParallaxImage({
+  src,
+  alt = "",
+  scrollTargetRef,
+  speed = 0.25,
+}: ParallaxImageProps) {
+  const reducedMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll({
+    target: scrollTargetRef,
+    offset: ["start start", "end start"],
+  })
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", `${speed * 100}%`])
+
+  if (reducedMotion) {
+    return (
+      <div className="absolute inset-0">
+        <Image src={src} alt={alt} fill className="object-cover" priority sizes="100vw" />
+      </div>
+    )
+  }
+
+  return (
+    <LazyMotion features={domAnimation} strict>
+      <m.div className="absolute -top-[12%] left-0 h-[125%] w-full" style={{ y }}>
+        <Image src={src} alt={alt} fill className="object-cover" priority sizes="100vw" />
+      </m.div>
+    </LazyMotion>
   )
 }
 

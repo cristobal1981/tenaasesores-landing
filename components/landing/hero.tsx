@@ -1,111 +1,123 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
+import { useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Shield, Clock, Users } from "lucide-react"
-import { FadeIn, FloatingElement, StaggerContainer, StaggerItem } from "@/components/animations"
+import { ArrowRight, Award, Eye, Zap } from "lucide-react"
+import { FloatingElement } from "@/components/animations"
+import { useHeroGsap } from "@/components/gsap/use-hero-gsap"
+import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
 import { SectionShell } from "@/components/layout/section-shell"
 import { hero, images } from "@/content/site"
+import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
 
-const trustIcons = [Users, Clock, Shield]
+const trustIcons = [Eye, Award, Zap]
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const parallaxRef = useSectionParallax(sectionRef, { range: "hero" })
+
+  useHeroGsap({ contentRef })
+
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden bg-gradient-to-br from-[#041d23] via-[#052a32] to-[#01635c]">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={images.hero}
-          alt=""
-          fill
-          className="object-cover opacity-10"
-          priority
-        />
-      </div>
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-hero-gradient pt-32 pb-20 md:pt-40 md:pb-32"
+    >
+      <SectionParallaxBackground
+        src={images.hero}
+        parallaxRef={parallaxRef}
+        priority
+        overlay={
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-background/88 via-background/78 to-card/92"
+            aria-hidden
+          />
+        }
+      />
 
       <FloatingElement
-        className="absolute top-20 right-10 w-96 h-96 bg-[#01dea2]/10 rounded-full blur-3xl"
+        className="absolute top-20 right-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
         duration={8}
       />
       <FloatingElement
-        className="absolute bottom-0 left-0 w-80 h-80 bg-[#01635c]/40 rounded-full blur-3xl"
+        className="absolute bottom-0 left-0 h-80 w-80 rounded-full bg-agua/40 blur-3xl"
         duration={10}
         delay={2}
       />
       <FloatingElement
-        className="absolute top-1/2 left-1/4 w-64 h-64 bg-[#01dea2]/5 rounded-full blur-2xl"
+        className="absolute top-1/2 left-1/4 h-64 w-64 rounded-full bg-primary/5 blur-2xl"
         duration={12}
         delay={4}
       />
 
       <SectionShell innerClassName="relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <FadeIn delay={0.1}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#01dea2]/10 border border-[#01dea2]/30 mb-8">
-              <span className="w-2 h-2 rounded-full bg-[#01dea2] animate-pulse" />
-              <span className="text-[#01dea2] text-sm font-medium">{hero.badge}</span>
-            </div>
-          </FadeIn>
+        <div ref={contentRef} className="mx-auto max-w-4xl text-center">
+          <h1
+            data-hero="title"
+            className="mx-auto mb-6 max-w-4xl text-4xl leading-[1.15] font-bold text-balance text-on-dark md:text-5xl lg:text-6xl"
+          >
+            {hero.title.before}{" "}
+            <span className="text-primary">{hero.title.highlight1}</span>
+            {hero.title.middle}{" "}
+            <span className="text-primary">{hero.title.highlight2}</span>
+          </h1>
 
-          <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#f0f6f6] leading-tight mb-6 text-balance">
-              {hero.title.before}{" "}
-              <span className="text-[#01dea2]">{hero.title.highlight1}</span>{" "}
-              {hero.title.middle}{" "}
-              <span className="text-[#01dea2]">{hero.title.highlight2}</span>
-            </h1>
-          </FadeIn>
+          <p
+            data-hero="subtitle"
+            className="prose-width mx-auto mb-10 text-lg leading-relaxed text-pretty text-muted-on-dark md:text-xl"
+          >
+            {hero.subtitle}
+          </p>
 
-          <FadeIn delay={0.3}>
-            <p className="text-lg md:text-xl text-[#f0f6f6]/70 max-w-2xl mx-auto mb-10 text-pretty">
-              {hero.subtitle}
-            </p>
-          </FadeIn>
+          <div
+            data-hero="ctas"
+            className="mb-16 flex flex-col justify-center gap-4 sm:flex-row"
+          >
+            <Button
+              asChild
+              size="lg"
+              className="px-8 text-base font-semibold transition-transform hover:scale-105"
+            >
+              <Link href="/#contacto">
+                {hero.ctaPrimary}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-on-dark/30 px-8 text-base font-semibold text-on-dark transition-transform hover:scale-105 hover:bg-on-dark/10"
+            >
+              <Link href="/servicios">{hero.ctaSecondary}</Link>
+            </Button>
+          </div>
 
-          <FadeIn delay={0.4}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button
-                asChild
-                size="lg"
-                className="bg-[#01dea2] text-[#041d23] hover:bg-[#01dea2]/90 font-semibold text-base px-8 transition-transform hover:scale-105"
-              >
-                <Link href="#contacto">
-                  {hero.ctaPrimary}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-[#f0f6f6]/30 text-[#f0f6f6] hover:bg-[#f0f6f6]/10 font-semibold text-base px-8 transition-transform hover:scale-105"
-              >
-                <Link href="#servicios">{hero.ctaSecondary}</Link>
-              </Button>
-            </div>
-          </FadeIn>
-
-          <StaggerContainer
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto"
-            staggerDelay={0.15}
+          <div
+            data-hero="trust"
+            className="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-3"
           >
             {hero.trust.map((item, index) => {
               const Icon = trustIcons[index]
               return (
-                <StaggerItem key={item.title}>
-                  <div className="flex items-center justify-center gap-3 p-4 rounded-xl bg-[#041d23]/50 border border-[#01635c]/30 backdrop-blur-sm hover:border-[#01dea2]/50 transition-colors">
-                    <div className="w-10 h-10 rounded-lg bg-[#01dea2]/20 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-[#01dea2]" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[#f0f6f6] font-bold">{item.title}</p>
-                      <p className="text-[#f0f6f6]/60 text-sm">{item.subtitle}</p>
-                    </div>
+                <div
+                  key={item.title}
+                  data-hero="trust-card"
+                  className="flex items-center justify-center gap-3 rounded-xl border border-agua/30 bg-surface-dark/50 p-4 backdrop-blur-sm transition-colors hover:border-primary/50"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
+                    <Icon className="h-5 w-5 text-primary" />
                   </div>
-                </StaggerItem>
+                  <div className="text-left">
+                    <p className="font-bold text-on-dark">{item.title}</p>
+                    <p className="text-sm text-muted-on-dark">{item.subtitle}</p>
+                  </div>
+                </div>
               )
             })}
-          </StaggerContainer>
+          </div>
         </div>
       </SectionShell>
     </section>

@@ -1,13 +1,15 @@
 "use client"
 
-import Image from "next/image"
+import { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, ArrowRight, Clock } from "lucide-react"
 import { FadeIn, StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
+import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
 import { SectionShell } from "@/components/layout/section-shell"
 import { contact, images, site } from "@/content/site"
+import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
 
 const contactInfo = [
   {
@@ -31,63 +33,67 @@ const contactInfo = [
 ]
 
 export function Contact() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const parallaxRef = useSectionParallax(sectionRef)
+
   return (
-    <section id="contacto" className="relative py-20 md:py-28 bg-[#f0f6f6] overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <Image src={images.contact} alt="" fill className="object-cover opacity-5" />
-      </div>
+    <section
+      ref={sectionRef}
+      id="contacto"
+      className="relative overflow-hidden bg-surface-light py-20 md:py-28"
+    >
+      <SectionParallaxBackground
+        src={images.contact}
+        parallaxRef={parallaxRef}
+        imageClassName="opacity-[0.12]"
+      />
 
       <FloatingElement
-        className="absolute top-20 right-20 w-96 h-96 bg-[#01dea2]/10 rounded-full blur-3xl"
+        className="absolute top-20 right-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
         duration={12}
       />
 
       <SectionShell>
-        <FadeIn className="max-w-2xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#041d23]/10 border border-[#041d23]/20 mb-6">
-            <span className="text-xs text-[#041d23] font-medium uppercase tracking-wide">
-              {contact.badge}
-            </span>
+        <FadeIn className="mx-auto mb-16 max-w-2xl text-center">
+          <div className="badge-on-light mb-6">
+            <span className="badge-label-on-light">{contact.badge}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#041d23] leading-tight mb-6">
+          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-light sm:text-4xl lg:text-5xl">
             {contact.title[0]}
             <br />
-            <span className="text-[#041d23]/50">{contact.title[1]}</span>
+            <span className="text-on-light-muted">{contact.title[1]}</span>
           </h2>
-          <p className="text-lg text-[#041d23]/70 leading-relaxed">{contact.subtitle}</p>
+          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
+            {contact.subtitle}
+          </p>
         </FadeIn>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid gap-12 lg:grid-cols-2">
           <FadeIn direction="left">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-[#041d23] to-[#01635c]/80 border border-[#01635c]/30 shadow-2xl shadow-[#041d23]/20">
-              <h3 className="text-xl font-semibold text-[#f0f6f6] mb-6">{contact.formTitle}</h3>
+            <div className="rounded-2xl border border-agua/30 bg-gradient-to-br from-surface-dark to-agua/80 p-8 shadow-2xl shadow-surface-dark/20">
+              <h3 className="mb-6 text-xl font-semibold text-on-dark">{contact.formTitle}</h3>
               <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-[#f0f6f6]/80">
+                    <label htmlFor="name" className="text-sm font-medium text-on-dark/90">
                       Nombre
                     </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="Tu nombre"
-                      className="bg-[#f0f6f6]/10 border-[#01635c]/30 focus:border-[#01dea2] text-[#f0f6f6] placeholder:text-[#f0f6f6]/40"
-                    />
+                    <Input id="name" name="name" placeholder="Tu nombre" className="input-on-dark" />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="phone" className="text-sm font-medium text-[#f0f6f6]/80">
+                    <label htmlFor="phone" className="text-sm font-medium text-on-dark/90">
                       Teléfono
                     </label>
                     <Input
                       id="phone"
                       name="phone"
                       placeholder="+34 600 000 000"
-                      className="bg-[#f0f6f6]/10 border-[#01635c]/30 focus:border-[#01dea2] text-[#f0f6f6] placeholder:text-[#f0f6f6]/40"
+                      className="input-on-dark"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-[#f0f6f6]/80">
+                  <label htmlFor="email" className="text-sm font-medium text-on-dark/90">
                     Email
                   </label>
                   <Input
@@ -95,11 +101,11 @@ export function Contact() {
                     name="email"
                     type="email"
                     placeholder="tu@email.com"
-                    className="bg-[#f0f6f6]/10 border-[#01635c]/30 focus:border-[#01dea2] text-[#f0f6f6] placeholder:text-[#f0f6f6]/40"
+                    className="input-on-dark"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-[#f0f6f6]/80">
+                  <label htmlFor="message" className="text-sm font-medium text-on-dark/90">
                     ¿En qué podemos ayudarte?
                   </label>
                   <Textarea
@@ -107,28 +113,28 @@ export function Contact() {
                     name="message"
                     placeholder="Cuéntanos brevemente tu situación..."
                     rows={4}
-                    className="bg-[#f0f6f6]/10 border-[#01635c]/30 focus:border-[#01dea2] text-[#f0f6f6] placeholder:text-[#f0f6f6]/40 resize-none"
+                    className="input-on-dark resize-none"
                   />
                 </div>
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full bg-[#01dea2] hover:bg-[#01dea2]/90 text-[#041d23] font-semibold transition-transform hover:scale-[1.02]"
+                  className="w-full font-semibold transition-transform hover:scale-[1.02]"
                 >
                   Enviar consulta
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-                <p className="text-xs text-[#f0f6f6]/50 text-center">{contact.privacyNote}</p>
+                <p className="text-center text-xs text-muted-on-dark">{contact.privacyNote}</p>
               </form>
             </div>
           </FadeIn>
 
           <FadeIn direction="right" delay={0.2}>
-            <div className="flex flex-col justify-center h-full">
-              <div className="rounded-2xl bg-white border border-[#041d23]/10 shadow-xl shadow-[#041d23]/5 overflow-hidden">
-                <div className="px-6 py-5 border-b border-[#041d23]/10">
-                  <h3 className="text-lg font-semibold text-[#041d23]">Datos de contacto</h3>
-                  <p className="text-sm text-[#041d23]/60 mt-1">
+            <div className="flex h-full flex-col justify-center">
+              <div className="overflow-hidden rounded-2xl border border-on-light/10 bg-brisa shadow-xl shadow-on-light/5">
+                <div className="border-b border-on-light/10 px-6 py-5">
+                  <h3 className="text-lg font-semibold text-on-light">Datos de contacto</h3>
+                  <p className="mt-1 text-sm text-muted-on-light">
                     Respuesta en menos de 24 horas laborables
                   </p>
                 </div>
@@ -138,42 +144,44 @@ export function Contact() {
                     <StaggerItem key={info.title}>
                       <a
                         href={info.action}
-                        className={`flex items-center gap-4 px-6 py-5 transition-colors duration-200 group hover:bg-[#01dea2]/5 ${
-                          index < contactInfo.length - 1 ? "border-b border-[#041d23]/8" : ""
+                        className={`group flex items-center gap-4 px-6 py-5 transition-colors duration-200 hover:bg-primary/5 ${
+                          index < contactInfo.length - 1 ? "border-b border-on-light/8" : ""
                         }`}
                       >
-                        <div className="w-11 h-11 rounded-xl bg-[#01dea2]/15 flex items-center justify-center shrink-0 group-hover:bg-[#01dea2]/25 transition-colors">
-                          <info.icon className="h-5 w-5 text-[#01635c]" />
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 transition-colors group-hover:bg-primary/25">
+                          <info.icon className="h-5 w-5 text-accent-on-light" />
                         </div>
                         <div className="min-w-0">
-                          <div className="text-xs font-medium uppercase tracking-wide text-[#041d23]/50 mb-0.5">
+                          <div className="mb-0.5 text-xs font-medium tracking-wide text-on-light-muted uppercase">
                             {info.title}
                           </div>
-                          <div className="font-medium text-[#041d23] group-hover:text-[#01635c] transition-colors truncate">
+                          <div className="truncate font-medium text-on-light transition-colors group-hover:text-accent-on-light">
                             {info.content}
                           </div>
                         </div>
-                        <ArrowRight className="h-4 w-4 text-[#01dea2] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all shrink-0 ml-auto" />
+                        <ArrowRight className="ml-auto h-4 w-4 shrink-0 -translate-x-1 text-accent-on-light opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
                       </a>
                     </StaggerItem>
                   ))}
                 </StaggerContainer>
 
-                <div className="px-6 py-5 bg-[#041d23]/[0.03] border-t border-[#041d23]/10">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#01dea2]/15 flex items-center justify-center">
-                      <Clock className="h-5 w-5 text-[#01635c]" />
+                <div className="border-t border-on-light/10 bg-on-light/[0.03] px-6 py-5">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15">
+                      <Clock className="h-5 w-5 text-accent-on-light" />
                     </div>
-                    <h4 className="font-semibold text-[#041d23]">Horario de atención</h4>
+                    <h4 className="font-semibold text-on-light">Horario de atención</h4>
                   </div>
-                  <div className="space-y-2 text-sm pl-[52px]">
-                    <div className="flex justify-between text-[#041d23]/70 gap-4">
+                  <div className="space-y-2 pl-[52px] text-sm">
+                    <div className="flex justify-between gap-4 text-muted-on-light">
                       <span>Lunes - Viernes</span>
-                      <span className="text-[#041d23] font-medium text-right">{site.hours.weekdays}</span>
+                      <span className="text-right font-medium text-on-light">
+                        {site.hours.weekdays}
+                      </span>
                     </div>
-                    <div className="flex justify-between text-[#041d23]/70">
+                    <div className="flex justify-between text-muted-on-light">
                       <span>Sábados y Domingos</span>
-                      <span className="text-[#041d23]/50">{site.hours.weekend}</span>
+                      <span className="text-on-light-muted">{site.hours.weekend}</span>
                     </div>
                   </div>
                 </div>

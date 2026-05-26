@@ -1,32 +1,41 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Archivo, Host_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const hostGrotesk = Host_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-host-grotesk',
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+})
+
+const archivo = Archivo({
+  subsets: ['latin'],
+  variable: '--font-archivo',
+  weight: ['300', '400', '600'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'Tena Asesores | Asesoría en Tenerife',
+  title: 'tenaasesores | Asesoría en Tenerife',
   description:
     'Asesoramiento y consultoría empresarial en Tenerife. Contabilidad, fiscalidad y laboral para autónomos, pymes y empresas digitales.',
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
       },
     ],
-    apple: '/apple-icon.png',
   },
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({
@@ -35,8 +44,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className="bg-background">
-      <body className="font-sans antialiased">
+    <html
+      lang="es"
+      className={`${hostGrotesk.variable} ${archivo.variable} bg-background`}
+    >
+      <body className={`${archivo.className} antialiased`}>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

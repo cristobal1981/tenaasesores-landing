@@ -6,7 +6,7 @@ import { philosophy } from "@/content/site"
 
 export function Philosophy() {
   return (
-    <section className="py-20 md:py-28 bg-[#f0f6f6] relative overflow-hidden">
+    <section className="relative overflow-hidden bg-surface-light py-20 md:py-28">
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
@@ -15,39 +15,40 @@ export function Philosophy() {
       />
 
       <SectionShell>
-        <FadeIn className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#041d23]/10 border border-[#041d23]/20 mb-6">
-            <span className="text-xs text-[#041d23] font-medium uppercase tracking-wide">
-              {philosophy.badge}
-            </span>
+        <FadeIn className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="badge-on-light mb-6">
+            <span className="badge-label-on-light">{philosophy.badge}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#041d23] leading-tight mb-6">
+          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-light sm:text-4xl lg:text-5xl">
             {philosophy.title[0]}
             <br />
-            <span className="text-[#041d23]/50">{philosophy.title[1]}</span>
+            <span className="text-on-light-muted">{philosophy.title[1]}</span>
           </h2>
-          <p className="text-lg text-[#041d23]/70 leading-relaxed">
+          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
             {philosophy.subtitle}{" "}
-            <span className="text-[#01635c] font-bold">{philosophy.acronym}</span>:
+            <span className="font-bold text-accent-on-light">{philosophy.acronym}</span>
+            :
           </p>
         </FadeIn>
 
         <StaggerContainer
-          className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4"
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5"
           staggerDelay={0.08}
         >
           {philosophy.values.map((value, index) => (
             <StaggerItem key={value.letter}>
-              <div className="group h-full p-6 rounded-2xl bg-gradient-to-br from-[#041d23] to-[#01635c]/80 border border-[#01635c]/30 hover:border-[#01dea2]/50 transition-all duration-300 hover:translate-y-[-4px] hover:shadow-xl hover:shadow-[#041d23]/20">
+              <div className="group h-full rounded-2xl border border-agua/30 bg-gradient-to-br from-surface-dark to-agua/80 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-surface-dark/20">
                 <ScaleIn delay={index * 0.05}>
-                  <div className="text-5xl font-bold text-[#01dea2] mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="mb-4 text-5xl font-bold text-primary transition-transform duration-300 group-hover:scale-110">
                     {value.letter}
                   </div>
                 </ScaleIn>
-                <h3 className="text-sm font-semibold text-[#f0f6f6] uppercase tracking-wide mb-2">
+                <h3 className="mb-2 text-sm font-semibold tracking-wide text-on-dark uppercase">
                   {value.title}
                 </h3>
-                <p className="text-sm text-[#f0f6f6]/70 leading-relaxed">{value.description}</p>
+                <p className="text-sm leading-relaxed text-muted-on-dark">
+                  {value.description}
+                </p>
               </div>
             </StaggerItem>
           ))}
