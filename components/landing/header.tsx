@@ -20,7 +20,7 @@ export function Header() {
 
   const linkClass = (href: string) =>
     cn(
-      "font-sans text-sm font-medium transition-colors hover:text-primary",
+      "font-sans text-base font-medium transition-colors hover:text-primary",
       isNavActive(pathname, href) ? "text-primary" : "text-muted-on-dark"
     )
 

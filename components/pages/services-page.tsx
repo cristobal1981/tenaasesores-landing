@@ -41,6 +41,7 @@ export function ServicesPage() {
           src={images.services}
           parallaxRef={parallaxRef}
           imageClassName="opacity-[0.15]"
+          priority
         />
         <FloatingElement
           className="absolute -top-10 right-1/4 h-80 w-80 rounded-full bg-primary/15 blur-3xl"

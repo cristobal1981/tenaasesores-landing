@@ -1,0 +1,85 @@
+import { contactHref } from "@/content/site"
+
+export const sappoIntroStorageKey = "tenaasesores-sappo-intro-seen" as const
+
+export const chatbotUi = {
+  name: "Sappo",
+  fabLabel: "Abrir Sappo, asistente de ayuda",
+  title: "Sappo",
+  welcome:
+    "Hola, soy Sappo. Puedo ayudarte a encontrar información sobre nuestros servicios, horarios, contacto y más. ¿En qué te puedo ayudar?",
+  introBubble: {
+    title: "¡Hola! Soy Sappo",
+    body: "Tu asistente en tenaasesores. Pregúntame por servicios, horarios, Odoo o contacto cuando quieras.",
+    cta: "Hablar con Sappo",
+    dismissLabel: "Cerrar presentación",
+    autoDismissMs: 8000,
+  },
+  inputPlaceholder: "Escribe tu pregunta…",
+  sendLabel: "Enviar",
+  closeLabel: "Cerrar chat",
+  linkLabel: "Ver más",
+  fallback: {
+    text: "No he encontrado información concreta sobre eso en la web. ¿Quieres que hablemos? La primera consulta es gratuita.",
+    href: contactHref,
+    linkLabel: "Solicitar consulta gratuita",
+  },
+} as const
+
+export const quickReplies = [
+  { label: "Servicios", query: "servicios fiscal contable laboral" },
+  { label: "Horario", query: "horario de atención" },
+  { label: "Teléfono", query: "teléfono de contacto" },
+  { label: "Odoo", query: "Odoo partners" },
+  { label: "Equipo", query: "equipo profesionales" },
+  { label: "Contacto", query: "contacto consulta gratuita" },
+] as const
+
+export type IntentDefinition = {
+  id: string
+  patterns: RegExp[]
+  keywords: string[]
+}
+
+export const intentDefinitions: IntentDefinition[] = [
+  {
+    id: "hours",
+    patterns: [/horario/, /abierto/, /atencion/, /cuando\s+atend/, /fin\s+de\s+semana/],
+    keywords: ["horario", "abierto", "atencion", "hora", "weekend"],
+  },
+  {
+    id: "phone",
+    patterns: [/telefono/, /llamar/, /whatsapp/, /movil/],
+    keywords: ["telefono", "llamar", "numero", "922"],
+  },
+  {
+    id: "email",
+    patterns: [/correo/, /email/, /e-mail/],
+    keywords: ["email", "correo", "info@"],
+  },
+  {
+    id: "location",
+    patterns: [/donde/, /ubicacion/, /direccion/, /tenerife/, /canarias/],
+    keywords: ["ubicacion", "tenerife", "canarias", "donde"],
+  },
+  {
+    id: "contact",
+    patterns: [/contacto/, /consulta/, /cita/, /presupuesto/, /precio/, /tarifa/],
+    keywords: ["contacto", "consulta", "gratis", "cita", "formulario"],
+  },
+  {
+    id: "odoo",
+    patterns: [/odoo/, /erp/, /migracion/, /partner/],
+    keywords: ["odoo", "erp", "migracion", "partner"],
+  },
+  {
+    id: "team",
+    patterns: [/equipo/, /quienes/, /profesional/, /asesor/, /persona/],
+    keywords: ["equipo", "nosotros", "profesionales", "cristobal", "ariana"],
+  },
+  {
+    id: "services",
+    patterns: [/servicio/, /gestoria/, /asesoria/, /ofreceis/, /ofrecéis/],
+    keywords: ["servicios", "gestoria", "asesoria"],
+  },
+]

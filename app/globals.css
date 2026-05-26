@@ -231,6 +231,43 @@
   .section-cta-brisa-btn {
     @apply font-semibold bg-secondary text-brisa hover:bg-secondary/90;
   }
+
+  /*
+   * Chat scroll — Firefox (scrollbar-width/color) + WebKit (::-webkit-scrollbar).
+   * Sin soporte: scrollbar nativo del SO (fallback aceptable).
+   */
+  .chat-scrollbar {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--turquesa) var(--muted);
+  }
+
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-track {
+    margin-block: 4px;
+    border-radius: 9999px;
+    background: rgba(1, 99, 92, 0.35);
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    background: var(--turquesa);
+    background-clip: padding-box;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+    background-clip: padding-box;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-thumb:active {
+    background: #02b88a;
+    background-clip: padding-box;
+  }
 }
 
 @keyframes float {
