@@ -56,7 +56,7 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-agua/30 bg-background">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid h-20 grid-cols-[1fr_auto_1fr] items-center">
+        <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20">
           <BrandLogo className="justify-self-start" priority />
 
           <nav className="hidden items-center gap-8 justify-self-center md:flex">

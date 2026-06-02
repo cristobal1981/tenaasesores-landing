@@ -85,7 +85,7 @@ export function ServicesPage() {
       </section>
 
       {/* Sticky nav */}
-      <div className="sticky top-20 z-40 border-b border-agua/30 bg-background/90 backdrop-blur-md">
+      <div className="sticky top-16 z-40 border-b border-agua/30 bg-background/90 backdrop-blur-md md:top-20">
         <SectionShell innerClassName="py-3">
           <nav
             className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

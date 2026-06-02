@@ -18,12 +18,32 @@ import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
 import { cn } from "@/lib/utils"
 
 const trustIcons = [Eye, Award, Zap]
+const ROTATING_WORD_WIDTH_BUFFER = 4
+
+function measureRotatingWordWidth(node: HTMLElement | null) {
+  if (!node) return 0
+  return Math.ceil(node.getBoundingClientRect().width) + ROTATING_WORD_WIDTH_BUFFER
+}
+
+function RotatingWordMeasure({ word }: { word: string }) {
+  return (
+    <span className="inline-flex whitespace-nowrap">
+      {Array.from(word).map((character, index) => (
+        <span key={`${character}-${index}`} className="inline-block">
+          {character}
+        </span>
+      ))}
+    </span>
+  )
+}
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const wordMeasureRefs = useRef<Array<HTMLSpanElement | null>>([])
   const reducedMotion = useReducedMotion()
   const [activeWordIndex, setActiveWordIndex] = useState(0)
+  const [wordWidths, setWordWidths] = useState<number[]>([])
   const parallaxRef = useSectionParallax(sectionRef, { range: "hero" })
   const activeWord = hero.title.rotatingWords[activeWordIndex]
 
@@ -39,10 +59,38 @@ export function Hero() {
     return () => window.clearInterval(interval)
   }, [reducedMotion])
 
+  useEffect(() => {
+    if (reducedMotion) {
+      return
+    }
+
+    const measureWidths = () => {
+      const nextWidths = hero.title.rotatingWords.map((_, index) =>
+        measureRotatingWordWidth(wordMeasureRefs.current[index])
+      )
+
+      setWordWidths(nextWidths)
+    }
+
+    measureWidths()
+    void document.fonts?.ready.then(measureWidths)
+
+    const resizeObserver = new ResizeObserver(measureWidths)
+    for (const node of wordMeasureRefs.current) {
+      if (node) resizeObserver.observe(node)
+    }
+
+    window.addEventListener("resize", measureWidths)
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", measureWidths)
+    }
+  }, [reducedMotion])
+
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100svh] overflow-hidden bg-hero-gradient pt-28 pb-12 md:min-h-[100dvh] md:pt-32 md:pb-16"
+      className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-hero-gradient pb-12 md:min-h-[calc(100dvh-5rem)] md:pb-16"
     >
       <SectionParallaxBackground
         src={images.hero}
@@ -71,21 +119,32 @@ export function Hero() {
         delay={4}
       />
 
-      <SectionShell innerClassName="relative z-10 flex min-h-[calc(100svh-10rem)] items-center md:min-h-[calc(100dvh-12rem)]">
+      <SectionShell
+        className="relative z-10 flex min-h-0 flex-1 flex-col"
+        innerClassName="flex flex-1 flex-col justify-center"
+      >
         <div ref={contentRef} className="mx-auto max-w-4xl text-center">
           <h1
             data-hero="title"
-            className="mx-auto mb-6 max-w-4xl text-4xl leading-[1.15] font-bold text-balance text-on-dark md:text-5xl lg:text-6xl"
+            className="mx-auto mb-4 max-w-4xl text-3xl leading-[1.15] font-bold text-balance text-on-dark sm:text-4xl md:text-5xl lg:text-6xl"
           >
             <span className="block">
               <span>{hero.title.prefix} </span>
-              <span className="relative inline-grid h-[1.18em] overflow-hidden align-baseline text-primary [grid-template-areas:'word']">
-                <span className="invisible [grid-area:word]">{activeWord}</span>
+              <m.span
+                className="relative inline-grid h-[1.18em] overflow-hidden align-baseline whitespace-nowrap text-primary [grid-template-areas:'word']"
+                initial={false}
+                animate={
+                  reducedMotion || !wordWidths[activeWordIndex]
+                    ? undefined
+                    : { width: wordWidths[activeWordIndex] }
+                }
+                transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+              >
                 {reducedMotion ? (
                   <span className="[grid-area:word]">{hero.title.rotatingWords[0]}</span>
                 ) : (
                   <AnimatePresence mode="wait" initial={false}>
-                    <m.span key={activeWord} className="inline-flex [grid-area:word]">
+                    <m.span key={activeWord} className="inline-flex whitespace-nowrap [grid-area:word]">
                       {Array.from(activeWord).map((character, index) => (
                         <m.span
                           key={`${character}-${index}`}
@@ -107,7 +166,23 @@ export function Hero() {
                     </m.span>
                   </AnimatePresence>
                 )}
-              </span>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -z-10 opacity-0"
+                >
+                  {hero.title.rotatingWords.map((word, index) => (
+                    <span
+                      key={`measure-${word}`}
+                      ref={(node) => {
+                        wordMeasureRefs.current[index] = node
+                      }}
+                      className="absolute top-0 left-0 inline-flex whitespace-nowrap"
+                    >
+                      <RotatingWordMeasure word={word} />
+                    </span>
+                  ))}
+                </span>
+              </m.span>
               {hero.title.bridgeWord ? (
                 <>
                   {" "}
@@ -120,14 +195,14 @@ export function Hero() {
 
           <p
             data-hero="subtitle"
-            className="prose-width mx-auto mb-10 text-lg leading-relaxed text-pretty text-muted-on-dark md:text-xl"
+            className="prose-width mx-auto mb-8 text-base leading-relaxed text-pretty text-muted-on-dark sm:text-lg md:text-xl"
           >
             {hero.subtitle}
           </p>
 
           <div
             data-hero="ctas"
-            className="mb-16 flex flex-col justify-center gap-4 sm:flex-row"
+            className="mb-0 flex flex-col justify-center gap-4 md:mb-16 sm:flex-row"
           >
             <Button
               asChild
@@ -159,7 +234,7 @@ export function Hero() {
 
           <div
             data-hero="trust"
-            className="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-3"
+            className="mx-auto hidden max-w-3xl grid-cols-3 gap-6 md:grid"
           >
             {hero.trust.map((item, index) => {
               const Icon = trustIcons[index]

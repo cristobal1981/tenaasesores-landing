@@ -16,9 +16,9 @@ export function BrandLogo({ className, priority = false }: BrandLogoProps) {
         width={40}
         height={40}
         priority={priority}
-        className="h-10 w-10 shrink-0"
+        className="h-8 w-8 shrink-0 sm:h-10 sm:w-10"
       />
-      <span className="font-sans text-3xl font-semibold lowercase tracking-tight">
+      <span className="font-sans text-2xl font-semibold lowercase tracking-tight sm:text-3xl">
         <span className="text-brisa">{brand.wordmarkHighlight}</span>
         <span className="text-muted-on-dark">{brand.wordmarkRest}</span>
       </span>
