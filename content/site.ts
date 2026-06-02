@@ -27,21 +27,27 @@ export const site = {
 
 export const navItems = [
   { label: "Servicios", href: "/servicios" },
+  {
+    label: "Planes",
+    children: [
+      { label: "Soy autónomo", href: "/plan-autonomos" },
+      { label: "Soy empresa", href: "/plan-empresas" },
+    ],
+  },
   { label: "Nosotros", href: "/nosotros" },
-  { label: "Planes", href: "/planes" },
 ] as const
 
 export const contactHref = "/contacto" as const
 
 export const hero = {
   title: {
-    before: "Gestoría moderna y cercana: números",
-    highlight1: "al día",
-    middle: ", decisiones con",
-    highlight2: "quien te entiende",
+    prefix: "Asesoría",
+    rotatingWords: ["Innovadora", "Personalizada", "Estratégica"],
+    bridgeWord: "",
+    secondLine: "",
   },
   subtitle:
-    "Consulta tu situación cuando quieras; nosotros supervisamos, revisamos y te acompañamos en contable, fiscal y laboral con el mismo trato de siempre. Para autónomos, pymes y empresas digitales que buscan eficiencia sin perder el contacto humano ni la claridad de saber a quién acudir.",
+    "Impulsamos empresas digitales con asesoría cercana, estratégica y orientada a datos. Gestionamos obligaciones legales y administrativas mientras convertimos información en decisiones de crecimiento. Unimos contabilidad analítica, automatización y acompañamiento experto para que ganes eficiencia y control, con máximo rendimiento en Odoo y Holded.",
   ctaPrimary: "Solicitar Consulta Gratis",
   ctaSecondary: "Ver Servicios",
   trust: [
@@ -94,67 +100,100 @@ export const odoo = {
   cta: "Hablemos de tu migración a Odoo",
 } as const
 
-export const plans = {
+const plansBase = {
   badge: "Planes",
-  title: ["Elige el ritmo que necesita", "tu negocio hoy"],
-  subtitle:
-    "Tres niveles pensados para pymes y autónomos: cobertura clara, precio mensual transparente y posibilidad de escalar cuando creces.",
   legalNote:
     "Precios orientativos sin impuestos, solo como referencia inicial. Ajustamos propuesta final tras revisar tu volumen y necesidades reales.",
-  ctaTitle: "¿No sabes qué plan te encaja mejor?",
-  ctaSubtitle:
-    "Te orientamos en 20 minutos y te recomendamos el plan con mejor equilibrio entre coste, cobertura y etapa de negocio.",
   ctaLabel: "Hablar con un asesor",
-  tiers: [
-    {
-      name: "Base",
-      audience: "Autónomos & microempresas con operativa estable",
-      price: "69",
-      period: "mes",
-      summary: "Cobertura esencial para tener fiscal y contabilidad al día sin fricción.",
-      responseSla: "Respuesta en 48h laborables",
-      ctaLabel: "Quiero Empezar",
-      highlight: false,
-      items: [
-        "Contabilidad mensual y cierre básico",
-        "Modelos fiscales trimestrales y resumen anual",
-        "Soporte por email",
-        "1 sesión de revisión mensual",
-      ],
-    },
-    {
-      name: "Profesional",
-      audience: "Pymes con equipo y mayor volumen operativo",
-      price: "129",
-      period: "mes",
-      summary: "Plan recomendado para control más fino, prevención de errores y mayor rapidez.",
-      responseSla: "Respuesta en menos de 24h laborables",
-      ctaLabel: "Reservar Este Plan",
-      highlight: true,
-      items: [
-        "Todo lo incluido en Base",
-        "Gestión laboral hasta 6 nóminas",
-        "Panel de seguimiento y alertas de plazos",
-        "2 sesiones de revisión al mes",
-      ],
-    },
-    {
-      name: "Avanzado",
-      audience: "Empresas en crecimiento con necesidades de control continuo",
-      price: "239",
-      period: "mes",
-      summary: "Acompañamiento integral con mayor profundidad estratégica y operativa.",
-      responseSla: "Canal prioritario y respuesta en el día",
-      ctaLabel: "Pedir Propuesta",
-      highlight: false,
-      items: [
-        "Todo lo incluido en Profesional",
-        "Gestión laboral hasta 15 nóminas",
-        "Acompañamiento en inspecciones y requerimientos",
-        "Comité mensual de seguimiento con acciones",
-      ],
-    },
+} as const
+
+const sharedPlanTiers = [
+  {
+    name: "Base",
+    audience: "Negocios con operativa estable y necesidades esenciales",
+    price: "69",
+    period: "mes",
+    summary: "Cobertura esencial para tener fiscal y contabilidad al día sin fricción.",
+    responseSla: "Respuesta en 48h laborables",
+    ctaLabel: "Quiero Empezar",
+    highlight: false,
+    items: [
+      "Contabilidad mensual y cierre básico",
+      "Modelos fiscales trimestrales y resumen anual",
+      "Soporte por email",
+      "1 sesión de revisión mensual",
+    ],
+  },
+  {
+    name: "Estándar",
+    audience: "Equipos en crecimiento que buscan más control y rapidez",
+    price: "129",
+    period: "mes",
+    summary: "Plan recomendado para ganar contexto operativo y tomar decisiones más seguras.",
+    responseSla: "Respuesta en menos de 24h laborables",
+    ctaLabel: "Reservar Este Plan",
+    highlight: true,
+    items: [
+      "Todo lo incluido en Base",
+      "Gestión laboral hasta 6 nóminas",
+      "Panel de seguimiento y alertas de plazos",
+      "2 sesiones de revisión al mes",
+    ],
+  },
+  {
+    name: "Pro",
+    audience: "Empresas con mayor volumen y necesidad de acompañamiento continuo",
+    price: "239",
+    period: "mes",
+    summary: "Acompañamiento integral con canal prioritario y foco estratégico recurrente.",
+    responseSla: "Canal prioritario y respuesta en el día",
+    ctaLabel: "Pedir Propuesta",
+    highlight: false,
+    items: [
+      "Todo lo incluido en Estándar",
+      "Gestión laboral hasta 15 nóminas",
+      "Acompañamiento en inspecciones y requerimientos",
+      "Comité mensual de seguimiento con acciones",
+    ],
+  },
+] as const
+
+const sharedPlansComparison = {
+  title: "Comparativa de planes",
+  subtitle: "Visualiza en un vistazo qué cambia entre Base, Estándar y Pro.",
+  rows: [
+    { feature: "Contabilidad mensual", Base: "Incluida", Estándar: "Incluida", Pro: "Incluida" },
+    { feature: "Modelos fiscales", Base: "Trimestral + anual", Estándar: "Trimestral + anual", Pro: "Completa + soporte prioritario" },
+    { feature: "Gestión laboral", Base: "No incluida", Estándar: "Hasta 6 nóminas", Pro: "Hasta 15 nóminas" },
+    { feature: "Sesiones de revisión", Base: "1 sesión / mes", Estándar: "2 sesiones / mes", Pro: "Comité mensual estratégico" },
+    { feature: "Soporte", Base: "Email", Estándar: "Email + seguimiento activo", Pro: "Canal prioritario en el día" },
+    { feature: "Alertas y seguimiento", Base: "Básico", Estándar: "Panel + alertas", Pro: "Panel + alertas + plan de acción" },
   ],
+} as const
+
+export const plansByAudience = {
+  autonomos: {
+    ...plansBase,
+    title: ["Plan para autónomos", "que quieren claridad mensual"],
+    subtitle:
+      "Cobertura clara para autónomos y microempresas: control fiscal y contable, soporte cercano y precio transparente.",
+    ctaTitle: "¿Eres autónomo y dudas entre opciones?",
+    ctaSubtitle:
+      "Te orientamos en 20 minutos y te recomendamos el plan que mejor encaja con tu volumen y momento actual.",
+    tiers: sharedPlanTiers,
+    comparisonTable: sharedPlansComparison,
+  },
+  empresas: {
+    ...plansBase,
+    title: ["Plan para empresas", "con visión de crecimiento"],
+    subtitle:
+      "Acompañamiento integral para empresas que necesitan seguimiento continuo, prioridad de respuesta y más profundidad estratégica.",
+    ctaTitle: "¿Necesitas un plan para tu empresa?",
+    ctaSubtitle:
+      "Revisamos estructura, volumen y equipo para proponerte cobertura realista sin sobrecostes innecesarios.",
+    tiers: sharedPlanTiers,
+    comparisonTable: sharedPlansComparison,
+  },
 } as const
 
 export const services = {
@@ -672,7 +711,8 @@ export const footer = {
   company: [
     { label: "Servicios", href: "/servicios" },
     { label: "Nosotros", href: "/nosotros" },
-    { label: "Planes", href: "/planes" },
+    { label: "Soy autónomo", href: "/plan-autonomos" },
+    { label: "Soy empresa", href: "/plan-empresas" },
     { label: "Testimonios", href: "/#testimonios" },
     { label: "Contacto", href: "/contacto" },
   ],

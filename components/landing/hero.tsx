@@ -1,13 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Button,
   marketingCtaBaseClassName,
   marketingCtaVariantClassName,
 } from "@/components/ui/button"
 import { ArrowRight, Award, Eye, Zap } from "lucide-react"
+import { AnimatePresence, m, useReducedMotion } from "framer-motion"
 import { FloatingElement } from "@/components/animations"
 import { useHeroGsap } from "@/components/gsap/use-hero-gsap"
 import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
@@ -21,14 +22,27 @@ const trustIcons = [Eye, Award, Zap]
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const reducedMotion = useReducedMotion()
+  const [activeWordIndex, setActiveWordIndex] = useState(0)
   const parallaxRef = useSectionParallax(sectionRef, { range: "hero" })
+  const activeWord = hero.title.rotatingWords[activeWordIndex]
 
   useHeroGsap({ contentRef })
+
+  useEffect(() => {
+    if (reducedMotion || hero.title.rotatingWords.length < 2) {
+      return
+    }
+    const interval = window.setInterval(() => {
+      setActiveWordIndex((current) => (current + 1) % hero.title.rotatingWords.length)
+    }, 2400)
+    return () => window.clearInterval(interval)
+  }, [reducedMotion])
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-hero-gradient pt-32 pb-20 md:pt-40 md:pb-32"
+      className="relative min-h-[100svh] overflow-hidden bg-hero-gradient pt-28 pb-12 md:min-h-[100dvh] md:pt-32 md:pb-16"
     >
       <SectionParallaxBackground
         src={images.hero}
@@ -57,16 +71,51 @@ export function Hero() {
         delay={4}
       />
 
-      <SectionShell innerClassName="relative z-10">
+      <SectionShell innerClassName="relative z-10 flex min-h-[calc(100svh-10rem)] items-center md:min-h-[calc(100dvh-12rem)]">
         <div ref={contentRef} className="mx-auto max-w-4xl text-center">
           <h1
             data-hero="title"
             className="mx-auto mb-6 max-w-4xl text-4xl leading-[1.15] font-bold text-balance text-on-dark md:text-5xl lg:text-6xl"
           >
-            {hero.title.before}{" "}
-            <span className="text-primary">{hero.title.highlight1}</span>
-            {hero.title.middle}{" "}
-            <span className="text-primary">{hero.title.highlight2}</span>
+            <span className="block">
+              <span>{hero.title.prefix} </span>
+              <span className="relative inline-grid h-[1.18em] overflow-hidden align-baseline text-primary [grid-template-areas:'word']">
+                <span className="invisible [grid-area:word]">{activeWord}</span>
+                {reducedMotion ? (
+                  <span className="[grid-area:word]">{hero.title.rotatingWords[0]}</span>
+                ) : (
+                  <AnimatePresence mode="wait" initial={false}>
+                    <m.span key={activeWord} className="inline-flex [grid-area:word]">
+                      {Array.from(activeWord).map((character, index) => (
+                        <m.span
+                          key={`${character}-${index}`}
+                          className="inline-block"
+                          initial={{ y: "-105%", opacity: 0, scale: 0.97 }}
+                          animate={{ y: "0%", opacity: 1, scale: 1 }}
+                          exit={{ y: "-105%", opacity: 0, scale: 0.97 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 290,
+                            damping: 24,
+                            mass: 0.62,
+                            delay: index * 0.018,
+                          }}
+                        >
+                          {character}
+                        </m.span>
+                      ))}
+                    </m.span>
+                  </AnimatePresence>
+                )}
+              </span>
+              {hero.title.bridgeWord ? (
+                <>
+                  {" "}
+                  <span>{hero.title.bridgeWord}</span>
+                </>
+              ) : null}
+            </span>
+            {hero.title.secondLine ? <span className="block">{hero.title.secondLine}</span> : null}
           </h1>
 
           <p

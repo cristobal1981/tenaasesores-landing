@@ -7,7 +7,7 @@ import {
   hero,
   odoo,
   philosophy,
-  plans,
+  plansByAudience,
   services,
   site,
   team,
@@ -95,24 +95,48 @@ export function flattenSiteContent(): KnowledgeChunk[] {
 
   chunks.push(
     chunk({
-      id: "plans-overview",
+      id: "plans-autonomos-overview",
       topic: "planes",
-      title: plans.title.join(" "),
-      body: `${plans.subtitle} ${plans.tiers.map((tier) => `${tier.name}: ${tier.price}€/${tier.period}, ${tier.summary}`).join(" ")}`,
-      href: "/planes",
-      keywords: ["planes", "plan", "suscripcion", "tarifa", "precio", "mensual", "base", "profesional", "avanzado"],
+      title: plansByAudience.autonomos.title.join(" "),
+      body: `${plansByAudience.autonomos.subtitle} ${plansByAudience.autonomos.tiers.map((tier) => `${tier.name}: ${tier.price}€/${tier.period}, ${tier.summary}`).join(" ")}`,
+      href: "/plan-autonomos",
+      keywords: ["planes", "plan", "autonomos", "suscripcion", "tarifa", "precio", "mensual", "base", "profesional"],
     }),
   )
 
-  for (const tier of plans.tiers) {
+  chunks.push(
+    chunk({
+      id: "plans-empresas-overview",
+      topic: "planes",
+      title: plansByAudience.empresas.title.join(" "),
+      body: `${plansByAudience.empresas.subtitle} ${plansByAudience.empresas.tiers.map((tier) => `${tier.name}: ${tier.price}€/${tier.period}, ${tier.summary}`).join(" ")}`,
+      href: "/plan-empresas",
+      keywords: ["planes", "plan", "empresas", "pymes", "suscripcion", "tarifa", "precio", "mensual", "profesional", "avanzado"],
+    }),
+  )
+
+  for (const tier of plansByAudience.autonomos.tiers) {
     chunks.push(
       chunk({
-        id: `plan-${tier.name.toLowerCase()}`,
+        id: `plan-autonomos-${tier.name.toLowerCase()}`,
         topic: "planes",
         title: `Plan ${tier.name}`,
         body: `${tier.summary} ${tier.audience}. ${tier.items.join(". ")}.`,
-        href: "/planes",
-        keywords: ["plan", tier.name.toLowerCase(), "precio", tier.price, "suscripcion", "tarifa"],
+        href: "/plan-autonomos",
+        keywords: ["plan", "autonomos", tier.name.toLowerCase(), "precio", tier.price, "suscripcion", "tarifa"],
+      }),
+    )
+  }
+
+  for (const tier of plansByAudience.empresas.tiers) {
+    chunks.push(
+      chunk({
+        id: `plan-empresas-${tier.name.toLowerCase()}`,
+        topic: "planes",
+        title: `Plan ${tier.name}`,
+        body: `${tier.summary} ${tier.audience}. ${tier.items.join(". ")}.`,
+        href: "/plan-empresas",
+        keywords: ["plan", "empresas", "pymes", tier.name.toLowerCase(), "precio", tier.price, "suscripcion", "tarifa"],
       }),
     )
   }

@@ -1,5 +1,5 @@
 import { intentDefinitions } from "@/content/chatbot"
-import { contact, contactHref, odoo, plans, services, site, team } from "@/content/site"
+import { contact, contactHref, odoo, plansByAudience, services, site, team } from "@/content/site"
 import { normalizeText } from "./normalize"
 import type { ChatReply } from "./types"
 
@@ -101,13 +101,16 @@ export function matchIntent(query: string): ChatReply | null {
           linkLabel: "Ver todos los servicios",
         }
       case "plans": {
-        const tierSummary = plans.tiers
+        const autonomosSummary = plansByAudience.autonomos.tiers
+          .map((tier) => `${tier.name} (${tier.price}€/${tier.period})`)
+          .join(", ")
+        const empresasSummary = plansByAudience.empresas.tiers
           .map((tier) => `${tier.name} (${tier.price}€/${tier.period})`)
           .join(", ")
         return {
           source: "intent",
-          text: `Tenemos 3 planes mensuales: ${tierSummary}. Precios orientativos.`,
-          href: "/planes",
+          text: `Tenemos plan para autónomos (${autonomosSummary}) y plan para empresas (${empresasSummary}). Precios orientativos.`,
+          href: "/plan-autonomos",
           linkLabel: "Ver planes",
         }
       }

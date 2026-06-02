@@ -1,4 +1,4 @@
-import { contactHref, plans } from "@/content/site"
+import { contactHref, plansByAudience } from "@/content/site"
 import { normalizeText } from "./normalize"
 import type { ChatReply } from "./types"
 
@@ -40,15 +40,18 @@ export function matchPlansIntent(query: string): ChatReply | null {
   const normalized = normalizeText(query)
   if (!normalized || !matchesAny(normalized, PLANS_PATTERNS)) return null
 
-  const tierSummary = plans.tiers
+  const autonomosSummary = plansByAudience.autonomos.tiers
+    .map((tier) => `${tier.name} (${tier.price}€/${tier.period})`)
+    .join(", ")
+  const empresasSummary = plansByAudience.empresas.tiers
     .map((tier) => `${tier.name} (${tier.price}€/${tier.period})`)
     .join(", ")
 
   return {
     source: "intent",
-    text: `Tenemos 3 planes mensuales: ${tierSummary}. Precios orientativos; la propuesta final depende de tu volumen.`,
-    href: "/planes",
-    linkLabel: "Ver planes",
+    text: `Tenemos planes separados para autónomos (${autonomosSummary}) y para empresas (${empresasSummary}). Precios orientativos; propuesta final según volumen.`,
+    href: "/plan-autonomos",
+    linkLabel: "Ver plan de autónomos",
   }
 }
 
