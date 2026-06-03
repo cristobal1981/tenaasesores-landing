@@ -14,19 +14,19 @@ export function Odoo() {
   return (
     <section
       id="odoo"
-      className="relative overflow-hidden border-y border-agua/20 bg-surface-light py-20 md:py-28"
+      className="relative overflow-hidden border-y border-agua/20 bg-surface-dark py-20 md:py-28"
     >
       <SectionShell>
         <FadeIn className="mx-auto mb-14 max-w-3xl text-center">
-          <div className="badge-on-light mb-6">
-            <span className="badge-label-on-light">{odoo.badge}</span>
+          <div className="badge-on-dark mb-6">
+            <span className="badge-label-on-dark">{odoo.badge}</span>
           </div>
-          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-light sm:text-4xl lg:text-5xl">
+          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-dark sm:text-4xl lg:text-5xl">
             {odoo.title[0]}
             <br />
-            <span className="text-on-light-muted">{odoo.title[1]}</span>
+            <span className="text-muted-on-dark">{odoo.title[1]}</span>
           </h2>
-          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
+          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-dark">
             {odoo.subtitle}
           </p>
         </FadeIn>
@@ -39,12 +39,12 @@ export function Odoo() {
             const Icon = benefitIcons[index]
             return (
               <StaggerItem key={benefit.title}>
-                <div className="h-full rounded-2xl border border-on-light/10 bg-on-light/5 p-6 transition-colors hover:border-accent-on-light/30">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-accent-on-light/10">
-                    <Icon className="h-5 w-5 text-accent-on-light" />
+                <div className="h-full rounded-2xl border border-on-dark/15 bg-on-dark/5 p-6 transition-colors hover:border-primary/35">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15">
+                    <Icon className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="mb-2 text-lg font-semibold text-on-light">{benefit.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-on-light">
+                  <h3 className="mb-2 text-lg font-semibold text-on-dark">{benefit.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-on-dark">
                     {benefit.description}
                   </p>
                 </div>
@@ -54,7 +54,7 @@ export function Odoo() {
         </StaggerContainer>
 
         <FadeIn>
-          <p className="mb-8 text-center font-sans text-sm font-semibold tracking-wide text-accent-on-light uppercase">
+          <p className="mb-8 text-center font-sans text-sm font-semibold tracking-wide text-primary uppercase">
             {odoo.stepsTitle}
           </p>
         </FadeIn>
@@ -62,7 +62,7 @@ export function Odoo() {
         <StaggerContainer className="mb-12 grid gap-6 md:grid-cols-3" staggerDelay={0.08}>
           {odoo.steps.map((step, index) => (
             <StaggerItem key={step.title}>
-              <div className="flex h-full gap-4 rounded-2xl border border-on-light/10 bg-gradient-to-br from-surface-dark to-agua/80 p-6">
+              <div className="flex h-full gap-4 rounded-2xl border border-on-dark/15 bg-gradient-to-br from-surface-dark to-agua/80 p-6">
                 <span className="font-sans text-3xl font-bold text-primary">
                   {index + 1}
                 </span>

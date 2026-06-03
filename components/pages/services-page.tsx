@@ -42,6 +42,10 @@ export function ServicesPage() {
   useEffect(() => {
     const hash = window.location.hash
     if (!hash) return
+    const navEntry = performance.getEntriesByType("navigation")[0] as
+      | PerformanceNavigationTiming
+      | undefined
+    if (navEntry?.type === "reload") return
 
     const raf = window.requestAnimationFrame(() => {
       scrollToService(hash)

@@ -30,8 +30,18 @@ export const navItems = [
   {
     label: "Planes",
     children: [
-      { label: "Soy autónomo", href: "/plan-autonomos" },
-      { label: "Soy empresa", href: "/plan-empresas" },
+      {
+        label: "Soy autónomo",
+        href: "/plan-autonomos",
+        description:
+          "Control fiscal y contable con soporte cercano y precio transparente.",
+      },
+      {
+        label: "Soy empresa",
+        href: "/plan-empresas",
+        description:
+          "Seguimiento continuo, prioridad de respuesta y visión de crecimiento.",
+      },
     ],
   },
   { label: "Nosotros", href: "/nosotros" },
