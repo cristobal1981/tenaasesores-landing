@@ -124,11 +124,19 @@ export function Philosophy() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-5">
-            {philosophy.values.map((value) => {
+            {philosophy.values.map((value, index) => {
               const isActive = hoverLetter === value.letter
+              const isLast = index === philosophy.values.length - 1
 
               return (
-                <div key={value.letter} onMouseEnter={() => activate(value.letter)}>
+                <div
+                  key={value.letter}
+                  className={cn(
+                    isLast &&
+                      "sm:col-span-2 sm:mx-auto sm:w-full sm:max-w-md xl:col-span-1 xl:mx-0 xl:max-w-none",
+                  )}
+                  onMouseEnter={() => activate(value.letter)}
+                >
                   <ClaveValueCard
                     value={value}
                     titleParts={titlePartsByLetter[value.letter]}

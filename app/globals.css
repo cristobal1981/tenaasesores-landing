@@ -55,6 +55,11 @@
   --chart-3: #039272;
   --chart-4: #046c5a;
   --chart-5: #054642;
+  /* Per-service icon accents (home + /servicios) */
+  --service-fiscal: #e8b84a;
+  --service-contable: #5bc4e8;
+  --service-laboral: #f08a7a;
+  --service-constitucion: #9b8cf0;
   --radius: 0.625rem;
   --sidebar: var(--surface-dark);
   --sidebar-foreground: var(--on-dark);
@@ -104,6 +109,10 @@
   --chart-3: #039272;
   --chart-4: #046c5a;
   --chart-5: #054642;
+  --service-fiscal: #e8b84a;
+  --service-contable: #5bc4e8;
+  --service-laboral: #f08a7a;
+  --service-constitucion: #9b8cf0;
   --sidebar: var(--surface-dark);
   --sidebar-foreground: var(--on-dark);
   --sidebar-primary: #01dea2;
@@ -152,6 +161,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-service-fiscal: var(--service-fiscal);
+  --color-service-contable: var(--service-contable);
+  --color-service-laboral: var(--service-laboral);
+  --color-service-constitucion: var(--service-constitucion);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -363,11 +376,33 @@
   animation: float 6s ease-in-out infinite;
 }
 
+@keyframes sappo-fab-attention {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 20px rgba(4, 29, 35, 0.32),
+      0 0 0 0 rgba(1, 222, 162, 0);
+  }
+  50% {
+    box-shadow:
+      0 6px 26px rgba(4, 29, 35, 0.42),
+      0 0 0 5px rgba(1, 222, 162, 0.22);
+  }
+}
+
+.animate-sappo-fab {
+  animation: sappo-fab-attention 2.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .animate-float {
+    animation: none;
+  }
+
+  .animate-sappo-fab {
     animation: none;
   }
 

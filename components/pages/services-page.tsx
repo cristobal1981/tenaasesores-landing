@@ -12,10 +12,8 @@ import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
 import { SectionShell } from "@/components/layout/section-shell"
 import { images, services } from "@/content/site"
-import {
-  getServiceIconBySlug,
-  valueDifferentialIcons,
-} from "@/lib/service-icons"
+import { ServiceIconBadge } from "@/components/landing/service-icon-badge"
+import { valueDifferentialIcons } from "@/lib/service-icons"
 import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
 import { useServicesScrollBlob } from "@/lib/gsap/use-services-scroll-blob"
 
@@ -126,7 +124,10 @@ export function ServicesPage() {
             </h2>
           </FadeIn>
 
-          <StaggerContainer className="grid gap-6 md:grid-cols-3" staggerDelay={0.1}>
+          <StaggerContainer
+            className="mx-auto grid max-w-2xl grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-3"
+            staggerDelay={0.1}
+          >
             {valueDifferential.items.map((item, index) => {
               const Icon = valueDifferentialIcons[index]
               return (
@@ -157,8 +158,6 @@ export function ServicesPage() {
 
         <div className="relative z-[2]">
           {mainServices.map((service) => {
-            const Icon = getServiceIconBySlug(service.slug)
-
             return (
               <section
                 key={service.slug}
@@ -168,9 +167,7 @@ export function ServicesPage() {
                 <SectionShell>
                   <div className="mb-12 max-w-3xl">
                     <div className="mb-4 flex items-center gap-4">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/20">
-                        <Icon className="h-7 w-7 text-primary" />
-                      </div>
+                      <ServiceIconBadge slug={service.slug} size="md" />
                       <h2 className="text-3xl font-bold text-on-dark sm:text-4xl">
                         {service.title}
                       </h2>

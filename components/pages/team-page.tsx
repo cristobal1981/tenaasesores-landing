@@ -74,13 +74,15 @@ export function TeamPage() {
                 <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-card to-agua/50 p-8 md:p-12">
                   <StaggerContainer className="grid grid-cols-2 gap-8" staggerDelay={0.1}>
                     {about.stats.map((stat, i) => (
-                      <StaggerItem key={stat.label}>
+                      <StaggerItem key={stat.label} className="h-full">
                         <ScaleIn delay={i * 0.1}>
-                          <div className="rounded-xl border border-agua/30 bg-surface-dark/30 p-6 text-center transition-all duration-300 hover:scale-105 hover:border-primary/40">
+                          <div className="flex h-full flex-col rounded-xl border border-agua/30 bg-surface-dark/30 p-6 text-center transition-all duration-300 hover:scale-105 hover:border-primary/40">
                             <div className="mb-2 text-4xl font-bold text-primary md:text-5xl">
                               {stat.value}
                             </div>
-                            <div className="text-sm text-muted-on-dark">{stat.label}</div>
+                            <div className="flex min-h-[2.75rem] flex-1 items-center justify-center px-1 text-center text-xs leading-snug text-muted-on-dark sm:text-sm">
+                              {stat.label}
+                            </div>
                           </div>
                         </ScaleIn>
                       </StaggerItem>

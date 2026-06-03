@@ -1,5 +1,8 @@
+import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+
+const SAPPO_AVATAR_SRC = "/logo-sappo_blanco.svg"
 
 interface ChatMessageProps {
   role: "user" | "bot"
@@ -12,18 +15,39 @@ interface ChatMessageProps {
 export function ChatMessage({ role, text, href, linkLabel, onLinkClick }: ChatMessageProps) {
   const isUser = role === "user"
 
+  if (isUser) {
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[85%] rounded-2xl rounded-br-md bg-turquesa px-3.5 py-2.5 text-sm leading-relaxed text-on-light">
+          <p className="whitespace-pre-wrap">{text}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className={cn("flex", isUser ? "justify-end" : "justify-start")}>
+    <div className="flex max-w-[92%] items-start gap-2">
+      <div
+        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-agua shadow-sm ring-1 ring-primary/25"
+        aria-hidden
+      >
+        <Image
+          src={SAPPO_AVATAR_SRC}
+          alt=""
+          width={24}
+          height={24}
+          className="size-6 object-contain"
+        />
+      </div>
       <div
         className={cn(
-          "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-          isUser
-            ? "bg-turquesa text-on-light rounded-br-md"
-            : "bg-muted text-on-dark rounded-bl-md",
+          "relative min-w-0 flex-1 rounded-2xl rounded-tl-sm bg-muted px-3.5 py-2.5 text-sm leading-relaxed text-on-dark",
+          "before:absolute before:top-3 before:-left-1.5 before:h-0 before:w-0",
+          "before:border-y-[6px] before:border-r-[7px] before:border-y-transparent before:border-r-muted",
         )}
       >
         <p className="whitespace-pre-wrap">{text}</p>
-        {!isUser && href && linkLabel ? (
+        {href && linkLabel ? (
           <Link
             href={href}
             onClick={onLinkClick}

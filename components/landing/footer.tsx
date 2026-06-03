@@ -7,7 +7,7 @@ import { webIssueFooter, webIssueReportPath } from "@/content/web-issue"
 
 export function Footer() {
   return (
-    <footer className="border-t border-agua/30 bg-background">
+    <footer className="border-t border-agua/30 bg-background pb-[calc(3.75rem+env(safe-area-inset-bottom,0px))] md:pb-0">
       <SectionShell innerClassName="py-12 md:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div className="sm:col-span-2 lg:col-span-1">
@@ -15,6 +15,23 @@ export function Footer() {
             <p className="mt-4 text-sm leading-relaxed text-muted-on-dark">
               {footer.description}
             </p>
+            <div className="mt-6">
+              <h4 className="mb-3 font-sans text-sm font-semibold text-on-dark">Síguenos</h4>
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href={notImplementedPath}
+                  className="inline-flex min-h-11 items-center text-sm text-muted-on-dark transition-colors hover:text-primary"
+                >
+                  LinkedIn
+                </Link>
+                <Link
+                  href={notImplementedPath}
+                  className="inline-flex min-h-11 items-center text-sm text-muted-on-dark transition-colors hover:text-primary"
+                >
+                  Instagram
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -76,24 +93,10 @@ export function Footer() {
           </Link>
         </p>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-agua/30 pt-8 sm:flex-row">
+        <div className="mt-6 flex flex-col items-center border-t border-agua/30 pt-6 text-center">
           <p className="text-sm text-muted-on-dark">
             © {new Date().getFullYear()} {site.name}. Todos los derechos reservados.
           </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href={notImplementedPath}
-              className="text-sm text-muted-on-dark transition-colors hover:text-primary"
-            >
-              LinkedIn
-            </Link>
-            <Link
-              href={notImplementedPath}
-              className="text-sm text-muted-on-dark transition-colors hover:text-primary"
-            >
-              Instagram
-            </Link>
-          </div>
         </div>
       </SectionShell>
     </footer>

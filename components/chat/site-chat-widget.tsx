@@ -2,13 +2,15 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { MessageCircle, Send, X } from "lucide-react"
+import Image from "next/image"
+import { Send, X } from "lucide-react"
 import { chatbotUi, quickReplies, sappoIntroStorageKey } from "@/content/chatbot"
 import { ChatMessage } from "@/components/chat/chat-message"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { respondToQuery } from "@/lib/chatbot/respond"
 import { usePrefersReducedMotion } from "@/lib/gsap/use-prefers-reduced-motion"
+import { cn } from "@/lib/utils"
 import type { ChatMessage as ChatMessageType } from "@/lib/chatbot/types"
 function createMessage(
   role: ChatMessageType["role"],
@@ -167,7 +169,14 @@ export function SiteChatWidget() {
       }
 
   return (
-    <div className="pointer-events-none fixed z-[60] flex w-[calc(100vw-2rem)] max-w-[380px] flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:w-auto sm:gap-3 bottom-[max(1rem,env(safe-area-inset-bottom,0px))] right-[max(1rem,env(safe-area-inset-right,0px))]">
+    <div
+      className={cn(
+        "fixed z-[60] flex w-max max-w-[calc(100vw-2rem)] flex-col items-end",
+        "bottom-[max(1rem,env(safe-area-inset-bottom,0px))] right-[max(1rem,env(safe-area-inset-right,0px))]",
+        "sm:bottom-6 sm:right-6",
+      )}
+    >
+      <div className="relative flex flex-col items-end gap-2 pb-[calc(3rem+1.25rem)] sm:gap-3 sm:pb-[calc(3.5rem+1.25rem)]">
       <AnimatePresence>
         {showIntro && !isOpen ? (
           <motion.div
@@ -175,7 +184,7 @@ export function SiteChatWidget() {
             key="sappo-intro"
             role="status"
             aria-live="polite"
-            className="pointer-events-auto relative w-full sm:max-w-[280px]"
+            className="relative w-[min(380px,calc(100vw-2rem))] sm:max-w-[280px]"
             {...introMotion}
           >
             <div className="relative rounded-2xl border border-border bg-card px-4 py-3.5 shadow-xl">
@@ -218,7 +227,7 @@ export function SiteChatWidget() {
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="pointer-events-auto flex w-full max-h-[min(52dvh,22rem)] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl sm:max-h-[min(68vh,32.5rem)]"
+            className="flex w-[min(380px,calc(100vw-2rem))] max-h-[min(52dvh,22rem)] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl sm:max-h-[min(68vh,32.5rem)]"
             {...panelMotion}
           >
             <header className="shrink-0 border-b border-border px-3 py-2.5 sm:px-4 sm:py-3">
@@ -292,19 +301,57 @@ export function SiteChatWidget() {
           </motion.div>
         ) : null}
       </AnimatePresence>
+      </div>
 
-      <div ref={fabRef} className="pointer-events-auto self-end">
+      <motion.div
+        ref={fabRef}
+        className="absolute right-0 bottom-0"
+        animate={
+          !isOpen && !reducedMotion ? { y: [0, -3, 0] } : { y: 0 }
+        }
+        transition={
+          !isOpen && !reducedMotion
+            ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
+            : { duration: 0.2 }
+        }
+      >
         <Button
           type="button"
-          size="icon-lg"
+          size="icon"
           onClick={() => (isOpen ? closeChat() : openChat())}
           aria-label={chatbotUi.fabLabel}
           aria-expanded={isOpen}
-          className="size-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 sm:size-14"
+          className={cn(
+            "relative size-12 shrink-0 cursor-pointer overflow-hidden rounded-full p-0 bg-primary text-primary-foreground",
+            "shadow-[0_4px_20px_rgba(4,29,35,0.32)] transition-colors duration-200",
+            "hover:bg-primary/90 active:bg-primary/80",
+            "focus-visible:ring-2 focus-visible:ring-on-dark focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+            !isOpen && !reducedMotion && "motion-safe:animate-sappo-fab",
+            "sm:size-14",
+          )}
         >
-          {isOpen ? <X className="size-5 sm:size-6" /> : <MessageCircle className="size-5 sm:size-6" />}
+          <span
+            className={cn(
+              "absolute inset-0 flex items-center justify-center transition-opacity duration-150",
+              isOpen ? "opacity-100" : "opacity-0",
+            )}
+            aria-hidden={!isOpen}
+          >
+            <X className="size-5 sm:size-6" />
+          </span>
+          <Image
+            src="/logo-sappo_blanco-45deg.svg"
+            alt=""
+            width={48}
+            height={48}
+            className={cn(
+              "absolute bottom-0 left-1/2 block size-12 max-w-none -translate-x-1/2 object-contain object-bottom transition-opacity duration-150 sm:size-14",
+              isOpen ? "opacity-0" : "opacity-100",
+            )}
+            aria-hidden={isOpen}
+          />
         </Button>
-      </div>
+      </motion.div>
     </div>
   )
 }

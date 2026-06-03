@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn, StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
 import { SectionShell } from "@/components/layout/section-shell"
-import { getServiceIcon } from "@/lib/service-icons"
+import { ServiceIconBadge } from "@/components/landing/service-icon-badge"
 import { services } from "@/content/site"
 
 export function Services() {
@@ -44,27 +44,24 @@ export function Services() {
         </FadeIn>
 
         <StaggerContainer className="grid gap-6 md:grid-cols-2" staggerDelay={0.1}>
-          {services.items.map((service, index) => {
-            const Icon = getServiceIcon(index)
+          {services.items.map((service) => {
             return (
-              <StaggerItem key={service.title}>
-                <div className="group flex h-full flex-col rounded-2xl border border-agua/30 bg-gradient-to-br from-card to-agua/20 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 md:p-8">
-                  <div className="flex gap-5 md:gap-6">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/20 transition-all duration-300 group-hover:scale-105 group-hover:bg-primary/30 md:h-20 md:w-20">
-                      <Icon className="h-8 w-8 text-primary md:h-10 md:w-10" />
-                    </div>
+              <StaggerItem key={service.title} className="h-full">
+                <div className="group flex h-full flex-col rounded-2xl border border-agua/30 bg-gradient-to-br from-card to-agua/20 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 lg:p-8">
+                  <div className="flex gap-5 lg:gap-6">
+                    <ServiceIconBadge slug={service.slug} size="lg" />
                     <div className="min-w-0 flex-1">
-                      <h3 className="mb-2 text-lg font-semibold text-on-dark md:text-xl">
+                      <h3 className="mb-2 text-lg font-semibold text-on-dark lg:text-xl">
                         {service.title}
                       </h3>
-                      <p className="line-clamp-2 text-sm leading-relaxed text-muted-on-dark md:text-base">
+                      <p className="line-clamp-3 min-h-[4.5rem] text-sm leading-relaxed text-muted-on-dark lg:line-clamp-2 lg:min-h-0 lg:text-base">
                         {service.description}
                       </p>
                     </div>
                   </div>
                   <Link
                     href={`/servicios#${service.slug}`}
-                    className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-on-dark group-hover:gap-3 md:mt-6"
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-on-dark group-hover:gap-3 lg:mt-6"
                   >
                     Más información
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
