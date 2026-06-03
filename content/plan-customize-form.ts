@@ -12,9 +12,15 @@ export const planCustomizeTaxRegions = [
 
 export const planCustomizeForm = {
   sectionId: "personalizar-plan",
-  intro: {
-    title: "Personalizar tu plan",
-    subtitle: "Cuéntanos tu caso en 3 pasos. Te respondemos con una propuesta concreta.",
+  panelHeader: {
+    autonomos: {
+      eyebrow: "Plan personalizado · autónomos",
+      lead: "Si tu caso no encaja en el plan Base, aquí preparamos la propuesta a medida.",
+    },
+    empresas: {
+      eyebrow: "Plan personalizado · empresas",
+      lead: "Si tu caso no encaja en Constitución de empresa, aquí preparamos la propuesta a medida.",
+    },
   },
   steps: {
     progressLabel: "Paso {current} de {total}",

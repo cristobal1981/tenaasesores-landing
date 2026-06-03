@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback } from "react"
+import { useCallback, useId } from "react"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 import { StaggerContainer, StaggerItem } from "@/components/animations"
 import { PlanCustomizeWizard } from "@/components/pages/plan-customize-wizard"
+import { BrisaFormCard, BrisaFormSection, DarkFormPanel } from "@/components/layout/brisa-form-section"
 import { SectionShell } from "@/components/layout/section-shell"
 import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
 import { planCustomizeForm } from "@/content/plan-customize-form"
@@ -47,6 +48,7 @@ type PlansAudience = keyof typeof plansByAudience
 
 export function PlansPageClient({ audience }: { audience: PlansAudience }) {
   const plans = plansByAudience[audience]
+  const customizeHeadingId = useId()
   const scrollToCustomizeForm = useCallback(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     const section = document.getElementById(planCustomizeForm.sectionId)
@@ -64,6 +66,7 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
   }, [])
 
   return (
+    <>
     <section className="py-16 md:py-20">
       <SectionShell>
         <StaggerContainer className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2" staggerDelay={0.1}>
@@ -171,9 +174,20 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
             {plans.planNote}
           </p>
         </aside>
-
-        <PlanCustomizeWizard audience={audience} />
       </SectionShell>
     </section>
+
+    <BrisaFormSection
+      id={planCustomizeForm.sectionId}
+      className="scroll-mt-28"
+      aria-labelledby={customizeHeadingId}
+    >
+      <BrisaFormCard maxWidthClassName="max-w-4xl">
+        <DarkFormPanel>
+          <PlanCustomizeWizard audience={audience} sectionTitleId={customizeHeadingId} />
+        </DarkFormPanel>
+      </BrisaFormCard>
+    </BrisaFormSection>
+    </>
   )
 }

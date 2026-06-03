@@ -36,7 +36,7 @@ const stepExitMotion = { duration: stepExitMs, ease: stepEase } as const
 const stepHeightMotion = { duration: stepHeightMs, ease: stepEase } as const
 const successFadeMs = 0.2
 const submitDelayMs = 100
-const planFormWidthClass = "mx-auto w-full max-w-4xl"
+const planFormWidthClass = "w-full"
 
 const compactChoiceButtonClass =
   "min-h-9 cursor-pointer rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-[border-color,background-color] duration-200 motion-reduce:transition-none"
@@ -235,6 +235,7 @@ function PlanCustomizeSuccess({ detail }: { detail?: string | null }) {
 
 type PlanCustomizeWizardProps = {
   audience: PlanCustomizeAudience
+  sectionTitleId: string
 }
 
 function formatProgressLabel(current: number) {
@@ -374,7 +375,7 @@ function getStepValidationError(
   return null
 }
 
-export function PlanCustomizeWizard({ audience }: PlanCustomizeWizardProps) {
+export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeWizardProps) {
   const panelId = useId()
   const stepLiveId = useId()
   const reducedMotion = useReducedMotion()
@@ -783,19 +784,19 @@ export function PlanCustomizeWizard({ audience }: PlanCustomizeWizardProps) {
     )
   }
 
+  const panelHeader = planCustomizeForm.panelHeader[audience]
+
   return (
-    <section
-      id={planCustomizeForm.sectionId}
-      className={cn("mt-16 scroll-mt-28", planFormWidthClass)}
-      aria-labelledby={`${panelId}-title`}
-      data-plan-customize-form
-    >
-      <header className="mb-6 w-full">
-        <h2 id={`${panelId}-title`} className="text-xl font-semibold text-on-dark md:text-2xl">
-          {planCustomizeForm.intro.title}
+    <div className={planFormWidthClass} data-plan-customize-form>
+      <header className="mb-6">
+        <h2
+          id={sectionTitleId}
+          className="text-sm font-semibold tracking-[0.12em] text-primary uppercase sm:text-base"
+        >
+          {panelHeader.eyebrow}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-on-dark">
-          {planCustomizeForm.intro.subtitle}
+          {panelHeader.lead}
         </p>
       </header>
 
@@ -810,7 +811,7 @@ export function PlanCustomizeWizard({ audience }: PlanCustomizeWizardProps) {
               onKeyDown={handleFormKeyDown}
               noValidate
               className="w-full"
-              aria-labelledby={`${panelId}-title`}
+              aria-labelledby={sectionTitleId}
               initial={reducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={reducedMotion ? undefined : { opacity: 0 }}
@@ -956,6 +957,6 @@ export function PlanCustomizeWizard({ audience }: PlanCustomizeWizardProps) {
           )}
         </AnimatePresence>
       </LazyMotion>
-    </section>
+    </div>
   )
 }

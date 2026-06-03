@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, ArrowRight, Clock, LinkedinIcon, InstagramIcon, Sparkles } from "lucide-react"
 import { FadeIn } from "@/components/animations"
 import { FaqSection } from "@/components/landing/faq-section"
-import { SectionShell } from "@/components/layout/section-shell"
+import { BrisaFormCard, BrisaFormSection, DarkFormPanel } from "@/components/layout/brisa-form-section"
 import { contact, faqContact, site } from "@/content/site"
 import { contactForm } from "@/content/contact-form"
 import {
@@ -125,26 +125,8 @@ export function Contact() {
   )
 
   return (
-    <section ref={sectionRef} id="contacto" className="relative overflow-x-hidden bg-brisa py-20 md:py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 [background-image:radial-gradient(circle_at_12%_14%,rgba(1,222,162,0.24),transparent_32%),radial-gradient(circle_at_86%_20%,rgba(1,99,92,0.15),transparent_30%),radial-gradient(circle_at_72%_88%,rgba(43,192,169,0.18),transparent_35%),linear-gradient(to_bottom,rgba(255,255,255,0.92),rgba(214,242,232,0.95))]"
-      />
-      <div
-        aria-hidden
-        className="contact-geo-float contact-geo-float-a pointer-events-none absolute -top-24 right-12 h-60 w-60 rotate-12 rounded-[2rem] border border-agua/20 bg-white/55"
-      />
-      <div
-        aria-hidden
-        className="contact-geo-float contact-geo-float-b pointer-events-none absolute top-1/3 -left-16 h-44 w-44 rounded-full border border-primary/35 bg-primary/10"
-      />
-      <div
-        aria-hidden
-        className="contact-geo-float contact-geo-float-c pointer-events-none absolute bottom-12 right-1/3 h-24 w-24 rotate-45 border border-agua/30 bg-white/70"
-      />
-
-      <SectionShell>
-        <FadeIn className="mx-auto mb-14 max-w-3xl text-center">
+    <BrisaFormSection ref={sectionRef} id="contacto" padding="spacious">
+      <FadeIn className="mx-auto mb-14 max-w-3xl text-center">
           <div className="badge-on-light mb-6">
             <span className="badge-label-on-light">{contact.badge}</span>
           </div>
@@ -156,21 +138,11 @@ export function Contact() {
           <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
             {contact.subtitle}
           </p>
-        </FadeIn>
+      </FadeIn>
 
-        <div className="mx-auto max-w-6xl">
-          <FadeIn>
-            <div className="overflow-hidden rounded-3xl border border-agua/25 bg-white/90 shadow-xl shadow-agua/10 backdrop-blur-sm">
-              <div className="grid gap-0 lg:grid-cols-12">
-                <div className="relative border-b border-agua/20 bg-surface-dark p-6 sm:p-8 lg:col-span-7 lg:border-r lg:border-b-0 lg:p-9">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -top-20 right-6 h-52 w-52 rounded-full bg-primary/20 blur-3xl"
-                  />
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute bottom-8 left-10 h-36 w-36 rounded-full bg-turquesa/18 blur-3xl"
-                  />
+      <BrisaFormCard>
+        <div className="grid gap-0 lg:grid-cols-12">
+          <DarkFormPanel className="border-b border-agua/20 lg:col-span-7 lg:border-r lg:border-b-0">
                   <div className="mb-7 flex flex-wrap items-start justify-between gap-4">
                     <div>
                       <h3 className="text-2xl font-semibold tracking-tight text-on-dark">{contact.formTitle}</h3>
@@ -309,7 +281,7 @@ export function Contact() {
                   <div className="mt-6 rounded-xl border border-agua/35 bg-on-dark/8 px-4 py-3 text-center text-sm text-muted-on-dark motion-safe:animate-pulse [animation-duration:4.8s]">
                     ¿Tienes dudas antes de enviar? Mira las preguntas frecuentes justo debajo.
                   </div>
-                </div>
+                </DarkFormPanel>
                 <div className="relative bg-surface-dark p-6 sm:p-8 lg:col-span-5">
                   <div
                     aria-hidden
@@ -392,10 +364,9 @@ export function Contact() {
                   </div>
                 </div>
               </div>
-            </div>
-          </FadeIn>
+        </BrisaFormCard>
 
-          <FadeIn delay={0.15} className="mt-8">
+      <FadeIn delay={0.15} className="mx-auto mt-8 max-w-6xl">
             <div className="rounded-3xl border border-agua/20 bg-white/85 p-6 shadow-lg shadow-agua/8 md:p-8">
               <div className="mb-6 text-center">
                 <p className="text-xs font-semibold tracking-[0.18em] text-on-light-muted uppercase">
@@ -410,9 +381,7 @@ export function Contact() {
                 className="mx-auto max-w-none"
               />
             </div>
-          </FadeIn>
-        </div>
-      </SectionShell>
-    </section>
+      </FadeIn>
+    </BrisaFormSection>
   )
 }
