@@ -57,7 +57,7 @@ export const hero = {
     secondLine: "",
   },
   subtitle:
-    "Impulsamos empresas digitales con asesoría cercana, estratégica y orientada a datos. Gestionamos obligaciones legales y administrativas mientras convertimos información en decisiones de crecimiento. Unimos contabilidad analítica, automatización y acompañamiento experto para que ganes eficiencia y control, con máximo rendimiento en Odoo y Holded.",
+    "Asesoría estratégica que convierte datos en crecimiento. Gestionamos obligaciones legales, automatizamos procesos y potenciamos tu negocio. Contabilidad analítica y expertise en Odoo y Holded con la personalización de nuestros profesionales.",
   ctaPrimary: "Solicitar Consulta Gratis",
   ctaSecondary: "Ver Servicios",
   trust: [
@@ -112,20 +112,18 @@ export const odoo = {
 
 const plansBase = {
   badge: "Planes",
-  legalNote:
-    "Precios orientativos sin impuestos, solo como referencia inicial. Ajustamos propuesta final tras revisar tu volumen y necesidades reales.",
-  ctaLabel: "Hablar con un asesor",
 } as const
 
-const sharedPlanTiers = [
+const autonomosTiers = [
   {
+    kind: "fixed",
     name: "Base",
-    audience: "Negocios con operativa estable y necesidades esenciales",
+    audience: "Autónomos con operativa estable y necesidades esenciales",
     price: "69",
     period: "mes",
     summary: "Cobertura esencial para tener fiscal y contabilidad al día sin fricción.",
     responseSla: "Respuesta en 48h laborables",
-    ctaLabel: "Quiero Empezar",
+    ctaLabel: "Quiero empezar",
     highlight: false,
     items: [
       "Contabilidad mensual y cierre básico",
@@ -135,74 +133,78 @@ const sharedPlanTiers = [
     ],
   },
   {
-    name: "Estándar",
-    audience: "Equipos en crecimiento que buscan más control y rapidez",
-    price: "129",
-    period: "mes",
-    summary: "Plan recomendado para ganar contexto operativo y tomar decisiones más seguras.",
-    responseSla: "Respuesta en menos de 24h laborables",
-    ctaLabel: "Reservar Este Plan",
+    kind: "custom",
+    name: "Personalizado",
+    audience: "Cuando necesitas más volumen, laboral u Odoo en el mismo equipo",
+    summary:
+      "Combinamos contabilidad, fiscal, laboral o tecnología según tu facturación, empleados y herramientas actuales.",
+    ctaLabel: "Personalizar tu plan",
     highlight: true,
     items: [
-      "Todo lo incluido en Base",
-      "Gestión laboral hasta 6 nóminas",
-      "Panel de seguimiento y alertas de plazos",
-      "2 sesiones de revisión al mes",
-    ],
-  },
-  {
-    name: "Pro",
-    audience: "Empresas con mayor volumen y necesidad de acompañamiento continuo",
-    price: "239",
-    period: "mes",
-    summary: "Acompañamiento integral con canal prioritario y foco estratégico recurrente.",
-    responseSla: "Canal prioritario y respuesta en el día",
-    ctaLabel: "Pedir Propuesta",
-    highlight: false,
-    items: [
-      "Todo lo incluido en Estándar",
-      "Gestión laboral hasta 15 nóminas",
-      "Acompañamiento en inspecciones y requerimientos",
-      "Comité mensual de seguimiento con acciones",
+      "Alcance definido contigo, sin paquete rígido",
+      "Gestión laboral y nóminas según plantilla",
+      "Integración Odoo u otras herramientas si las usas",
+      "Propuesta clara antes de contratar",
     ],
   },
 ] as const
 
-const sharedPlansComparison = {
-  title: "Comparativa de planes",
-  subtitle: "Visualiza en un vistazo qué cambia entre Base, Estándar y Pro.",
-  rows: [
-    { feature: "Contabilidad mensual", Base: "Incluida", Estándar: "Incluida", Pro: "Incluida" },
-    { feature: "Modelos fiscales", Base: "Trimestral + anual", Estándar: "Trimestral + anual", Pro: "Completa + soporte prioritario" },
-    { feature: "Gestión laboral", Base: "No incluida", Estándar: "Hasta 6 nóminas", Pro: "Hasta 15 nóminas" },
-    { feature: "Sesiones de revisión", Base: "1 sesión / mes", Estándar: "2 sesiones / mes", Pro: "Comité mensual estratégico" },
-    { feature: "Soporte", Base: "Email", Estándar: "Email + seguimiento activo", Pro: "Canal prioritario en el día" },
-    { feature: "Alertas y seguimiento", Base: "Básico", Estándar: "Panel + alertas", Pro: "Panel + alertas + plan de acción" },
-  ],
-} as const
+const empresasTiers = [
+  {
+    kind: "fixed",
+    name: "Constitución de empresa",
+    audience: "Para dar de alta tu negocio con fiscal y contabilidad desde el día uno",
+    price: "69",
+    period: "mes",
+    summary:
+      "Tramitación de altas, elección de forma jurídica y puesta en marcha fiscal y contable con acompañamiento inicial.",
+    responseSla: "Respuesta en 48h laborables",
+    ctaLabel: "Quiero empezar",
+    highlight: false,
+    items: [
+      "Asesoramiento en forma jurídica (autónomo, SL, etc.)",
+      "Tramitación de altas y licencias",
+      "Plan contable y obligaciones tributarias configuradas",
+      "Primeros meses con soporte cercano",
+    ],
+  },
+  {
+    kind: "custom",
+    name: "Personalizado",
+    audience: "Empresas en marcha que necesitan cobertura a medida",
+    summary:
+      "Diseñamos fiscal, contable, laboral y soporte en Odoo según estructura, equipo y ritmo de crecimiento de tu empresa.",
+    ctaLabel: "Personalizar tu plan",
+    highlight: true,
+    items: [
+      "Cobertura acorde a volumen y número de empleados",
+      "Prioridad de respuesta acordada",
+      "Seguimiento estratégico recurrente si lo necesitas",
+      "Propuesta detallada antes de comprometerte",
+    ],
+  },
+] as const
 
 export const plansByAudience = {
   autonomos: {
     ...plansBase,
     title: ["Plan para autónomos", "que quieren claridad mensual"],
     subtitle:
-      "Cobertura clara para autónomos y microempresas: control fiscal y contable, soporte cercano y precio transparente.",
-    ctaTitle: "¿Eres autónomo y dudas entre opciones?",
-    ctaSubtitle:
-      "Te orientamos en 20 minutos y te recomendamos el plan que mejor encaja con tu volumen y momento actual.",
-    tiers: sharedPlanTiers,
-    comparisonTable: sharedPlansComparison,
+      "Base con precio claro o plan personalizado — nuestra opción recomendada si tu caso no encaja en un paquete fijo.",
+    tiers: autonomosTiers,
+    customizeFormAnchor: "personalizar-plan",
+    planNote:
+      "El plan Base muestra un precio orientativo que puedes acordar con nuestros asesores. El plan personalizado se adapta mejor a tus necesidades.",
   },
   empresas: {
     ...plansBase,
     title: ["Plan para empresas", "con visión de crecimiento"],
     subtitle:
-      "Acompañamiento integral para empresas que necesitan seguimiento continuo, prioridad de respuesta y más profundidad estratégica.",
-    ctaTitle: "¿Necesitas un plan para tu empresa?",
-    ctaSubtitle:
-      "Revisamos estructura, volumen y equipo para proponerte cobertura realista sin sobrecostes innecesarios.",
-    tiers: sharedPlanTiers,
-    comparisonTable: sharedPlansComparison,
+      "Constitución con precio de referencia o plan personalizado — recomendado cuando ya estás en marcha o necesitas más alcance.",
+    tiers: empresasTiers,
+    customizeFormAnchor: "personalizar-plan",
+    planNote:
+      "El plan Constitución de empresa muestra un precio orientativo que puedes acordar con nuestros asesores. El plan personalizado se adapta mejor a tus necesidades.",
   },
 } as const
 

@@ -13,6 +13,11 @@ import {
   team,
   testimonials,
 } from "@/content/site"
+import {
+  formatPlanTierBody,
+  planTierHref,
+  planTierKeywords,
+} from "@/lib/chatbot/plan-tier-summary"
 import type { KnowledgeChunk } from "./types"
 
 const SERVICE_KEYWORDS: Record<string, string[]> = {
@@ -98,9 +103,9 @@ export function flattenSiteContent(): KnowledgeChunk[] {
       id: "plans-autonomos-overview",
       topic: "planes",
       title: plansByAudience.autonomos.title.join(" "),
-      body: `${plansByAudience.autonomos.subtitle} ${plansByAudience.autonomos.tiers.map((tier) => `${tier.name}: ${tier.price}€/${tier.period}, ${tier.summary}`).join(" ")}`,
+      body: `${plansByAudience.autonomos.subtitle} ${plansByAudience.autonomos.tiers.map(formatPlanTierBody).join(" ")}`,
       href: "/plan-autonomos",
-      keywords: ["planes", "plan", "autonomos", "suscripcion", "tarifa", "precio", "mensual", "base", "profesional"],
+      keywords: ["planes", "plan", "autonomos", "suscripcion", "tarifa", "precio", "mensual", "base", "personalizado"],
     }),
   )
 
@@ -109,9 +114,9 @@ export function flattenSiteContent(): KnowledgeChunk[] {
       id: "plans-empresas-overview",
       topic: "planes",
       title: plansByAudience.empresas.title.join(" "),
-      body: `${plansByAudience.empresas.subtitle} ${plansByAudience.empresas.tiers.map((tier) => `${tier.name}: ${tier.price}€/${tier.period}, ${tier.summary}`).join(" ")}`,
+      body: `${plansByAudience.empresas.subtitle} ${plansByAudience.empresas.tiers.map(formatPlanTierBody).join(" ")}`,
       href: "/plan-empresas",
-      keywords: ["planes", "plan", "empresas", "pymes", "suscripcion", "tarifa", "precio", "mensual", "profesional", "avanzado"],
+      keywords: ["planes", "plan", "empresas", "pymes", "suscripcion", "tarifa", "precio", "mensual", "constitucion", "personalizado"],
     }),
   )
 
@@ -122,8 +127,8 @@ export function flattenSiteContent(): KnowledgeChunk[] {
         topic: "planes",
         title: `Plan ${tier.name}`,
         body: `${tier.summary} ${tier.audience}. ${tier.items.join(". ")}.`,
-        href: "/plan-autonomos",
-        keywords: ["plan", "autonomos", tier.name.toLowerCase(), "precio", tier.price, "suscripcion", "tarifa"],
+        href: planTierHref("autonomos", tier),
+        keywords: ["plan", "autonomos", tier.name.toLowerCase(), ...planTierKeywords(tier)],
       }),
     )
   }
@@ -131,12 +136,12 @@ export function flattenSiteContent(): KnowledgeChunk[] {
   for (const tier of plansByAudience.empresas.tiers) {
     chunks.push(
       chunk({
-        id: `plan-empresas-${tier.name.toLowerCase()}`,
+        id: `plan-empresas-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
         topic: "planes",
         title: `Plan ${tier.name}`,
         body: `${tier.summary} ${tier.audience}. ${tier.items.join(". ")}.`,
-        href: "/plan-empresas",
-        keywords: ["plan", "empresas", "pymes", tier.name.toLowerCase(), "precio", tier.price, "suscripcion", "tarifa"],
+        href: planTierHref("empresas", tier),
+        keywords: ["plan", "empresas", "pymes", tier.name.toLowerCase(), ...planTierKeywords(tier)],
       }),
     )
   }

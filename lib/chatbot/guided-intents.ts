@@ -1,4 +1,6 @@
 import { contactHref, plansByAudience } from "@/content/site"
+import { formatPlanTierPriceLabel } from "@/lib/chatbot/plan-tier-summary"
+import { planCustomizeForm } from "@/content/plan-customize-form"
 import { normalizeText } from "./normalize"
 import type { ChatReply } from "./types"
 
@@ -40,16 +42,12 @@ export function matchPlansIntent(query: string): ChatReply | null {
   const normalized = normalizeText(query)
   if (!normalized || !matchesAny(normalized, PLANS_PATTERNS)) return null
 
-  const autonomosSummary = plansByAudience.autonomos.tiers
-    .map((tier) => `${tier.name} (${tier.price}€/${tier.period})`)
-    .join(", ")
-  const empresasSummary = plansByAudience.empresas.tiers
-    .map((tier) => `${tier.name} (${tier.price}€/${tier.period})`)
-    .join(", ")
+  const autonomosSummary = plansByAudience.autonomos.tiers.map(formatPlanTierPriceLabel).join(", ")
+  const empresasSummary = plansByAudience.empresas.tiers.map(formatPlanTierPriceLabel).join(", ")
 
   return {
     source: "intent",
-    text: `Tenemos planes separados para autónomos (${autonomosSummary}) y para empresas (${empresasSummary}). Precios orientativos; propuesta final según volumen.`,
+    text: `Autónomos: ${autonomosSummary}. Empresas: ${empresasSummary}. Plan personalizado: formulario en la página (#${planCustomizeForm.sectionId}).`,
     href: "/plan-autonomos",
     linkLabel: "Ver plan de autónomos",
   }

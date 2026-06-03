@@ -244,7 +244,15 @@
     @apply font-sans text-xs font-medium tracking-wide text-on-light uppercase;
   }
   .input-on-dark {
-    @apply border-agua/30 bg-on-dark/10 text-on-dark placeholder:text-muted-on-dark focus-visible:border-primary focus-visible:ring-ring/50;
+    @apply border-agua/30 bg-on-dark/10 text-on-dark placeholder:text-muted-on-dark focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none;
+  }
+  .select-on-dark {
+    @apply border-agua/30 bg-on-dark/10 text-on-dark focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none;
+    color-scheme: dark;
+  }
+  .select-on-dark option {
+    background-color: var(--card);
+    color: var(--on-dark);
   }
   .contact-form-shell {
     @apply rounded-2xl border border-agua/40 bg-gradient-to-br from-surface-dark via-[#083340] to-agua/90 p-6 shadow-2xl shadow-surface-dark/30 md:p-8;
