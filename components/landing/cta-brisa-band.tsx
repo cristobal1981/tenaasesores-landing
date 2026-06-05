@@ -4,8 +4,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { FadeIn } from "@/components/animations"
 import { SectionShell } from "@/components/layout/section-shell"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { contactHref } from "@/content/site"
 
 interface CtaBrisaBandProps {
@@ -31,16 +30,12 @@ export function CtaBrisaBand({
             {title}
           </h2>
           <p className="section-cta-brisa-body mb-8">{subtitle}</p>
-          <Button
-            asChild
-            size="lg"
-            className={cn(marketingCtaBaseClassName, marketingCtaVariantClassName.brisa)}
-          >
+          <MarketingButton asChild size="lg" marketingVariant="brisa">
             <Link href={href}>
               {label}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Link>
-          </Button>
+          </MarketingButton>
         </FadeIn>
       </SectionShell>
     </section>

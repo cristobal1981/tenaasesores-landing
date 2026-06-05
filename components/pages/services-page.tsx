@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useRef } from "react"
-import { Check } from "lucide-react"
 import {
   FadeIn,
   StaggerContainer,
@@ -10,9 +9,12 @@ import {
 } from "@/components/animations"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { images, services } from "@/content/site"
 import { ServiceIconBadge } from "@/components/landing/service-icon-badge"
+import { ChecklistItem } from "@/components/ui/checklist-item"
+import { IconFeatureCard } from "@/components/ui/icon-feature-card"
 import { valueDifferentialIcons } from "@/lib/service-icons"
 import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
 import { useServicesScrollBlob } from "@/lib/gsap/use-services-scroll-blob"
@@ -70,19 +72,15 @@ export function ServicesPage() {
           duration={11}
         />
         <SectionShell>
-          <FadeIn className="mx-auto max-w-3xl text-center">
-            <div className="badge-on-dark mb-6">
-              <span className="badge-label-on-dark">{pageIntro.badge}</span>
-            </div>
-            <h1 className="mb-6 text-3xl leading-[1.15] font-bold text-on-dark sm:text-4xl lg:text-5xl">
-              {pageIntro.title[0]}
-              <br />
-              <span className="text-primary">{pageIntro.title[1]}</span>
-            </h1>
-            <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-dark">
-              {pageIntro.subtitle}
-            </p>
-          </FadeIn>
+          <MarketingSectionHeading
+            badge={pageIntro.badge}
+            title={pageIntro.title}
+            subtitle={pageIntro.subtitle}
+            titleLine2Tone="primary"
+            as="h1"
+            size="page"
+            className="max-w-3xl"
+          />
         </SectionShell>
       </section>
 
@@ -113,16 +111,12 @@ export function ServicesPage() {
       {/* Valor diferencial */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <SectionShell>
-          <FadeIn className="mx-auto mb-14 max-w-2xl text-center">
-            <div className="badge-on-dark mb-6">
-              <span className="badge-label-on-dark">{valueDifferential.badge}</span>
-            </div>
-            <h2 className="text-2xl font-bold text-on-dark sm:text-3xl lg:text-4xl">
-              {valueDifferential.title[0]}
-              <br />
-              <span className="text-muted-on-dark">{valueDifferential.title[1]}</span>
-            </h2>
-          </FadeIn>
+          <MarketingSectionHeading
+            badge={valueDifferential.badge}
+            title={valueDifferential.title}
+            size="compact"
+            className="mb-14 max-w-2xl"
+          />
 
           <StaggerContainer
             className="mx-auto grid max-w-2xl grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-3"
@@ -132,15 +126,13 @@ export function ServicesPage() {
               const Icon = valueDifferentialIcons[index]
               return (
                 <StaggerItem key={item.title}>
-                  <div className="group flex h-full flex-col rounded-2xl border border-agua/30 bg-gradient-to-br from-card to-agua/25 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5">
-                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/20 transition-transform duration-300 group-hover:scale-105">
-                      <Icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="mb-3 text-lg font-semibold text-on-dark">{item.title}</h3>
-                    <p className="text-sm leading-relaxed text-muted-on-dark">
-                      {item.description}
-                    </p>
-                  </div>
+                  <IconFeatureCard
+                    icon={Icon}
+                    title={item.title}
+                    description={item.description}
+                    variant="gradient"
+                    iconSize="md"
+                  />
                 </StaggerItem>
               )
             })}
@@ -201,12 +193,13 @@ export function ServicesPage() {
                         </h3>
                         <ul className="grid gap-4 sm:grid-cols-2">
                           {service.benefits.map((benefit) => (
-                            <li key={benefit} className="flex items-start gap-3">
-                              <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                              <span className="text-sm leading-relaxed text-on-dark/90 md:text-base">
-                                {benefit}
-                              </span>
-                            </li>
+                            <ChecklistItem
+                              key={benefit}
+                              className="gap-3"
+                              textClassName="text-on-dark/90 md:text-base"
+                            >
+                              {benefit}
+                            </ChecklistItem>
                           ))}
                         </ul>
                       </div>

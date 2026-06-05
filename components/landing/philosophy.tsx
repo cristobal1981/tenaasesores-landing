@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useReducedMotion } from "framer-motion"
 import { FadeIn } from "@/components/animations"
 import { ClaveValueCard } from "@/components/landing/clave-value-card"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { philosophy } from "@/content/site"
 import { cn } from "@/lib/utils"
@@ -62,19 +63,13 @@ export function Philosophy() {
       />
 
       <SectionShell className="relative">
-        <FadeIn className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-          <div className="badge-on-light mb-6">
-            <span className="badge-label-on-light">{philosophy.badge}</span>
-          </div>
-          <h2 className="mb-6 text-pretty text-3xl leading-[1.2] font-bold text-on-light sm:text-4xl lg:text-5xl">
-            {philosophy.title[0]}
-            <br />
-            <span className="text-on-light-muted">{philosophy.title[1]}</span>
-          </h2>
-          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
-            {philosophy.subtitle}
-          </p>
-        </FadeIn>
+        <MarketingSectionHeading
+          badge={philosophy.badge}
+          title={philosophy.title}
+          subtitle={philosophy.subtitle}
+          tone="light"
+          className="mb-12 max-w-3xl md:mb-16"
+        />
 
         <div className="relative" onMouseLeave={clearHover}>
           <div className="mb-10 md:mb-12">

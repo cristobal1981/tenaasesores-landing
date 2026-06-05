@@ -34,3 +34,5 @@ alwaysApply: true
 ## Secretos
 
 - Variables de entorno para webhooks/credenciales; nunca en código fuente.
+- Leads Odoo (contacto + plan personalizado): `ODOO_LEAD_WEBHOOK_URL`, opcional `ODOO_LEAD_WEBHOOK_SECRET`.
+- Solo UI (sin API): `NEXT_PUBLIC_FORM_SUBMIT_STUB=true` en `.env.local`; quitar en producción.

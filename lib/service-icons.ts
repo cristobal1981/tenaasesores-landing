@@ -18,7 +18,6 @@ export const serviceIconsBySlug: Record<string, LucideIcon> = {
 
 export const valueDifferentialIcons: LucideIcon[] = [ShieldCheck, Monitor, GraduationCap]
 
-/** @deprecated Use getServiceIconBySlug */
 export const serviceIcons: LucideIcon[] = [FileText, Calculator, Users, Briefcase]
 
 export function getServiceIconBySlug(slug: string): LucideIcon {

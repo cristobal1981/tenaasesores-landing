@@ -2,9 +2,11 @@
 
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-import { FadeIn, StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
+import { StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { ServiceIconBadge } from "@/components/landing/service-icon-badge"
+import { GradientCard } from "@/components/ui/gradient-card"
 import { services } from "@/content/site"
 
 export function Services() {
@@ -29,25 +31,17 @@ export function Services() {
       />
 
       <SectionShell>
-        <FadeIn className="mx-auto mb-16 max-w-2xl text-center">
-          <div className="badge-on-dark mb-6">
-            <span className="badge-label-on-dark">{services.badge}</span>
-          </div>
-          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-dark sm:text-4xl lg:text-5xl">
-            {services.title[0]}
-            <br />
-            <span className="text-muted-on-dark">{services.title[1]}</span>
-          </h2>
-          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-dark">
-            {services.subtitle}
-          </p>
-        </FadeIn>
+        <MarketingSectionHeading
+          badge={services.badge}
+          title={services.title}
+          subtitle={services.subtitle}
+        />
 
         <StaggerContainer className="grid gap-6 md:grid-cols-2" staggerDelay={0.1}>
           {services.items.map((service) => {
             return (
               <StaggerItem key={service.title} className="h-full">
-                <div className="group flex h-full flex-col rounded-2xl border border-agua/30 bg-gradient-to-br from-card to-agua/20 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 lg:p-8">
+                <GradientCard>
                   <div className="flex gap-5 lg:gap-6">
                     <ServiceIconBadge slug={service.slug} size="lg" />
                     <div className="min-w-0 flex-1">
@@ -66,7 +60,7 @@ export function Services() {
                     Más información
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
-                </div>
+                </GradientCard>
               </StaggerItem>
             )
           })}

@@ -12,6 +12,9 @@ export const planCustomizeTaxRegions = [
 
 export const planCustomizeForm = {
   sectionId: "personalizar-plan",
+  fields: {
+    honeypotLabel: "Deja este campo vacío",
+  },
   panelHeader: {
     autonomos: {
       eyebrow: "Plan personalizado · autónomos",
@@ -80,9 +83,9 @@ export const planCustomizeForm = {
     namePlaceholder: "Tu nombre",
     emailLabel: "Email",
     emailPlaceholder: "tu@email.com",
-    phoneLabel: "Teléfono (opcional)",
+    phoneLabel: "Teléfono",
     phonePlaceholder: "+34 600 000 000",
-    notesLabel: "Algo más que debamos saber (opcional)",
+    notesLabel: "Algo más que debamos saber",
     notesPlaceholder: "Plazos, herramientas que usas, dudas concretas…",
   },
   messagePrefix: {
@@ -108,10 +111,31 @@ export const planCustomizeForm = {
     notesMax: 1000,
     revenueDigitsMin: 1,
     revenueDigitsMax: 12,
+    minSubmitDelayMs: 2500,
+  },
+  rateLimit: {
+    maxPerIpPerHour: 5,
+    maxPerEmailPerHour: 3,
+    clientMaxPerWindow: 2,
+    clientWindowMs: 30 * 60 * 1000,
+  },
+  messages: {
+    validation: "Revisa los campos marcados e inténtalo de nuevo.",
+    honeypot:
+      "No se ha podido enviar la solicitud. Si eres una persona, inténtalo de nuevo.",
+    rateLimit:
+      "Has enviado varias solicitudes recientemente. Espera un momento antes de volver a intentarlo.",
+    duplicateLead:
+      "Ya hay una solicitud reciente con este email. Te contactaremos en breve; si es urgente, llámanos por teléfono.",
+    webhookForbidden:
+      "No hemos podido registrar tu solicitud ahora mismo. Inténtalo en unos minutos o contáctanos por teléfono.",
+    genericError:
+      "No se ha podido enviar la solicitud. Inténtalo más tarde o contáctanos por teléfono.",
   },
   success: {
     title: "Proceso completado",
     body: "Hemos recibido tu información. Te contactaremos lo antes posible — en menos de 24 horas laborables — con tu propuesta personalizada.",
     stepsDoneLabel: "Los 3 pasos están enviados",
   },
+  privacyNote: "Al enviar aceptas la política de privacidad",
 } as const

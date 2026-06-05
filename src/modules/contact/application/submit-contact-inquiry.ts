@@ -1,8 +1,9 @@
 import { createContactInquiry } from "@/src/modules/contact/domain/contact-inquiry"
-import type { ContactEmailGateway } from "@/src/modules/contact/infrastructure/contact-email-gateway"
+import type { OdooLeadGateway } from "@/src/modules/leads/infrastructure/odoo-lead-gateway"
+import { submitContactCrmLead } from "@/src/modules/leads/application/submit-crm-lead"
 
 export async function submitContactInquiry(
-  gateway: ContactEmailGateway,
+  gateway: OdooLeadGateway,
   input: {
     name: string
     phone?: string
@@ -11,6 +12,6 @@ export async function submitContactInquiry(
   }
 ) {
   const inquiry = createContactInquiry(input)
-  await gateway.sendInquiry(inquiry)
+  await submitContactCrmLead(gateway, input)
   return inquiry
 }

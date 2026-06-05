@@ -1,7 +1,8 @@
 "use client"
 
 import { Star, Quote } from "lucide-react"
-import { FadeIn, StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
+import { StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { testimonials } from "@/content/site"
 
@@ -22,19 +23,12 @@ export function Testimonials() {
       />
 
       <SectionShell>
-        <FadeIn className="mx-auto mb-16 max-w-2xl text-center">
-          <div className="badge-on-light mb-6">
-            <span className="badge-label-on-light">{testimonials.badge}</span>
-          </div>
-          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-light sm:text-4xl lg:text-5xl">
-            {testimonials.title[0]}
-            <br />
-            <span className="text-on-light-muted">{testimonials.title[1]}</span>
-          </h2>
-          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
-            {testimonials.subtitle}
-          </p>
-        </FadeIn>
+        <MarketingSectionHeading
+          badge={testimonials.badge}
+          title={testimonials.title}
+          subtitle={testimonials.subtitle}
+          tone="light"
+        />
 
         <StaggerContainer className="grid gap-6 md:grid-cols-3" staggerDelay={0.15}>
           {testimonials.items.map((testimonial) => (

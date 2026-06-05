@@ -11,6 +11,7 @@ import {
   legalRoutes,
   type LegalPageSlug,
 } from "@/content/legal"
+import { formatLegalText } from "@/lib/legal/format-legal-text"
 import { cn } from "@/lib/utils"
 
 const SCROLL_SPY_OFFSET_PX = 120
@@ -19,31 +20,6 @@ function formatLastUpdated(isoDate: string) {
   const date = new Date(isoDate)
   if (Number.isNaN(date.getTime())) return isoDate
   return new Intl.DateTimeFormat("es-ES", { dateStyle: "long" }).format(date)
-}
-
-function renderParagraphWithLinks(text: string) {
-  const parts = text.split(/(\/aviso-legal|\/privacidad|\/cookies)/g)
-
-  return parts.map((part, index) => {
-    if (part === "/aviso-legal" || part === "/privacidad" || part === "/cookies") {
-      const labels: Record<string, string> = {
-        "/aviso-legal": "Aviso legal",
-        "/privacidad": "Política de privacidad",
-        "/cookies": "Política de cookies",
-      }
-      return (
-        <Link
-          key={`${part}-${index}`}
-          href={part}
-          className="text-accent-on-light underline-offset-4 hover:underline"
-        >
-          {labels[part]}
-        </Link>
-      )
-    }
-
-    return <span key={`${part}-${index}`}>{part}</span>
-  })
 }
 
 type LegalPageContentProps = {
@@ -143,12 +119,12 @@ export function LegalPageContent({ slug }: LegalPageContentProps) {
                   </h2>
                   <div className="space-y-4 text-base leading-relaxed text-muted-on-light">
                     {section.paragraphs.map((paragraph) => (
-                      <p key={paragraph}>{renderParagraphWithLinks(paragraph)}</p>
+                      <p key={paragraph}>{formatLegalText(paragraph)}</p>
                     ))}
                     {"listItems" in section && section.listItems ? (
                       <ul className="list-disc space-y-2 pl-5">
                         {section.listItems.map((item) => (
-                          <li key={item}>{renderParagraphWithLinks(item)}</li>
+                          <li key={item}>{formatLegalText(item)}</li>
                         ))}
                       </ul>
                     ) : null}

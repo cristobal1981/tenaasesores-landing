@@ -2,7 +2,6 @@ export const serviceSlugs = ["fiscal", "contable", "laboral", "constitucion"] as
 
 export type ServiceSlug = (typeof serviceSlugs)[number]
 
-/** Icon badge tints per service — cards/sections stay on brand green. */
 export const serviceAccentBySlug: Record<
   ServiceSlug,
   { badge: string; icon: string; badgeHover: string }

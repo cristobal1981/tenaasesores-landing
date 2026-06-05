@@ -2,7 +2,6 @@ import { site } from "@/content/site"
 
 export const webIssueReportPath = "/reportar-problema" as const
 
-/** Destino del mailto de incidencias web (no confundir con site.email de contacto). */
 export const webIssueReportEmail = site.technicalEmail
 
 export const webIssueFooter = {

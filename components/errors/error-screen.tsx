@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { cn } from "@/lib/utils"
 
 interface ErrorScreenProps {
@@ -59,30 +59,23 @@ export function ErrorScreen({
             {description}
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button
-              asChild
-              size="lg"
-              className={cn("px-8", marketingCtaBaseClassName, marketingCtaVariantClassName.primary)}
-            >
+            <MarketingButton asChild size="lg" className="px-8">
               <Link href={primaryHref}>
                 {primaryLabel}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-            </Button>
+            </MarketingButton>
             {onRetry ? (
-              <Button
+              <MarketingButton
                 type="button"
                 size="lg"
                 variant="outline"
-                className={cn(
-                  "px-8",
-                  marketingCtaBaseClassName,
-                  marketingCtaVariantClassName.secondary
-                )}
+                marketingVariant="secondary"
+                className="px-8"
                 onClick={onRetry}
               >
                 Intentar de nuevo
-              </Button>
+              </MarketingButton>
             ) : null}
           </div>
         </div>

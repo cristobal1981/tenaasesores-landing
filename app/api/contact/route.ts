@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { contactForm } from "@/content/contact-form"
 import { submitContactInquiry } from "@/src/modules/contact/application/submit-contact-inquiry"
-import { createContactEmailGateway } from "@/src/modules/contact/infrastructure/contact-email-gateway"
+import { createOdooLeadGateway } from "@/src/modules/leads/infrastructure/odoo-lead-gateway"
 import {
   checkContactSubmissionRateLimit,
   isContactBodyWithinLimit,
@@ -12,6 +12,10 @@ import {
   validateContactInquiry,
   type ContactInquiryPayload,
 } from "@/lib/contact/validate-inquiry"
+import {
+  leadDeliveryJsonResponse,
+  toLeadDeliveryError,
+} from "@/lib/leads/handle-lead-delivery-failure"
 
 function json(data: Record<string, unknown>, status = 200, headers?: HeadersInit) {
   return NextResponse.json(data, { status, headers })
@@ -72,17 +76,11 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await submitContactInquiry(createContactEmailGateway(), validation.data)
-  } catch {
-    return json(
-      {
-        ok: false,
-        error: "delivery",
-        message: contactForm.messages.genericError,
-      },
-      503
-    )
+    await submitContactInquiry(createOdooLeadGateway(), validation.data)
+  } catch (error) {
+    const deliveryError = toLeadDeliveryError(error, "contact")
+    return json(leadDeliveryJsonResponse(deliveryError), deliveryError.status)
   }
 
-  return json({ ok: true, message: contactForm.messages.success })
+  return json({ ok: true, message: contactForm.success.body })
 }

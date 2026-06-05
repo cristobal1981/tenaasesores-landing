@@ -26,19 +26,48 @@ function allowedOrigins(): Set<string> {
   return origins
 }
 
+function isPrivateOrLocalDevHostname(hostname: string): boolean {
+  if (hostname === "localhost" || hostname === "127.0.0.1") return true
+  if (/^192\.168\.\d{1,3}\.\d{1,3}$/.test(hostname)) return true
+  if (/^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname)) return true
+  if (/^172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}$/.test(hostname)) return true
+  const secondOctet = Number.parseInt(hostname.split(".")[1] ?? "", 10)
+  if (hostname.startsWith("100.") && secondOctet >= 64 && secondOctet <= 127) return true
+  return false
+}
+
+function isLocalNetworkDevOrigin(origin: string): boolean {
+  try {
+    const { protocol, hostname } = new URL(origin)
+    if (protocol !== "http:" && protocol !== "https:") return false
+    return isPrivateOrLocalDevHostname(hostname)
+  } catch {
+    return false
+  }
+}
+
+function isAllowedOriginValue(value: string | null, allowed: Set<string>): boolean {
+  if (!value) return false
+  const normalized = normalizeOrigin(value)
+  if (!normalized) return false
+  if (allowed.has(normalized)) return true
+  if (process.env.NODE_ENV !== "production" && isLocalNetworkDevOrigin(normalized)) {
+    return true
+  }
+  return false
+}
+
 export function isContactRequestOriginAllowed(request: NextRequest): boolean {
   const allowed = allowedOrigins()
   const origin = request.headers.get("origin")
   const referer = request.headers.get("referer")
 
   if (origin) {
-    const normalized = normalizeOrigin(origin)
-    return normalized ? allowed.has(normalized) : false
+    return isAllowedOriginValue(origin, allowed)
   }
 
   if (referer) {
-    const normalized = normalizeOrigin(referer)
-    return normalized ? allowed.has(normalized) : false
+    return isAllowedOriginValue(referer, allowed)
   }
 
   return process.env.NODE_ENV !== "production"

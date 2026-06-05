@@ -160,8 +160,8 @@ Ejemplo: enlaces legales o redes sociales sin página → `href="/proximamente"`
 - `pnpm dev` — desarrollo
 - `pnpm build` — producción
 
-## Fase posterior
-- API `app/api/submit-lead` + Odoo para formulario de contacto
+## Integración leads
+- `POST /api/contact` y `POST /api/plan-customize` → webhook n8n (`ODOO_LEAD_WEBHOOK_URL`) → `crm.lead` en Odoo
 
 ## Checklist antes de entregar UI
 - [x] Tipografías: Host Grotesk (títulos) + Archivo (cuerpo) vía `next/font` + `font-family` en base

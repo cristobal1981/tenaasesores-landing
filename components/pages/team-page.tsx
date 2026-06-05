@@ -11,6 +11,7 @@ import {
 } from "@/components/animations"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { TeamCardGeometries } from "@/components/pages/team-card-geometries"
 import { about, images, team } from "@/content/site"
@@ -99,17 +100,13 @@ export function TeamPage() {
 
       <section className="border-t border-agua/30 bg-background py-16 md:py-24">
         <SectionShell>
-          <FadeIn className="mx-auto mb-14 max-w-2xl text-center">
-            <div className="badge-on-dark mb-6">
-              <span className="badge-label-on-dark">{team.badge}</span>
-            </div>
-            <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-dark sm:text-4xl">
-              {team.title[0]}
-              <br />
-              <span className="text-muted-on-dark">{team.title[1]}</span>
-            </h2>
-            <p className="text-lg leading-relaxed text-muted-on-dark">{team.subtitle}</p>
-          </FadeIn>
+          <MarketingSectionHeading
+            badge={team.badge}
+            title={team.title}
+            subtitle={team.subtitle}
+            className="mb-14 max-w-2xl"
+            subtitleProse={false}
+          />
 
           <StaggerContainer
             className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3"

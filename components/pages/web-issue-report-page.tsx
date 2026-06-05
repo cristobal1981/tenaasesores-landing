@@ -4,8 +4,12 @@ import Link from "next/link"
 import { useCallback, useEffect, useId, useMemo, useState } from "react"
 import { ArrowRight, Mail } from "lucide-react"
 import { FadeIn } from "@/components/animations"
+import { DarkPageHero } from "@/components/layout/dark-page-hero"
 import { SectionShell } from "@/components/layout/section-shell"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { FieldLabel } from "@/components/forms/field-label"
+import { FormStatusMessage } from "@/components/forms/form-status-message"
+import { HoneypotField } from "@/components/forms/honeypot-field"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { webIssueReport, webIssueReportPath } from "@/content/web-issue"
@@ -94,32 +98,22 @@ export function WebIssueReportPage({ initialPageUrl = "" }: WebIssueReportPagePr
 
   return (
     <main className="min-h-screen">
-      <section className="relative overflow-hidden border-b border-agua/30 py-16 md:py-20">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_16%,rgba(1,222,162,0.14),transparent_36%),radial-gradient(circle_at_88%_12%,rgba(1,99,92,0.16),transparent_40%),linear-gradient(to_bottom,rgba(6,42,51,0.72),rgba(4,29,35,0.94))]"
-        />
-        <SectionShell>
-          <FadeIn className="relative mx-auto max-w-3xl">
-            <p className="mb-3 text-sm font-medium tracking-wide text-primary uppercase">
-              {webIssueReport.badge}
-            </p>
-            <h1 className="mb-4 text-3xl leading-[1.15] font-bold text-balance text-on-dark sm:text-4xl">
-              {webIssueReport.title}
-            </h1>
-            <p className="text-lg leading-relaxed text-muted-on-dark">
-              {webIssueReport.subtitle}{" "}
-              <Link
-                href={webIssueReport.contactHref}
-                className="text-primary underline-offset-4 hover:underline"
-              >
-                {webIssueReport.contactLinkLabel}
-              </Link>
-              .
-            </p>
-          </FadeIn>
-        </SectionShell>
-      </section>
+      <DarkPageHero
+        eyebrow={webIssueReport.badge}
+        title={webIssueReport.title}
+        lead={
+          <>
+            {webIssueReport.subtitle}{" "}
+            <Link
+              href={webIssueReport.contactHref}
+              className="text-primary underline-offset-4 hover:underline"
+            >
+              {webIssueReport.contactLinkLabel}
+            </Link>
+            .
+          </>
+        }
+      />
 
       <section className="border-t border-agua/20 bg-surface-light py-12 md:py-16">
         <SectionShell>
@@ -132,23 +126,18 @@ export function WebIssueReportPage({ initialPageUrl = "" }: WebIssueReportPagePr
               }}
               noValidate
             >
-              <div className="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden>
-                <label htmlFor={honeypotId}>{webIssueReport.fields.honeypotLabel}</label>
-                <input
-                  id={honeypotId}
-                  type="text"
-                  name="company"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={honeypot}
-                  onChange={(event) => setHoneypot(event.target.value)}
-                />
-              </div>
+              <HoneypotField
+                id={honeypotId}
+                label={webIssueReport.fields.honeypotLabel}
+                value={honeypot}
+                onChange={setHoneypot}
+                hide="off-screen"
+              />
 
               <div className="space-y-2">
-                <label htmlFor="page-url" className="text-sm font-medium text-on-light">
+                <FieldLabel htmlFor="page-url" tone="light">
                   {webIssueReport.fields.pageUrl}
-                </label>
+                </FieldLabel>
                 <Input
                   id="page-url"
                   name="pageUrl"
@@ -164,9 +153,9 @@ export function WebIssueReportPage({ initialPageUrl = "" }: WebIssueReportPagePr
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="issue-type" className="text-sm font-medium text-on-light">
+                <FieldLabel htmlFor="issue-type" tone="light">
                   {webIssueReport.fields.issueType}
-                </label>
+                </FieldLabel>
                 <select
                   id="issue-type"
                   name="issueType"
@@ -187,9 +176,9 @@ export function WebIssueReportPage({ initialPageUrl = "" }: WebIssueReportPagePr
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="description" className="text-sm font-medium text-on-light">
+                <FieldLabel htmlFor="description" tone="light">
                   {webIssueReport.fields.description}
-                </label>
+                </FieldLabel>
                 <Textarea
                   id="description"
                   name="description"
@@ -224,26 +213,17 @@ export function WebIssueReportPage({ initialPageUrl = "" }: WebIssueReportPagePr
               </div>
 
               {errorMessage ? (
-                <p className="text-sm text-destructive" role="alert">
+                <FormStatusMessage variant="error" tone="light" boxed={false}>
                   {errorMessage}
-                </p>
+                </FormStatusMessage>
               ) : null}
 
               <div className="space-y-2 pt-2">
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={!canSubmit}
-                  className={cn(
-                    "w-full sm:w-auto",
-                    marketingCtaBaseClassName,
-                    marketingCtaVariantClassName.primary
-                  )}
-                >
+                <MarketingButton type="submit" size="lg" disabled={!canSubmit} className="w-full sm:w-auto">
                   <Mail className="mr-2 h-4 w-4" />
                   {webIssueReport.submitLabel}
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                </MarketingButton>
                 <p className="text-xs text-muted-on-light">{webIssueReport.submitHint}</p>
               </div>
             </form>

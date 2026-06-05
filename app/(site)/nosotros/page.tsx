@@ -5,7 +5,7 @@ import { site } from "@/src/shared/config/site"
 export const metadata: Metadata = {
   title: "Nosotros | tenaasesores",
   description:
-    "Conoce al equipo de tenaasesores en Tenerife. Siete profesionales, trato directo y asesoría contable, fiscal y laboral con Odoo.",
+    "Conoce al equipo de tenaasesores en Tenerife. Seis profesionales, trato directo y asesoría contable, fiscal y laboral con Odoo.",
   openGraph: {
     title: "Nosotros | tenaasesores",
     description: site.description,

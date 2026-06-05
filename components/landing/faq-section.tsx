@@ -3,6 +3,7 @@
 import { ChevronDown } from "lucide-react"
 import { useId, useState } from "react"
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { cn } from "@/lib/utils"
 
@@ -44,36 +45,39 @@ export function FaqSection({
   const content = (
     <>
       {hasHeader ? (
-        <FadeIn className={wrapperClassName}>
-          {badge ? (
-            <div className="badge-on-dark mb-6">
-              <span className="badge-label-on-dark">{badge}</span>
-            </div>
-          ) : null}
-          {title ? (
-            <h2 className={headingClassName}>
-              {lineA}
-              {lineB ? (
-                <>
-                  <br />
-                  <span className={embedded ? "text-on-light-muted" : "text-muted-on-dark"}>{lineB}</span>
-                </>
-              ) : null}
-            </h2>
-          ) : null}
-          {subtitle ? (
-            <p
-              className={cn(
-                "mt-4 leading-relaxed",
-                embedded
-                  ? "max-w-none text-base text-muted-on-light"
-                  : "prose-width mx-auto text-lg text-muted-on-dark"
-              )}
-            >
-              {subtitle}
-            </p>
-          ) : null}
-        </FadeIn>
+        embedded ? (
+          <FadeIn className={wrapperClassName}>
+            {badge ? (
+              <div className="badge-on-dark mb-6">
+                <span className="badge-label-on-dark">{badge}</span>
+              </div>
+            ) : null}
+            {title ? (
+              <h2 className={headingClassName}>
+                {lineA}
+                {lineB ? (
+                  <>
+                    <br />
+                    <span className="text-on-light-muted">{lineB}</span>
+                  </>
+                ) : null}
+              </h2>
+            ) : null}
+            {subtitle ? (
+              <p className="mt-4 max-w-none text-base leading-relaxed text-muted-on-light">
+                {subtitle}
+              </p>
+            ) : null}
+          </FadeIn>
+        ) : (
+          <MarketingSectionHeading
+            badge={badge}
+            title={title ?? ""}
+            subtitle={subtitle}
+            className={compact ? "mb-8 max-w-3xl" : "mb-14 max-w-2xl"}
+            size={compact ? "compact" : "section"}
+          />
+        )
       ) : null}
 
       <StaggerContainer className="mx-auto max-w-4xl space-y-4" staggerDelay={0.06}>

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { cookieBannerCopy, legalRoutes } from "@/content/legal"
 import {
   hasCookieConsentDecision,
@@ -63,30 +63,21 @@ export function CookieBanner() {
         </p>
 
         <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
-          <Button
+          <MarketingButton
             type="button"
-            className={cn(
-              "w-full sm:w-auto",
-              marketingCtaBaseClassName,
-              marketingCtaVariantClassName.secondary,
-              "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            )}
+            marketingVariant="secondary"
+            className="w-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:w-auto"
             onClick={() => persistChoice(false)}
           >
             {cookieBannerCopy.rejectLabel}
-          </Button>
-          <Button
+          </MarketingButton>
+          <MarketingButton
             type="button"
-            className={cn(
-              "w-full sm:w-auto",
-              marketingCtaBaseClassName,
-              marketingCtaVariantClassName.primary,
-              "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            )}
+            className="w-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:w-auto"
             onClick={() => persistChoice(true)}
           >
             {cookieBannerCopy.acceptLabel}
-          </Button>
+          </MarketingButton>
         </div>
       </div>
     </div>

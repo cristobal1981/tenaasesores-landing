@@ -12,7 +12,6 @@ registerScrollTrigger()
 const FADE_IN_PORTION = 0.12
 const FADE_OUT_PORTION = 0.1
 
-/** Puntos de una S al bajar: arriba-izq → arriba-der → medio-izq → medio-der → abajo-der */
 const S_PATH = [
   { left: "10%", top: "18%", scale: 0.8 },
   { left: "74%", top: "30%", scale: 1.06 },
@@ -21,7 +20,6 @@ const S_PATH = [
   { left: "76%", top: "72%", scale: 1.2 },
 ] as const
 
-/** Duración relativa por tramo (más alto = más scroll en ese tramo = más lento) */
 const SEGMENT_DURATION = [0.2, 0.34, 0.18, 0.28] as const
 const SEGMENT_EASE = ["power2.in", "power1.inOut", "power2.in", "power1.out"] as const
 

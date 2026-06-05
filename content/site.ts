@@ -2,7 +2,7 @@ export const brand = {
   wordmark: "tenaasesores",
   wordmarkHighlight: "tena",
   wordmarkRest: "asesores",
-  logoSrc: "/syntia-isotipo.svg",
+  logoSrc: "/brand/syntia-isotipo.svg",
 } as const
 
 export const site = {
@@ -13,7 +13,6 @@ export const site = {
   url: "https://tenaasesores.es",
   location: "Tenerife, España",
   email: "info@tenaasesores.es",
-  /** Incidencias técnicas de la web (reportar-problema); no usar para contacto comercial. */
   technicalEmail: "tecnico@tenaasesores.es",
   phone: {
     display: "+34 922 38 81 92",
@@ -411,55 +410,42 @@ export const team = {
   badge: "Nuestro equipo",
   title: ["Personas reales,", "trato directo."],
   subtitle:
-    "Siete profesionales en Tenerife. Sin call center ni intermediarios: conoces quién lleva tu expediente.",
+    "Seis profesionales en Tenerife. Sin call center ni intermediarios: conoces quién lleva tu expediente.",
   members: [
     {
       name: "Cristóbal",
       role: "Socio · Dirección y fiscal",
-      photo:
-        "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+      photo: "/team/cristobal.jfif",
       bio: "Más de quince años asesorando pymes y autónomos. Especialista en planificación fiscal y cumplimiento tributario en Canarias.",
     },
     {
       name: "Ariana",
       role: "Área contable y Odoo",
-      photo:
-        "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+      photo: "/team/ariana.jfif",
       bio: "Supervisa la contabilidad en Odoo y los cierres mensuales. Le gusta que los números cuadren y que el cliente los entienda.",
     },
     {
       name: "Irene",
       role: "Área laboral",
-      photo:
-        "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+      photo: "/team/irene.jfif",
       bio: "Gestiona nóminas, contratos y Seguridad Social. Resuelve dudas laborales con claridad y sin tecnicismos innecesarios.",
-    },
-    {
-      name: "Verónica",
-      role: "Área fiscal",
-      photo:
-        "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
-      bio: "Lleva modelos, IVA/IGIC y obligaciones periódicas. Vigila plazos para que no te pillen sorpresas con Hacienda.",
     },
     {
       name: "David",
       role: "Constitución y altas",
-      photo:
-        "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+      photo: "/team/david.jfif",
       bio: "Acompaña a nuevos negocios desde el primer día: forma jurídica, altas y puesta en marcha contable y fiscal.",
     },
     {
       name: "Jesús",
       role: "Contabilidad y revisión",
-      photo:
-        "https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+      photo: "/team/jesus.jfif",
       bio: "Revisa asientos, conciliaciones y documentación. Puente entre lo que haces en Odoo y la supervisión del equipo.",
     },
     {
       name: "Guillermo",
       role: "Tecnología y procesos",
-      photo:
-        "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+      photo: "/team/guillermo.jfif",
       bio: "Automatización, integraciones y buenas prácticas en Odoo. Menos tareas manuales, más tiempo para lo importante.",
     },
   ],
@@ -563,63 +549,61 @@ export const contact = {
 export const logoMarquee = {
   badge: "Empresas con las que trabajamos",
   title: "Confianza de equipos que priorizan orden y claridad",
-  /** Ancho/alto del hueco de cada logo en el carrusel (px). */
   slotWidth: 220,
   slotHeight: 60,
   items: [
     {
       name: "Spalopia",
       alt: "Logo de Spalopia",
-      src: "/logos/logo-spalopia.svg",
+      src: "/partners/logo-spalopia.svg",
       url: "https://www.spalopia.com/",
       scale: 1,
     },
     {
       name: "Turitop",
       alt: "Logo de Turitop",
-      src: "/logos/logo-turitop.svg",
+      src: "/partners/logo-turitop.svg",
       url: "https://www.turitop.com/",
       scale: 1,
     },
     {
       name: "Bluenewable",
       alt: "Logo de Bluenewable",
-      src: "/logos/logo-bluenewable.svg",
+      src: "/partners/logo-bluenewable.svg",
       url: "https://bluenewables.com/",
       scale: 1,
     },
     {
       name: "Youwind",
       alt: "Logo de Youwind",
-      src: "/logos/logo-youwind.svg",
+      src: "/partners/logo-youwind.svg",
       url: "https://youwindrenewables.com/",
       scale: 1,
     },
     {
       name: "Agnos PCB",
       alt: "Logo de Agnos PCB",
-      src: "/logos/logo-agnospcb.webp",
+      src: "/partners/logo-agnospcb.webp",
       url: "https://agnospcb.com/",
       scale: 1.4,
     },
     {
       name: "Nubelia",
       alt: "Logo de Nubelia",
-      src: "/logos/logo-nubelia.png",
+      src: "/partners/logo-nubelia.png",
       url: "https://nubeliacloud.com/",
       scale: 1,
     },
     {
       name: "Mecainca",
       alt: "Logo de Mecainca",
-      src: "/logos/logo-mecainca.webp",
+      src: "/partners/logo-mecainca.webp",
       url: "https://mecainca.com/",
       scale: 1,
     },
   ],
 } as const
 
-/** Franja de cifras en la home (tras el hero, antes del carrusel de logos). No duplicar about.stats en Nosotros. */
 export const homeStats = {
   items: [
     {
@@ -706,7 +690,7 @@ export const faqContact = {
     {
       question: "¿Qué canal usáis para contactar?",
       answer:
-        "Te contactamos por teléfono o email según lo que indiques, y si hace falta agendamos una llamada de seguimiento.",
+        "Te contactamos por email. Si hace falta, agendamos una llamada de seguimiento para resolver tus dudas y continuar con el proceso.",
     },
   ],
 } as const

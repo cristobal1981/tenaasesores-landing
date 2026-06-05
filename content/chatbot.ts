@@ -2,6 +2,11 @@ import { contactHref } from "@/content/site"
 
 export const sappoIntroStorageKey = "tenaasesores-sappo-intro-seen" as const
 
+export const sappoAssets = {
+  fabLogo: "/brand/sappo/logo-sappo_colores-45deg.svg",
+  chatAvatar: "/brand/sappo/logo-sappo_blanco.svg",
+} as const
+
 export const chatbotUi = {
   name: "Sappo",
   fabLabel: "Abrir Sappo, asistente de ayuda",

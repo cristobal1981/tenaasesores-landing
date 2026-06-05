@@ -2,11 +2,12 @@
 
 import Link from "next/link"
 import { ArrowRight, Eye, ShieldCheck, Zap } from "lucide-react"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { IconFeatureCard } from "@/components/ui/icon-feature-card"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { odoo } from "@/content/site"
-import { cn } from "@/lib/utils"
 
 const benefitIcons = [Eye, ShieldCheck, Zap]
 
@@ -17,19 +18,12 @@ export function Odoo() {
       className="relative overflow-hidden border-y border-agua/20 bg-surface-dark py-20 md:py-28"
     >
       <SectionShell>
-        <FadeIn className="mx-auto mb-14 max-w-3xl text-center">
-          <div className="badge-on-dark mb-6">
-            <span className="badge-label-on-dark">{odoo.badge}</span>
-          </div>
-          <h2 className="mb-6 text-3xl leading-[1.2] font-bold text-on-dark sm:text-4xl lg:text-5xl">
-            {odoo.title[0]}
-            <br />
-            <span className="text-muted-on-dark">{odoo.title[1]}</span>
-          </h2>
-          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-dark">
-            {odoo.subtitle}
-          </p>
-        </FadeIn>
+        <MarketingSectionHeading
+          badge={odoo.badge}
+          title={odoo.title}
+          subtitle={odoo.subtitle}
+          className="mb-14 max-w-3xl"
+        />
 
         <StaggerContainer
           className="mb-16 grid gap-6 md:grid-cols-3"
@@ -39,15 +33,11 @@ export function Odoo() {
             const Icon = benefitIcons[index]
             return (
               <StaggerItem key={benefit.title}>
-                <div className="h-full rounded-2xl border border-on-dark/15 bg-on-dark/5 p-6 transition-colors hover:border-primary/35">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15">
-                    <Icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold text-on-dark">{benefit.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-on-dark">
-                    {benefit.description}
-                  </p>
-                </div>
+                <IconFeatureCard
+                  icon={Icon}
+                  title={benefit.title}
+                  description={benefit.description}
+                />
               </StaggerItem>
             )
           })}
@@ -78,16 +68,12 @@ export function Odoo() {
         </StaggerContainer>
 
         <FadeIn className="text-center">
-          <Button
-            asChild
-            size="lg"
-            className={cn(marketingCtaBaseClassName, marketingCtaVariantClassName.primary)}
-          >
+          <MarketingButton asChild size="lg">
             <Link href="/contacto">
               {odoo.cta}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-          </Button>
+          </MarketingButton>
         </FadeIn>
       </SectionShell>
     </section>

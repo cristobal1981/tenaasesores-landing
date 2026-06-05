@@ -2,11 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import {
-  Button,
-  marketingCtaBaseClassName,
-  marketingCtaVariantClassName,
-} from "@/components/ui/button"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { ArrowRight, Award, Eye, Zap } from "lucide-react"
 import { AnimatePresence, m, useReducedMotion } from "framer-motion"
 import { FloatingElement } from "@/components/animations"
@@ -204,32 +200,21 @@ export function Hero() {
             data-hero="ctas"
             className="mb-0 flex flex-col justify-center gap-4 md:mb-16 sm:flex-row"
           >
-            <Button
-              asChild
-              size="lg"
-              className={cn(
-                "px-8 text-base",
-                marketingCtaBaseClassName,
-                marketingCtaVariantClassName.primary
-              )}
-            >
+            <MarketingButton asChild size="lg" className="px-8 text-base">
               <Link href="/contacto">
                 {hero.ctaPrimary}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-            </Button>
-            <Button
+            </MarketingButton>
+            <MarketingButton
               asChild
               size="lg"
               variant="outline"
-              className={cn(
-                "px-8 text-base",
-                marketingCtaBaseClassName,
-                marketingCtaVariantClassName.secondary
-              )}
+              marketingVariant="secondary"
+              className="px-8 text-base"
             >
               <Link href="/servicios">{hero.ctaSecondary}</Link>
-            </Button>
+            </MarketingButton>
           </div>
 
           <div

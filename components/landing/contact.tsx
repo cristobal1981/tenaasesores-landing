@@ -2,21 +2,33 @@
 
 import Link from "next/link"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { LazyMotion, AnimatePresence, domAnimation, m, useReducedMotion } from "framer-motion"
+import { HoneypotField } from "@/components/forms/honeypot-field"
+import { ContactChannelCard } from "@/components/landing/contact-channel-card"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, ArrowRight, Clock, LinkedinIcon, InstagramIcon, Sparkles } from "lucide-react"
 import { FadeIn } from "@/components/animations"
 import { FaqSection } from "@/components/landing/faq-section"
 import { BrisaFormCard, BrisaFormSection, DarkFormPanel } from "@/components/layout/brisa-form-section"
+import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { contact, faqContact, site } from "@/content/site"
 import { contactForm } from "@/content/contact-form"
 import {
   canSubmitContactFromClient,
   recordContactClientSubmission,
 } from "@/lib/contact/rate-limit"
+import { FieldLabel } from "@/components/forms/field-label"
+import { FormStatusMessage } from "@/components/forms/form-status-message"
+import { FormSubmissionSuccess } from "@/components/forms/form-submission-success"
+import {
+  formSubmitStubDelayMs,
+  isFormSubmitStubEnabled,
+} from "@/lib/forms/form-submit-stub"
+import { resolveFormApiErrorMessage, type FormApiPayload } from "@/lib/forms/form-api-response"
 import { isLikelyValidPhone } from "@/lib/contact/validate-inquiry"
-import { cn } from "@/lib/utils"
+import { formExitMs, formStepEase } from "@/lib/forms/motion-tokens"
 
 const socialIcons = {
   LinkedIn: LinkedinIcon,
@@ -25,6 +37,7 @@ const socialIcons = {
 
 export function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
+  const reducedMotion = useReducedMotion()
   const honeypotId = useId()
   const formStartedAtRef = useRef(Date.now())
   const [name, setName] = useState("")
@@ -36,25 +49,58 @@ export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const successFocusRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const timer = window.setTimeout(() => setFormReady(true), contactForm.limits.minSubmitDelayMs)
     return () => window.clearTimeout(timer)
   }, [])
 
+  useEffect(() => {
+    if (!successMessage) return
+
+    const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const timer = window.setTimeout(() => {
+      const node = successFocusRef.current
+      if (!node) return
+      node.scrollIntoView({
+        behavior: motionReduced ? "auto" : "smooth",
+        block: "center",
+      })
+      node.focus({ preventScroll: true })
+    }, motionReduced ? 0 : 1100)
+
+    return () => window.clearTimeout(timer)
+  }, [successMessage])
+
+  const phoneValid = isLikelyValidPhone(phone)
+
+  const formSubmitStub = isFormSubmitStubEnabled()
+
   const canSubmit =
-    formReady &&
-    !isSubmitting &&
-    name.trim().length > 0 &&
-    email.trim().length > 0 &&
-    message.trim().length >= contactForm.limits.messageMin &&
-    company.length === 0
+    formSubmitStub ||
+    (formReady &&
+      !isSubmitting &&
+      name.trim().length > 0 &&
+      phoneValid &&
+      email.trim().length > 0 &&
+      message.trim().length >= contactForm.limits.messageMin &&
+      company.length === 0)
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       setErrorMessage(null)
       setSuccessMessage(null)
+
+      if (formSubmitStub) {
+        setIsSubmitting(true)
+        await new Promise((resolve) => window.setTimeout(resolve, formSubmitStubDelayMs))
+        setSuccessMessage(contactForm.success.body)
+        formStartedAtRef.current = Date.now()
+        setIsSubmitting(false)
+        return
+      }
 
       if (company.length > 0) {
         setErrorMessage(contactForm.messages.honeypot)
@@ -66,7 +112,7 @@ export function Contact() {
         return
       }
 
-      if (phone.trim().length > 0 && !isLikelyValidPhone(phone)) {
+      if (phone.trim() && !isLikelyValidPhone(phone)) {
         setErrorMessage(contactForm.messages.phoneInvalid)
         return
       }
@@ -92,24 +138,23 @@ export function Contact() {
           }),
         })
 
-        const payload = (await response.json()) as {
-          ok?: boolean
-          message?: string
-          error?: string
-        }
+        const payload = (await response.json()) as FormApiPayload
 
-        if (response.status === 429 || payload.error === "rate_limit") {
-          setErrorMessage(contactForm.messages.rateLimit)
-          return
-        }
+        const apiError = resolveFormApiErrorMessage(response, payload, {
+          rateLimit: contactForm.messages.rateLimit,
+          duplicateLead: contactForm.messages.duplicateLead,
+          webhookForbidden: contactForm.messages.webhookForbidden,
+          generic: contactForm.messages.genericError,
+          validation: contactForm.messages.validation,
+        })
 
-        if (!response.ok || !payload.ok) {
-          setErrorMessage(payload.message ?? contactForm.messages.genericError)
+        if (apiError) {
+          setErrorMessage(apiError)
           return
         }
 
         recordContactClientSubmission()
-        setSuccessMessage(payload.message ?? contactForm.messages.success)
+        setSuccessMessage(payload.message ?? contactForm.success.body)
         setName("")
         setPhone("")
         setEmail("")
@@ -121,24 +166,19 @@ export function Contact() {
         setIsSubmitting(false)
       }
     },
-    [canSubmit, company, email, message, name, phone]
+    [canSubmit, company, email, formSubmitStub, message, name, phone]
   )
 
   return (
     <BrisaFormSection ref={sectionRef} id="contacto" padding="spacious">
-      <FadeIn className="mx-auto mb-14 max-w-3xl text-center">
-          <div className="badge-on-light mb-6">
-            <span className="badge-label-on-light">{contact.badge}</span>
-          </div>
-          <h2 className="mb-5 text-3xl leading-[1.15] font-bold text-on-light sm:text-4xl lg:text-5xl">
-            {contact.title[0]}
-            <br />
-            <span className="text-on-light-muted">{contact.title[1]}</span>
-          </h2>
-          <p className="prose-width mx-auto text-lg leading-relaxed text-muted-on-light">
-            {contact.subtitle}
-          </p>
-      </FadeIn>
+      <MarketingSectionHeading
+        badge={contact.badge}
+        title={contact.title}
+        subtitle={contact.subtitle}
+        tone="light"
+        size="page"
+        className="mb-14 max-w-3xl"
+      />
 
       <BrisaFormCard>
         <div className="grid gap-0 lg:grid-cols-12">
@@ -152,24 +192,44 @@ export function Contact() {
                     </div>
                   </div>
 
-                  <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-                    <div className="sr-only" aria-hidden>
-                      <label htmlFor={honeypotId}>{contactForm.fields.honeypotLabel}</label>
-                      <input
-                        id={honeypotId}
-                        name="company"
-                        type="text"
-                        tabIndex={-1}
-                        autoComplete="off"
-                        value={company}
-                        onChange={(event) => setCompany(event.target.value)}
+                  <LazyMotion features={domAnimation} strict>
+                  <AnimatePresence mode="wait" initial={false}>
+                  {successMessage ? (
+                    <div
+                      ref={successFocusRef}
+                      tabIndex={-1}
+                      className="outline-none"
+                      key="contact-form-success"
+                    >
+                      <FormSubmissionSuccess
+                        title={contactForm.success.title}
+                        body={successMessage}
+                        doneLabel={contactForm.success.doneLabel}
+                        progressSegments={1}
                       />
                     </div>
+                  ) : (
+                  <m.form
+                    key="contact-form"
+                    className="space-y-5"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    initial={reducedMotion ? false : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={reducedMotion ? undefined : { opacity: 0 }}
+                    transition={{ duration: reducedMotion ? 0 : formExitMs, ease: formStepEase }}
+                  >
+                    <HoneypotField
+                      id={honeypotId}
+                      label={contactForm.fields.honeypotLabel}
+                      value={company}
+                      onChange={setCompany}
+                    />
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <label htmlFor="name" className="text-sm font-medium text-on-dark/95">
+                        <FieldLabel htmlFor="name" required>
                           Nombre completo
-                        </label>
+                        </FieldLabel>
                         <Input
                           id="name"
                           name="name"
@@ -183,9 +243,9 @@ export function Contact() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="phone" className="text-sm font-medium text-on-dark/95">
-                          Teléfono
-                        </label>
+                        <FieldLabel htmlFor="phone">
+                          {contactForm.fields.phoneLabel}
+                        </FieldLabel>
                         <Input
                           id="phone"
                           name="phone"
@@ -200,9 +260,9 @@ export function Contact() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="email" className="text-sm font-medium text-on-dark/95">
+                      <FieldLabel htmlFor="email" required>
                         Email
-                      </label>
+                      </FieldLabel>
                       <Input
                         id="email"
                         name="email"
@@ -217,9 +277,9 @@ export function Contact() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-medium text-on-dark/95">
+                      <FieldLabel htmlFor="message" required>
                         ¿En qué podemos ayudarte?
-                      </label>
+                      </FieldLabel>
                       <Textarea
                         id="message"
                         name="message"
@@ -239,33 +299,18 @@ export function Contact() {
                         }}
                       />
                     </div>
-                    {(errorMessage || successMessage) && (
-                      <p
-                        role="status"
-                        aria-live="polite"
-                        className={cn(
-                          "rounded-lg border px-3 py-2 text-sm",
-                          successMessage
-                            ? "border-primary/35 bg-primary/10 text-on-dark"
-                            : "border-red-400/40 bg-red-500/10 text-on-dark"
-                        )}
-                      >
-                        {successMessage ?? errorMessage}
-                      </p>
-                    )}
-                    <Button
+                    {errorMessage ? (
+                      <FormStatusMessage variant="error">{errorMessage}</FormStatusMessage>
+                    ) : null}
+                    <MarketingButton
                       type="submit"
                       size="lg"
-                      disabled={!canSubmit}
-                      className={cn(
-                        "w-full",
-                        marketingCtaBaseClassName,
-                        marketingCtaVariantClassName.primary
-                      )}
+                      disabled={formSubmitStub ? isSubmitting : !canSubmit}
+                      className="w-full"
                     >
                       {isSubmitting ? contactForm.messages.sending : "Enviar consulta"}
                       <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    </MarketingButton>
                     <p className="text-center text-xs text-muted-on-dark">
                       Al enviar aceptas la{" "}
                       <Link
@@ -276,51 +321,30 @@ export function Contact() {
                       </Link>
                       .
                     </p>
-                  </form>
+                  </m.form>
+                  )}
+                  </AnimatePresence>
+                  </LazyMotion>
 
+                  {!successMessage ? (
                   <div className="mt-6 rounded-xl border border-agua/35 bg-on-dark/8 px-4 py-3 text-center text-sm text-muted-on-dark motion-safe:animate-pulse [animation-duration:4.8s]">
                     ¿Tienes dudas antes de enviar? Mira las preguntas frecuentes justo debajo.
                   </div>
+                  ) : null}
                 </DarkFormPanel>
-                <div className="relative bg-surface-dark p-6 sm:p-8 lg:col-span-5">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -top-14 -left-4 h-44 w-44 rounded-full bg-primary/16 blur-3xl"
-                  />
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute bottom-6 right-6 h-32 w-32 rounded-full bg-turquesa/14 blur-3xl"
-                  />
+                <DarkFormPanel className="lg:col-span-5">
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold text-on-dark">Canales directos</h3>
                   </div>
 
                   <div className="space-y-3">
-                    <div className="rounded-xl border border-agua/30 bg-on-dark/8 p-4">
-                      <p className="mb-1 flex items-center gap-2 text-xs font-semibold tracking-wide text-muted-on-dark uppercase">
-                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/25">
-                          <Phone className="h-4 w-4 text-primary motion-safe:animate-pulse" />
-                        </span>
-                        Teléfono
-                      </p>
+                    <ContactChannelCard icon={Phone} label="Teléfono">
                       <p className="text-sm font-semibold text-on-dark">{site.phone.display}</p>
-                    </div>
-                    <div className="rounded-xl border border-agua/30 bg-on-dark/8 p-4">
-                      <p className="mb-1 flex items-center gap-2 text-xs font-semibold tracking-wide text-muted-on-dark uppercase">
-                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/25">
-                          <Mail className="h-4 w-4 text-primary motion-safe:animate-pulse" />
-                        </span>
-                        Email
-                      </p>
+                    </ContactChannelCard>
+                    <ContactChannelCard icon={Mail} label="Email">
                       <p className="text-sm font-semibold text-on-dark">{site.email}</p>
-                    </div>
-                    <div className="rounded-xl border border-agua/30 bg-on-dark/8 p-4">
-                      <p className="mb-1 flex items-center gap-2 text-xs font-semibold tracking-wide text-muted-on-dark uppercase">
-                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/25">
-                          <MapPin className="h-4 w-4 text-primary motion-safe:animate-pulse" />
-                        </span>
-                        Oficina
-                      </p>
+                    </ContactChannelCard>
+                    <ContactChannelCard icon={MapPin} label="Oficina">
                       <p className="text-sm font-semibold text-on-dark">
                         C/ El Toscal, 29, 1º pta 7, Los Realejos (Tenerife)
                       </p>
@@ -331,7 +355,7 @@ export function Contact() {
                       <div className="mt-1 text-xs text-muted-on-dark">
                         Puede variar por festivos y dias especiales.
                       </div>
-                    </div>
+                    </ContactChannelCard>
                   </div>
 
                   <div className="mt-7 rounded-2xl border border-primary/35 bg-primary/14 p-4">
@@ -362,7 +386,7 @@ export function Contact() {
                         })}
                     </div>
                   </div>
-                </div>
+                </DarkFormPanel>
               </div>
         </BrisaFormCard>
 

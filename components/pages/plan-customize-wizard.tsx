@@ -11,18 +11,35 @@ import {
   type ReactNode,
 } from "react"
 import { LazyMotion, AnimatePresence, domAnimation, m, useReducedMotion } from "framer-motion"
-import { ArrowRight, CheckCircle2 } from "lucide-react"
-import { contactForm } from "@/content/contact-form"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import {
   planCustomizeForm,
   planCustomizeTaxRegions,
   planCustomizeYesNo,
   type PlanCustomizeAudience,
 } from "@/content/plan-customize-form"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { FieldLabel } from "@/components/forms/field-label"
+import { FormStatusMessage } from "@/components/forms/form-status-message"
+import { FormSubmissionSuccess } from "@/components/forms/form-submission-success"
+import { HoneypotField } from "@/components/forms/honeypot-field"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { isLikelyValidPhone } from "@/lib/contact/validate-inquiry"
+import {
+  formSubmitStubDelayMs,
+  isFormSubmitStubEnabled,
+} from "@/lib/forms/form-submit-stub"
+import { resolveFormApiErrorMessage, type FormApiPayload } from "@/lib/forms/form-api-response"
+import {
+  canSubmitPlanCustomizeFromClient,
+  recordPlanCustomizeClientSubmission,
+} from "@/lib/plan-customize/rate-limit"
+import {
+  getPlanCustomizeStepValidationError,
+  isValidAnnualRevenueInput,
+} from "@/lib/plan-customize/validate-inquiry"
+import { formStepEase } from "@/lib/forms/motion-tokens"
 import { cn } from "@/lib/utils"
 
 const TOTAL_STEPS = 3
@@ -30,11 +47,10 @@ const TOTAL_STEPS = 3
 const stepEnterMs = 0.28
 const stepExitMs = 0.2
 const stepHeightMs = 0.34
-const stepEase = [0.22, 1, 0.36, 1] as const
+const stepEase = formStepEase
 const stepMotion = { duration: stepEnterMs, ease: stepEase } as const
 const stepExitMotion = { duration: stepExitMs, ease: stepEase } as const
 const stepHeightMotion = { duration: stepHeightMs, ease: stepEase } as const
-const successFadeMs = 0.2
 const submitDelayMs = 100
 const planFormWidthClass = "w-full"
 
@@ -62,70 +78,12 @@ type PlanFormValues = {
   phone: string
 }
 
-function FieldLabel({
-  htmlFor,
-  id,
-  children,
-  required,
-  className,
-}: {
-  htmlFor?: string
-  id?: string
-  children: ReactNode
-  required?: boolean
-  className?: string
-}) {
-  const content = (
-    <>
-      <span>{children}</span>
-      {required ? (
-        <span className="text-primary" aria-hidden="true">
-          *
-        </span>
-      ) : null}
-    </>
-  )
-
-  if (htmlFor) {
-    return (
-      <label
-        htmlFor={htmlFor}
-        id={id}
-        className={cn("mb-2 flex items-center gap-1 text-sm font-medium text-on-dark", className)}
-      >
-        {content}
-      </label>
-    )
-  }
-
-  return (
-    <span
-      id={id}
-      className={cn("mb-2 flex items-center gap-1 text-sm font-medium text-on-dark", className)}
-    >
-      {content}
-    </span>
-  )
-}
-
 function isStepComplete(
   currentStep: number,
   audience: PlanCustomizeAudience,
   values: PlanFormValues
 ): boolean {
-  return getStepValidationError(currentStep, audience, values) === null
-}
-
-function isValidAnnualRevenueInput(raw: string): boolean {
-  const digits = raw.replace(/\D/g, "")
-  if (
-    digits.length < planCustomizeForm.limits.revenueDigitsMin ||
-    digits.length > planCustomizeForm.limits.revenueDigitsMax
-  ) {
-    return false
-  }
-  const value = Number.parseInt(digits, 10)
-  return Number.isFinite(value) && value > 0
+  return getPlanCustomizeStepValidationError(currentStep, audience, values) === null
 }
 
 type SegmentedChoiceProps = {
@@ -183,53 +141,6 @@ function SegmentedChoice({
         })}
       </div>
     </div>
-  )
-}
-
-function PlanCustomizeSuccess({ detail }: { detail?: string | null }) {
-  const reducedMotion = useReducedMotion()
-  const body = detail ?? planCustomizeForm.success.body
-
-  return (
-    <m.div
-      role="status"
-      aria-live="polite"
-      className={planFormWidthClass}
-      initial={reducedMotion ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: reducedMotion ? 0 : successFadeMs, ease: stepEase }}
-    >
-      <div
-        className="mb-6 flex w-full gap-1.5"
-        aria-label={planCustomizeForm.success.stepsDoneLabel}
-      >
-        {Array.from({ length: TOTAL_STEPS }, (_, index) => (
-          <span
-            key={index}
-            className="h-1 flex-1 rounded-full bg-primary"
-            aria-hidden
-          />
-        ))}
-      </div>
-
-      <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-primary/12">
-          <CheckCircle2 aria-hidden className="h-8 w-8 text-primary" strokeWidth={2} />
-        </div>
-
-        <div className="min-w-0 flex-1 space-y-2">
-          <h3 className="text-lg font-semibold text-on-dark md:text-xl">
-            {planCustomizeForm.success.title}
-          </h3>
-          <p className="max-w-prose text-sm leading-relaxed text-muted-on-dark md:text-base">
-            {body}
-          </p>
-          <p className="text-xs font-medium tracking-wide text-primary uppercase">
-            {planCustomizeForm.success.stepsDoneLabel}
-          </p>
-        </div>
-      </div>
-    </m.div>
   )
 }
 
@@ -310,77 +221,15 @@ function PlanStepTransition({
   )
 }
 
-function getStepValidationError(
-  currentStep: number,
-  audience: PlanCustomizeAudience,
-  values: PlanFormValues
-): string | null {
-  if (currentStep === 1) {
-    if (audience === "autonomos") {
-      if (!values.isRegisteredAutonomo) {
-        return planCustomizeForm.validation.registeredAutonomo
-      }
-      if (!values.willHireEmployees) {
-        return planCustomizeForm.validation.hireEmployees
-      }
-    } else {
-      if (!values.isNewConstitution) {
-        return planCustomizeForm.validation.newConstitution
-      }
-      if (!values.hasEmployees) {
-        return planCustomizeForm.validation.hasEmployees
-      }
-      if (values.hasEmployees === "yes") {
-        const count = Number.parseInt(values.employeeCount, 10)
-        if (!Number.isFinite(count) || count < 1) {
-          return planCustomizeForm.validation.employeeCount
-        }
-      }
-    }
-    if (!isValidAnnualRevenueInput(values.annualRevenue)) {
-      return planCustomizeForm.validation.revenue
-    }
-    return null
-  }
-
-  if (currentStep === 2) {
-    if (values.services.length === 0) {
-      return planCustomizeForm.validation.services
-    }
-    return null
-  }
-
-  if (currentStep === 3) {
-    const activityTrimmed = values.activity.trim()
-    if (
-      activityTrimmed.length < planCustomizeForm.limits.activityMin ||
-      activityTrimmed.length > planCustomizeForm.limits.activityMax
-    ) {
-      return planCustomizeForm.validation.activity
-    }
-    if (!values.taxRegion) {
-      return planCustomizeForm.validation.taxRegion
-    }
-    if (!values.name.trim()) {
-      return planCustomizeForm.validation.name
-    }
-    if (!values.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
-      return planCustomizeForm.validation.email
-    }
-    if (values.phone.trim().length > 0 && !isLikelyValidPhone(values.phone)) {
-      return contactForm.messages.phoneInvalid
-    }
-  }
-
-  return null
-}
-
 export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeWizardProps) {
   const panelId = useId()
   const stepLiveId = useId()
+  const honeypotId = useId()
+  const formStartedAtRef = useRef(Date.now())
   const reducedMotion = useReducedMotion()
 
   const [step, setStep] = useState(1)
+  const [company, setCompany] = useState("")
   const [isRegisteredAutonomo, setIsRegisteredAutonomo] = useState<YesNoValue>("")
   const [willHireEmployees, setWillHireEmployees] = useState<YesNoValue>("")
   const [isNewConstitution, setIsNewConstitution] = useState<YesNoValue>("")
@@ -394,9 +243,20 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [notes, setNotes] = useState("")
+  const [formReady, setFormReady] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [stepError, setStepError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const timer = window.setTimeout(
+      () => setFormReady(true),
+      planCustomizeForm.limits.minSubmitDelayMs
+    )
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  const formSubmitStub = isFormSubmitStubEnabled()
 
   const formValues: PlanFormValues = {
     isRegisteredAutonomo,
@@ -454,10 +314,12 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
   }, [])
 
   const handleNext = () => {
-    const error = getStepValidationError(step, audience, formValues)
-    if (error) {
-      setStepError(error)
-      return
+    if (!formSubmitStub) {
+      const error = getPlanCustomizeStepValidationError(step, audience, formValues)
+      if (error) {
+        setStepError(error)
+        return
+      }
     }
     setStepError(null)
     setStep((prev) => Math.min(prev + 1, TOTAL_STEPS))
@@ -468,9 +330,10 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     setStep((prev) => Math.max(prev - 1, 1))
   }
 
-  const revealSuccess = useCallback(() => {
-    setSuccessMessage(planCustomizeForm.success.body)
+  const revealSuccess = useCallback((detail?: string) => {
+    setSuccessMessage(detail ?? planCustomizeForm.success.body)
     resetWizard()
+    formStartedAtRef.current = Date.now()
     const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     window.setTimeout(() => {
       document.getElementById(planCustomizeForm.sectionId)?.scrollIntoView({
@@ -484,25 +347,92 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     if (event.key !== "Enter") return
     if (event.target instanceof HTMLTextAreaElement) return
     event.preventDefault()
-    if (step < TOTAL_STEPS && isCurrentStepComplete) {
+    if (step < TOTAL_STEPS && (formSubmitStub || isCurrentStepComplete)) {
       handleNext()
     }
   }
 
-  const handleSendRequest = () => {
-    const error = getStepValidationError(3, audience, formValues)
+  const handleSendRequest = async () => {
+    if (formSubmitStub) {
+      setStepError(null)
+      setIsSubmitting(true)
+      await new Promise((resolve) => window.setTimeout(resolve, formSubmitStubDelayMs))
+      const submitDelay = reducedMotion ? 0 : submitDelayMs
+      window.setTimeout(() => {
+        revealSuccess(planCustomizeForm.success.body)
+        setIsSubmitting(false)
+      }, submitDelay)
+      return
+    }
+
+    const error = getPlanCustomizeStepValidationError(3, audience, formValues)
     if (error) {
       setStepError(error)
       return
     }
 
+    if (company.length > 0) {
+      setStepError(planCustomizeForm.messages.honeypot)
+      return
+    }
+
+    if (!canSubmitPlanCustomizeFromClient()) {
+      setStepError(planCustomizeForm.messages.rateLimit)
+      return
+    }
+
     setStepError(null)
     setIsSubmitting(true)
-    const submitDelay = reducedMotion ? 0 : submitDelayMs
-    window.setTimeout(() => {
+
+    try {
+      const response = await fetch("/api/plan-customize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          audience,
+          isRegisteredAutonomo,
+          willHireEmployees,
+          isNewConstitution,
+          hasEmployees,
+          employeeCount,
+          annualRevenue,
+          services,
+          activity,
+          taxRegion,
+          name,
+          email,
+          phone,
+          notes,
+          company,
+          formStartedAt: formStartedAtRef.current,
+        }),
+      })
+
+      const payload = (await response.json()) as FormApiPayload
+
+      const apiError = resolveFormApiErrorMessage(response, payload, {
+        rateLimit: planCustomizeForm.messages.rateLimit,
+        duplicateLead: planCustomizeForm.messages.duplicateLead,
+        webhookForbidden: planCustomizeForm.messages.webhookForbidden,
+        generic: planCustomizeForm.messages.genericError,
+        validation: planCustomizeForm.messages.validation,
+      })
+
+      if (apiError) {
+        setStepError(apiError)
+        return
+      }
+
+      recordPlanCustomizeClientSubmission()
+      const submitDelay = reducedMotion ? 0 : submitDelayMs
+      window.setTimeout(() => {
+        revealSuccess(payload.message)
+      }, submitDelay)
+    } catch {
+      setStepError(planCustomizeForm.messages.genericError)
+    } finally {
       setIsSubmitting(false)
-      revealSuccess()
-    }, submitDelay)
+    }
   }
 
   const stepErrorId = stepError ? `${panelId}-form-error` : undefined
@@ -803,7 +733,14 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       <LazyMotion features={domAnimation} strict>
         <AnimatePresence mode="wait" initial={false}>
           {successMessage ? (
-            <PlanCustomizeSuccess key="plan-customize-success" detail={successMessage} />
+            <FormSubmissionSuccess
+              key="plan-customize-success"
+              className={planFormWidthClass}
+              title={planCustomizeForm.success.title}
+              body={successMessage ?? planCustomizeForm.success.body}
+              doneLabel={planCustomizeForm.success.stepsDoneLabel}
+              progressSegments={TOTAL_STEPS}
+            />
           ) : (
             <m.form
               key="plan-customize-form"
@@ -817,6 +754,12 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               exit={reducedMotion ? undefined : { opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : stepExitMs, ease: stepEase }}
             >
+              <HoneypotField
+                id={honeypotId}
+                label={planCustomizeForm.fields.honeypotLabel}
+                value={company}
+                onChange={setCompany}
+              />
               <div className="mb-5 w-full">
                 <p
                   id={stepLiveId}
@@ -853,10 +796,9 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
 
               <AnimatePresence initial={false}>
                 {stepError ? (
-                  <m.p
+                  <m.div
                     key="plan-step-error"
                     id={`${panelId}-form-error`}
-                    className="text-sm text-red-300"
                     role="alert"
                     aria-live="assertive"
                     initial={reducedMotion ? false : { opacity: 0, height: 0, marginTop: 0 }}
@@ -872,10 +814,23 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                     }
                     transition={reducedMotion ? { duration: 0 } : stepMotion}
                   >
-                    {stepError}
-                  </m.p>
+                    <FormStatusMessage variant="error">{stepError}</FormStatusMessage>
+                  </m.div>
                 ) : null}
               </AnimatePresence>
+
+              {step === TOTAL_STEPS ? (
+                <p className="mt-4 text-center text-xs text-muted-on-dark">
+                  Al enviar aceptas la{" "}
+                  <Link
+                    href="/privacidad"
+                    className="text-primary underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                  >
+                    política de privacidad
+                  </Link>
+                  .
+                </p>
+              ) : null}
 
               <div className="mt-6 flex min-h-11 flex-wrap items-center gap-3">
                 <AnimatePresence initial={false}>
@@ -888,18 +843,15 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                       transition={reducedMotion ? { duration: 0 } : stepMotion}
                       className="shrink-0"
                     >
-                      <Button
+                      <MarketingButton
                         type="button"
                         onClick={handleBack}
                         disabled={isSubmitting}
-                        className={cn(
-                          "min-h-11",
-                          marketingCtaBaseClassName,
-                          marketingCtaVariantClassName.secondary
-                        )}
+                        marketingVariant="secondary"
+                        className="min-h-11"
                       >
                         {planCustomizeForm.steps.back}
-                      </Button>
+                      </MarketingButton>
                     </m.div>
                   ) : null}
                 </AnimatePresence>
@@ -912,19 +864,19 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                       exit={reducedMotion ? undefined : { opacity: 0, x: -6 }}
                       transition={reducedMotion ? { duration: 0 } : stepMotion}
                     >
-                      <Button
+                      <MarketingButton
                         type="button"
                         onClick={handleNext}
-                        disabled={!isCurrentStepComplete || isSubmitting}
-                        className={cn(
-                          "min-h-11",
-                          marketingCtaBaseClassName,
-                          marketingCtaVariantClassName.primary
-                        )}
+                        disabled={
+                          formSubmitStub
+                            ? isSubmitting
+                            : !formReady || !isCurrentStepComplete || isSubmitting
+                        }
+                        className="min-h-11"
                       >
                         {planCustomizeForm.steps.next}
                         <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                      </Button>
+                      </MarketingButton>
                     </m.div>
                   ) : (
                     <m.div
@@ -934,21 +886,21 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                       exit={reducedMotion ? undefined : { opacity: 0, x: -6 }}
                       transition={reducedMotion ? { duration: 0 } : stepMotion}
                     >
-                      <Button
+                      <MarketingButton
                         type="button"
                         onClick={handleSendRequest}
-                        disabled={!isFinalStepComplete || isSubmitting}
-                        className={cn(
-                          "min-h-11",
-                          marketingCtaBaseClassName,
-                          marketingCtaVariantClassName.primary
-                        )}
+                        disabled={
+                          formSubmitStub
+                            ? isSubmitting
+                            : !formReady || !isFinalStepComplete || isSubmitting
+                        }
+                        className="min-h-11"
                         aria-busy={isSubmitting}
                       >
                         {isSubmitting
                           ? planCustomizeForm.steps.sending
                           : planCustomizeForm.steps.submit}
-                      </Button>
+                      </MarketingButton>
                     </m.div>
                   )}
                 </AnimatePresence>

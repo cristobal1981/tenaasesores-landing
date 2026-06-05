@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronDown, Menu, X } from "lucide-react"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -26,7 +26,6 @@ function hasChildren(item: (typeof navItems)[number]): item is (typeof navItems)
   return "children" in item
 }
 
-/** Enlaces del navbar: solo color, sin fondo (Verde Syntia en hover/activo). */
 function navItemClass(isActive: boolean) {
   return cn(
     "font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none",
@@ -34,7 +33,6 @@ function navItemClass(isActive: boolean) {
   )
 }
 
-/** Anula estilos por defecto de shadcn en el trigger de Planes. */
 const plansTriggerClass = cn(
   navItemClass(false),
   "group !h-auto !w-max gap-1 !rounded-none !bg-transparent !px-0 !py-0 !text-base !shadow-none",
@@ -148,12 +146,9 @@ export function Header() {
           </NavigationMenu>
 
           <div className="hidden justify-self-end md:flex">
-            <Button
-              asChild
-              className={cn(marketingCtaBaseClassName, marketingCtaVariantClassName.primary)}
-            >
+            <MarketingButton asChild>
               <Link href={contactHref}>Consulta Gratis</Link>
-            </Button>
+            </MarketingButton>
           </div>
 
           <button
@@ -251,18 +246,11 @@ export function Header() {
 
                 return null
               })}
-              <Button
-                asChild
-                className={cn(
-                  "mt-2 w-full",
-                  marketingCtaBaseClassName,
-                  marketingCtaVariantClassName.primary
-                )}
-              >
+              <MarketingButton asChild className="mt-2 w-full">
                 <Link href={contactHref} onClick={() => setIsMenuOpen(false)} tabIndex={isMenuOpen ? 0 : -1}>
                   Consulta Gratis
                 </Link>
-              </Button>
+              </MarketingButton>
             </nav>
           </div>
         </div>

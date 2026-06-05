@@ -12,6 +12,6 @@ Al tocar contacto:
 2. **Teléfono opcional** — Si hay valor, validar formato (`isLikelyValidPhone`); placeholder puede sugerir `+34` sin forzarlo en estado.
 3. **Seguridad servidor** — No quitar: origen permitido, límite de body, rate limit IP/email, honeypot (respuesta silenciosa si se rellena).
 4. **Mensajes** — Copy en `content/contact-form.ts`.
-5. **Entrega** — `CONTACT_INQUIRY_WEBHOOK_URL` opcional; sin webhook, gateway noop (no romper UX en dev).
+5. **Entrega Odoo** — `ODOO_LEAD_WEBHOOK_URL` (n8n → `crm.lead`); fallback `CONTACT_INQUIRY_WEBHOOK_URL`. Sin URL, noop en dev.
 
 Verificar: envío válido, rechazo por validación, rate limit 429, honeypot no filtra error obvio al usuario real.

@@ -12,9 +12,10 @@ export function createContactInquiry(input: {
   email: string
   message: string
 }): ContactInquiry {
+  const phone = input.phone?.trim()
   return {
     name: input.name.trim(),
-    phone: input.phone?.trim() || undefined,
+    phone: phone || undefined,
     email: input.email.trim().toLowerCase(),
     message: input.message.trim(),
     createdAtIso: new Date().toISOString(),

@@ -1,8 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+import { sappoAssets } from "@/content/chatbot"
 import { cn } from "@/lib/utils"
-
-const SAPPO_AVATAR_SRC = "/logo-sappo_blanco.svg"
 
 interface ChatMessageProps {
   role: "user" | "bot"
@@ -32,7 +31,7 @@ export function ChatMessage({ role, text, href, linkLabel, onLinkClick }: ChatMe
         aria-hidden
       >
         <Image
-          src={SAPPO_AVATAR_SRC}
+          src={sappoAssets.chatAvatar}
           alt=""
           width={24}
           height={24}

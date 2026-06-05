@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { useCallback, useId } from "react"
-import { ArrowRight, CheckCircle2 } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { StaggerContainer, StaggerItem } from "@/components/animations"
 import { PlanCustomizeWizard } from "@/components/pages/plan-customize-wizard"
 import { BrisaFormCard, BrisaFormSection, DarkFormPanel } from "@/components/layout/brisa-form-section"
 import { SectionShell } from "@/components/layout/section-shell"
-import { Button, marketingCtaBaseClassName, marketingCtaVariantClassName } from "@/components/ui/button"
+import { ChecklistItem } from "@/components/ui/checklist-item"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { planCustomizeForm } from "@/content/plan-customize-form"
 import { plansByAudience } from "@/src/shared/config/site"
 import { cn } from "@/lib/utils"
@@ -113,50 +114,43 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
 
                     <ul className="mb-7 grid gap-3 md:flex-1">
                       {tier.items.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5">
-                          <CheckCircle2
-                            aria-hidden="true"
-                            className={cn(
-                              "mt-0.5 h-4 w-4 shrink-0 text-primary",
-                              tier.highlight && "motion-safe:animate-pulse [animation-duration:2.8s]"
-                            )}
-                          />
-                          <span className="text-sm leading-relaxed text-on-dark">{item}</span>
-                        </li>
+                        <ChecklistItem
+                          key={item}
+                          icon="check-circle"
+                          className="gap-2.5"
+                          textClassName="text-on-dark"
+                          iconClassName={
+                            tier.highlight
+                              ? "motion-safe:animate-pulse [animation-duration:2.8s]"
+                              : undefined
+                          }
+                        >
+                          {item}
+                        </ChecklistItem>
                       ))}
                     </ul>
 
                     {tier.kind === "fixed" ? (
-                      <Button
+                      <MarketingButton
                         asChild
-                        className={cn(
-                          "mt-auto w-full min-h-11",
-                          marketingCtaBaseClassName,
-                          tier.highlight
-                            ? marketingCtaVariantClassName.primary
-                            : marketingCtaVariantClassName.secondary
-                        )}
+                        marketingVariant={tier.highlight ? "primary" : "secondary"}
+                        className="mt-auto w-full min-h-11"
                       >
                         <Link href="/contacto">
                           {tier.ctaLabel}
                           <ArrowRight aria-hidden="true" className="h-4 w-4" />
                         </Link>
-                      </Button>
+                      </MarketingButton>
                     ) : (
-                      <Button
+                      <MarketingButton
                         type="button"
                         onClick={scrollToCustomizeForm}
-                        className={cn(
-                          "mt-auto w-full min-h-11",
-                          marketingCtaBaseClassName,
-                          tier.highlight
-                            ? marketingCtaVariantClassName.primary
-                            : marketingCtaVariantClassName.secondary
-                        )}
+                        marketingVariant={tier.highlight ? "primary" : "secondary"}
+                        className="mt-auto w-full min-h-11"
                       >
                         {tier.ctaLabel}
                         <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                      </Button>
+                      </MarketingButton>
                     )}
                   </div>
                 </article>

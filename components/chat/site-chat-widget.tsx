@@ -4,7 +4,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
 import { Send, X } from "lucide-react"
-import { chatbotUi, quickReplies, sappoIntroStorageKey } from "@/content/chatbot"
+import { chatbotUi, quickReplies, sappoAssets, sappoIntroStorageKey } from "@/content/chatbot"
 import { ChatMessage } from "@/components/chat/chat-message"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -340,7 +340,7 @@ export function SiteChatWidget() {
             <X className="size-5 sm:size-6" />
           </span>
           <Image
-            src="/logo-sappo_blanco-45deg.svg"
+            src={sappoAssets.fabLogo}
             alt=""
             width={48}
             height={48}

@@ -10,7 +10,6 @@ interface UseSectionParallaxOptions {
   range?: ParallaxScrollRange
 }
 
-/** Call from the same component that attaches `sectionRef` to `<section>`. */
 export function useSectionParallax(
   sectionRef: RefObject<HTMLElement | null>,
   options: UseSectionParallaxOptions = {}

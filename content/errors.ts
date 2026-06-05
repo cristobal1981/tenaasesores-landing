@@ -1,4 +1,3 @@
-/** Ruta canónica para funcionalidad o páginas aún no implementadas (HTTP 200). */
 export const notImplementedPath = "/proximamente" as const
 
 export const errorPages = {
