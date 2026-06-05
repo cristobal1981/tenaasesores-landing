@@ -1,6 +1,8 @@
 import type { NextRequest } from "next/server"
 import { site } from "@/content/site"
 
+const additionalAllowedOrigins = ["https://landing-site-serven-psi.vercel.app"]
+
 function normalizeOrigin(value: string): string | null {
   try {
     return new URL(value).origin
@@ -15,6 +17,11 @@ function allowedOrigins(): Set<string> {
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL
   if (envUrl) {
     const normalized = normalizeOrigin(envUrl.startsWith("http") ? envUrl : `https://${envUrl}`)
+    if (normalized) origins.add(normalized)
+  }
+
+  for (const url of additionalAllowedOrigins) {
+    const normalized = normalizeOrigin(url)
     if (normalized) origins.add(normalized)
   }
 
