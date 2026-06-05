@@ -6,9 +6,9 @@ import {
   Odoo,
   Philosophy,
   Testimonials,
-  FaqSection,
 } from "@/src/modules/landing/ui"
-import { faqGeneral } from "@/src/shared/config/site"
+import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
+import { faqPage } from "@/content/faq"
 
 export default function Home() {
   return (
@@ -20,11 +20,11 @@ export default function Home() {
       <Philosophy />
       <Odoo />
       <Testimonials />
-      <FaqSection
-        badge={faqGeneral.badge}
-        title={faqGeneral.title}
-        subtitle={faqGeneral.subtitle}
-        items={faqGeneral.items}
+      <CtaBrisaBand
+        title={faqPage.homeTeaser.title}
+        subtitle={faqPage.homeTeaser.subtitle}
+        label={faqPage.homeTeaser.label}
+        href={faqPage.homeTeaser.href}
       />
     </main>
   )

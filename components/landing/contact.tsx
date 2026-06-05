@@ -10,10 +10,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, ArrowRight, Clock, LinkedinIcon, InstagramIcon, Sparkles } from "lucide-react"
 import { FadeIn } from "@/components/animations"
-import { FaqSection } from "@/components/landing/faq-section"
+import { FaqAccordionList } from "@/components/faq/faq-accordion-list"
 import { BrisaFormCard, BrisaFormSection, DarkFormPanel } from "@/components/layout/brisa-form-section"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { contact, faqContact, site } from "@/content/site"
+import { faqHref } from "@/content/faq"
 import { contactForm } from "@/content/contact-form"
 import {
   canSubmitContactFromClient,
@@ -397,12 +398,18 @@ export function Contact() {
                   Resuelve dudas comunes
                 </p>
                 <h3 className="mt-2 text-2xl font-semibold text-on-light">Preguntas frecuentes</h3>
+                <Link
+                  href={`${faqHref}#contacto`}
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                >
+                  Ver todas las preguntas
+                  <ArrowRight className="h-4 w-4" aria-hidden />
+                </Link>
               </div>
-              <FaqSection
-                embedded
-                compact
+              <FaqAccordionList
                 items={faqContact.items}
-                className="mx-auto max-w-none"
+                sectionLabel={faqContact.title}
+                defaultOpenIndex={-1}
               />
             </div>
       </FadeIn>

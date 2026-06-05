@@ -1,4 +1,4 @@
-import { contactHref } from "@/content/site"
+import { faqHref } from "@/content/faq"
 
 export const sappoIntroStorageKey = "tenaasesores-sappo-intro-seen" as const
 
@@ -26,8 +26,8 @@ export const chatbotUi = {
   linkLabel: "Ver más",
   fallback: {
     text: "No tengo respuesta exacta para eso todavía. Prueba servicios, nosotros o preguntas frecuentes y te llevo directo.",
-    href: "/servicios",
-    linkLabel: "Ver servicios",
+    href: faqHref,
+    linkLabel: "Ver preguntas frecuentes",
   },
 } as const
 

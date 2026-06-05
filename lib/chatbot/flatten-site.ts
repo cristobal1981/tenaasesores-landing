@@ -2,8 +2,6 @@ import {
   about,
   contact,
   contactHref,
-  faqContact,
-  faqGeneral,
   hero,
   odoo,
   philosophy,
@@ -13,6 +11,7 @@ import {
   team,
   testimonials,
 } from "@/content/site"
+import { faqHref, faqSections } from "@/content/faq"
 import {
   formatPlanTierBody,
   planTierHref,
@@ -72,31 +71,31 @@ export function flattenSiteContent(): KnowledgeChunk[] {
     }),
   )
 
-  for (const [index, item] of faqGeneral.items.entries()) {
-    chunks.push(
-      chunk({
-        id: `faq-general-${index}`,
-        topic: "faq",
-        title: item.question,
-        body: item.answer,
-        href: "/",
-        keywords: ["faq", "preguntas", "dudas", "consulta", "servicios"],
-      }),
-    )
+  for (const section of faqSections) {
+    for (const [index, item] of section.items.entries()) {
+      chunks.push(
+        chunk({
+          id: `faq-${section.slug}-${index}`,
+          topic: "faq",
+          title: item.question,
+          body: item.answer,
+          href: `${faqHref}#${section.slug}`,
+          keywords: ["faq", "preguntas", "dudas", section.slug, "consulta"],
+        }),
+      )
+    }
   }
 
-  for (const [index, item] of faqContact.items.entries()) {
-    chunks.push(
-      chunk({
-        id: `faq-contact-${index}`,
-        topic: "contacto",
-        title: item.question,
-        body: item.answer,
-        href: "/contacto",
-        keywords: ["faq", "contacto", "formulario", "consulta", "respuesta"],
-      }),
-    )
-  }
+  chunks.push(
+    chunk({
+      id: "faq-page",
+      topic: "faq",
+      title: "Preguntas frecuentes",
+      body: "Respuestas sobre servicios, planes, Odoo, equipo y contacto.",
+      href: faqHref,
+      keywords: ["faq", "preguntas", "dudas", "frecuentes", "ayuda"],
+    }),
+  )
 
   chunks.push(
     chunk({

@@ -44,6 +44,7 @@ export const navItems = [
     ],
   },
   { label: "Nosotros", href: "/nosotros" },
+  { label: "FAQ", href: "/faq" },
 ] as const
 
 export const contactHref = "/contacto" as const
@@ -635,65 +636,8 @@ export const homeStats = {
   ],
 } as const
 
-export const faqGeneral = {
-  badge: "Preguntas frecuentes",
-  title: ["Dudas habituales", "antes de empezar"],
-  subtitle:
-    "Respondemos lo que más nos preguntan para que sepas exactamente cómo trabajamos y qué esperar desde la primera consulta.",
-  items: [
-    {
-      question: "¿La primera consulta tiene coste?",
-      answer:
-        "No. La primera consulta es gratuita y sin compromiso. Nos sirve para entender tu situación y decirte si podemos ayudarte.",
-    },
-    {
-      question: "¿Trabajáis solo con empresas en Tenerife?",
-      answer:
-        "Nuestro equipo está en Tenerife, pero también trabajamos con autónomos y pymes de otras zonas cuando encaja el servicio.",
-    },
-    {
-      question: "¿Puedo contratar solo fiscal o solo laboral?",
-      answer:
-        "Sí. Puedes contratar servicios por separado o en formato integral, según la fase en la que esté tu negocio.",
-    },
-    {
-      question: "¿En cuánto tiempo respondéis normalmente?",
-      answer:
-        "Nuestro compromiso es responder en menos de 24 horas laborables, con seguimiento claro de cada caso.",
-    },
-    {
-      question: "¿Ayudáis con migración y uso de Odoo?",
-      answer:
-        "Sí. Como partners oficiales de Odoo, cubrimos migración, configuración y supervisión para que lo uses con seguridad.",
-    },
-  ],
-} as const
-
-export const faqContact = {
-  title: "Preguntas sobre la consulta",
-  items: [
-    {
-      question: "¿Qué debo contar en el formulario?",
-      answer:
-        "Con una descripción breve de tu situación actual y el tipo de ayuda que necesitas es suficiente para empezar.",
-    },
-    {
-      question: "¿Cuándo recibiré respuesta?",
-      answer:
-        "Normalmente en menos de 24 horas laborables. Si la consulta requiere revisión adicional, te avisamos del siguiente paso.",
-    },
-    {
-      question: "¿La consulta inicial me obliga a contratar?",
-      answer:
-        "No. La primera toma de contacto no implica compromiso. Decides con calma si seguimos trabajando juntos.",
-    },
-    {
-      question: "¿Qué canal usáis para contactar?",
-      answer:
-        "Te contactamos por email. Si hace falta, agendamos una llamada de seguimiento para resolver tus dudas y continuar con el proceso.",
-    },
-  ],
-} as const
+export { faqContact, faqGeneral, faqHref, faqPage, faqSections } from "@/content/faq"
+export type { FaqItem, FaqSection } from "@/content/faq"
 
 export const footer = {
   description:
@@ -711,6 +655,7 @@ export const footer = {
     { label: "Soy empresa", href: "/plan-empresas" },
     { label: "Testimonios", href: "/#testimonios" },
     { label: "Contacto", href: "/contacto" },
+    { label: "FAQ", href: "/faq" },
   ],
   legal: [
     { label: "Aviso legal", href: "/aviso-legal" },

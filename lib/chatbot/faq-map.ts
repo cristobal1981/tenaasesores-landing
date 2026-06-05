@@ -1,4 +1,5 @@
-import { faqContact, faqGeneral } from "@/content/site"
+import { faqContact } from "@/content/site"
+import { faqHref, faqSections } from "@/content/faq"
 import { normalizeText, tokenize } from "./normalize"
 import type { ChatReply } from "./types"
 
@@ -10,16 +11,18 @@ type FaqEntry = {
 }
 
 const FAQ_ENTRIES: FaqEntry[] = [
-  ...faqGeneral.items.map((item) => ({
-    question: item.question,
-    answer: item.answer,
-    href: "/",
-    aliases: [] as string[],
-  })),
+  ...faqSections.flatMap((section) =>
+    section.items.map((item) => ({
+      question: item.question,
+      answer: item.answer,
+      href: `${faqHref}#${section.slug}`,
+      aliases: [] as string[],
+    }))
+  ),
   ...faqContact.items.map((item) => ({
     question: item.question,
     answer: item.answer,
-    href: "/contacto",
+    href: `${faqHref}#contacto`,
     aliases:
       item.question.includes("formulario")
         ? (["como solicito consulta", "solicitar consulta asesor", "como pedir consulta", "formulario consulta"] as string[])
@@ -28,13 +31,13 @@ const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "¿La primera consulta tiene coste?",
     answer: "No. Primera consulta gratuita y sin compromiso.",
-    href: "/contacto",
+    href: `${faqHref}#empezar`,
     aliases: ["consulta gratis", "consulta gratuita", "coste consulta", "tiene coste la consulta"],
   },
   {
     question: "¿En cuánto tiempo respondéis normalmente?",
     answer: "Normalmente respondemos en menos de 24 horas laborables.",
-    href: "/contacto",
+    href: `${faqHref}#empezar`,
     aliases: ["cuando responden", "tiempo respuesta", "24 horas"],
   },
 ]
