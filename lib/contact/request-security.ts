@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server"
 import { site } from "@/content/site"
 
-const additionalAllowedOrigins = ["https://landing-site-serven-psi.vercel.app"]
+const additionalAllowedOrigins = ["https://landing-site-seven-psi.vercel.app"]
 
 function normalizeOrigin(value: string): string | null {
   try {
