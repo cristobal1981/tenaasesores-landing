@@ -57,7 +57,7 @@ export function Services() {
                     href={`/servicios#${service.slug}`}
                     className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-on-dark group-hover:gap-3 lg:mt-6"
                   >
-                    Más información
+                    Ver {service.title.toLowerCase()}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </GradientCard>

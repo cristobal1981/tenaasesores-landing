@@ -3,6 +3,7 @@ import { Archivo, Host_Grotesk } from 'next/font/google'
 import { JsonLd } from '@/components/seo/json-ld'
 import { ConsentAnalytics } from '@/components/legal/consent-analytics'
 import { defaultOgImage } from '@/lib/seo/metadata'
+import { getIndexingRobots } from '@/lib/seo/env'
 import { organizationSchema } from '@/lib/seo/structured-data'
 import { site } from '@/content/site'
 import './globals.css'
@@ -28,10 +29,7 @@ export const metadata: Metadata = {
     template: '%s',
   },
   description: site.description,
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: getIndexingRobots(),
   openGraph: {
     type: 'website',
     locale: 'es_ES',

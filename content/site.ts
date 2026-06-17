@@ -10,7 +10,7 @@ export const site = {
   tagline: "Asesores y Abogados",
   description:
     "Asesoramiento y consultoría empresarial en Tenerife. Servicios profesionales especializados en empresas digitales: fiscalidad, contabilidad, laboral y constitución de empresas.",
-  url: "https://tenaasesores.es",
+  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.tenaasesores.es",
   location: "Tenerife, España",
   email: "info@tenaasesores.es",
   technicalEmail: "tecnico@tenaasesores.es",
