@@ -1,18 +1,26 @@
 import type { Metadata } from "next"
 import { ServicesPage } from "@/components/pages/services-page"
-import { site } from "@/src/shared/config/site"
+import { JsonLd } from "@/components/seo/json-ld"
+import { breadcrumbSchema } from "@/lib/seo/structured-data"
+import { pageMetadata } from "@/lib/seo/metadata"
 
-export const metadata: Metadata = {
-  title: "Servicios | tenaasesores",
+export const metadata: Metadata = pageMetadata({
+  title: "Servicios de asesoría fiscal, contable y laboral | tenaasesores",
   description:
-    "Contabilidad, fiscalidad, laboral y constitución de empresas en Tenerife. Supervisión profesional con Odoo y trato cercano para autónomos y pymes.",
-  openGraph: {
-    title: "Servicios | tenaasesores",
-    description: site.description,
-    url: `${site.url}/servicios`,
-  },
-}
+    "Servicios de asesoría en Tenerife: gestión fiscal, contable, laboral y constitución de empresas. Supervisión profesional con Odoo y trato cercano.",
+  path: "/servicios",
+})
 
 export default function ServiciosRoute() {
-  return <ServicesPage />
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Inicio", path: "/" },
+          { name: "Servicios", path: "/servicios" },
+        ])}
+      />
+      <ServicesPage />
+    </>
+  )
 }

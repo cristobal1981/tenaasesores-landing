@@ -1,18 +1,13 @@
 import type { Metadata } from "next"
 import { LegalPage } from "@/components/pages/legal-page"
-import { site } from "@/src/shared/config/site"
+import { pageMetadata } from "@/lib/seo/metadata"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Política de privacidad | tenaasesores",
   description:
     "Política de privacidad y protección de datos de tenaasesores. Información sobre el tratamiento de datos personales conforme al RGPD.",
-  openGraph: {
-    title: "Política de privacidad | tenaasesores",
-    description: site.description,
-    url: `${site.url}/privacidad`,
-  },
-  robots: { index: true },
-}
+  path: "/privacidad",
+})
 
 export default function PrivacidadRoute() {
   return <LegalPage slug="privacidad" />

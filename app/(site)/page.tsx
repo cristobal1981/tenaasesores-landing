@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import {
   Hero,
   LogoMarquee,
@@ -9,6 +10,14 @@ import {
 } from "@/src/modules/landing/ui"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { faqPage } from "@/content/faq"
+import { pageMetadata } from "@/lib/seo/metadata"
+
+export const metadata: Metadata = pageMetadata({
+  title: "Asesoría fiscal y contable en Tenerife | tenaasesores",
+  description:
+    "Asesoría en Tenerife para autónomos y pymes: fiscal, contable y laboral con Odoo, trato directo y primera consulta gratuita.",
+  path: "/",
+})
 
 export default function Home() {
   return (

@@ -1,18 +1,24 @@
 import type { Metadata } from "next"
 import { FaqPage } from "@/components/pages/faq-page"
+import { JsonLd } from "@/components/seo/json-ld"
 import { faqPage } from "@/content/faq"
-import { site } from "@/src/shared/config/site"
+import { breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data"
+import { pageMetadata } from "@/lib/seo/metadata"
 
-export const metadata: Metadata = {
-  title: "Preguntas frecuentes | tenaasesores",
+export const metadata: Metadata = pageMetadata({
+  title: "Preguntas frecuentes sobre asesoría y planes | tenaasesores",
   description: faqPage.subtitle,
-  openGraph: {
-    title: "Preguntas frecuentes | tenaasesores",
-    description: faqPage.subtitle,
-    url: `${site.url}/faq`,
-  },
-}
+  path: "/faq",
+})
 
 export default function FaqRoute() {
-  return <FaqPage />
+  return (
+    <>
+      <JsonLd data={[faqPageSchema(), breadcrumbSchema([
+        { name: "Inicio", path: "/" },
+        { name: "Preguntas frecuentes", path: "/faq" },
+      ])]} />
+      <FaqPage />
+    </>
+  )
 }

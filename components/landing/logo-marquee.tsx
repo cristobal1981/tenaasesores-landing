@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { FadeIn } from "@/components/animations"
 import { SectionShell } from "@/components/layout/section-shell"
 import { logoMarquee } from "@/content/site"
@@ -26,12 +27,13 @@ export function LogoMarquee() {
               } as const
               const logoImage = (
                 <div className="flex shrink-0 items-center justify-center" style={slotStyle}>
-                  <img
+                  <Image
                     src={logo.src}
                     alt={logo.alt}
                     width={logoMarquee.slotWidth}
                     height={logoMarquee.slotHeight}
                     loading="lazy"
+                    decoding="async"
                     className="max-h-full max-w-full object-contain"
                     style={
                       logo.scale !== 1

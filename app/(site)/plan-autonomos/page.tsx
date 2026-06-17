@@ -1,21 +1,26 @@
 import type { Metadata } from "next"
 import { PlansPage } from "@/components/pages/plans-page"
-import { site } from "@/src/shared/config/site"
+import { JsonLd } from "@/components/seo/json-ld"
+import { breadcrumbSchema } from "@/lib/seo/structured-data"
+import { pageMetadata } from "@/lib/seo/metadata"
 
-export const metadata: Metadata = {
-  title: "Plan Autónomos | tenaasesores",
+export const metadata: Metadata = pageMetadata({
+  title: "Plan para autónomos — precio orientativo desde 69 €/mes | tenaasesores",
   description:
-    "Plan mensual para autónomos y microempresas: cobertura fiscal y contable con precios orientativos, soporte claro y posibilidad de escalar.",
-  openGraph: {
-    title: "Plan Autónomos | tenaasesores",
-    description: site.description,
-    url: `${site.url}/plan-autonomos`,
-  },
-  alternates: {
-    canonical: `${site.url}/plan-autonomos`,
-  },
-}
+    "Plan mensual para autónomos en Tenerife: fiscal y contabilidad al día con precio orientativo, plan Base o personalizado según tu operativa.",
+  path: "/plan-autonomos",
+})
 
 export default function PlanAutonomosRoute() {
-  return <PlansPage audience="autonomos" />
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Inicio", path: "/" },
+          { name: "Plan autónomos", path: "/plan-autonomos" },
+        ])}
+      />
+      <PlansPage audience="autonomos" />
+    </>
+  )
 }

@@ -3,8 +3,8 @@ import { faqHref } from "@/content/faq"
 export const sappoIntroStorageKey = "tenaasesores-sappo-intro-seen" as const
 
 export const sappoAssets = {
-  fabLogo: "/brand/sappo/logo-sappo_colores-45deg.svg",
-  chatAvatar: "/brand/sappo/logo-sappo_blanco.svg",
+  fabLogo: "/brand/sappo/logo-sappo_colores-45deg.webp",
+  chatAvatar: "/brand/sappo/logo-sappo_blanco.webp",
 } as const
 
 export const chatbotUi = {

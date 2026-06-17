@@ -1,21 +1,26 @@
 import type { Metadata } from "next"
 import { PlansPage } from "@/components/pages/plans-page"
-import { site } from "@/src/shared/config/site"
+import { JsonLd } from "@/components/seo/json-ld"
+import { breadcrumbSchema } from "@/lib/seo/structured-data"
+import { pageMetadata } from "@/lib/seo/metadata"
 
-export const metadata: Metadata = {
-  title: "Plan Empresas | tenaasesores",
+export const metadata: Metadata = pageMetadata({
+  title: "Plan para empresas y pymes en Tenerife | tenaasesores",
   description:
-    "Planes para empresas y pymes en crecimiento: cobertura fiscal, contable y laboral con acompañamiento continuo y respuesta prioritaria.",
-  openGraph: {
-    title: "Plan Empresas | tenaasesores",
-    description: site.description,
-    url: `${site.url}/plan-empresas`,
-  },
-  alternates: {
-    canonical: `${site.url}/plan-empresas`,
-  },
-}
+    "Planes para empresas en Tenerife: constitución con precio orientativo o plan personalizado con fiscal, contable y laboral a medida.",
+  path: "/plan-empresas",
+})
 
 export default function PlanEmpresasRoute() {
-  return <PlansPage audience="empresas" />
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Inicio", path: "/" },
+          { name: "Plan empresas", path: "/plan-empresas" },
+        ])}
+      />
+      <PlansPage audience="empresas" />
+    </>
+  )
 }

@@ -1,26 +1,20 @@
 import type { Metadata } from "next"
 import { WebIssueReportPage } from "@/components/pages/web-issue-report-page"
-import { site } from "@/src/shared/config/site"
+import { pageMetadata } from "@/lib/seo/metadata"
 
 type PageProps = {
   searchParams: Promise<{ pagina?: string }>
 }
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Reportar problema web | tenaasesores",
   description:
     "Canal para reportar incidencias técnicas del sitio web de tenaasesores. No utilices este formulario para consultas de asesoría.",
+  path: "/reportar-problema",
   robots: { index: false, follow: true },
-  openGraph: {
-    title: "Reportar problema web | tenaasesores",
-    description: site.description,
-    url: `${site.url}/reportar-problema`,
-  },
-}
+})
 
 export default async function ReportarProblemaRoute({ searchParams }: PageProps) {
-  const params = await searchParams
-  const initialPageUrl = typeof params.pagina === "string" ? params.pagina : ""
-
-  return <WebIssueReportPage initialPageUrl={initialPageUrl} />
+  const { pagina } = await searchParams
+  return <WebIssueReportPage initialPageUrl={pagina} />
 }

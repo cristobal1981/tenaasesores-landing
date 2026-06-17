@@ -95,12 +95,12 @@ export const faqSections: readonly FaqSection[] = [
       {
         question: "¿Qué plan me conviene si soy autónomo?",
         answer:
-          "Depende de tu operativa. El plan Base cubre necesidades esenciales; el Pro añade más soporte; el Premium incluye prioridad y alcance ampliado. En la página de autónomos puedes comparar qué incluye cada uno.",
+          "Depende de tu operativa. El plan Base cubre necesidades esenciales con un precio orientativo desde 69 €/mes. Si necesitas más alcance — laboral, Odoo o mayor volumen —, el plan Personalizado se adapta a tu caso. En la página de autónomos puedes comparar qué incluye cada uno.",
       },
       {
         question: "¿Y si tengo una empresa o pyme?",
         answer:
-          "El plan para empresas incluye seguimiento continuo y prioridad de respuesta. Si estás constituyendo la sociedad, el plan Constitución muestra un precio orientativo que acordamos contigo.",
+          "El plan Constitución de empresa cubre el arranque con precio orientativo. Si ya estás en marcha o necesitas más alcance, el plan Personalizado incluye seguimiento continuo y cobertura a medida según tu estructura y equipo.",
       },
       {
         question: "¿Hay plan personalizado?",

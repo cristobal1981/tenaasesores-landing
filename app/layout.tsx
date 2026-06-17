@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { Archivo, Host_Grotesk } from 'next/font/google'
+import { JsonLd } from '@/components/seo/json-ld'
 import { ConsentAnalytics } from '@/components/legal/consent-analytics'
+import { defaultOgImage } from '@/lib/seo/metadata'
+import { organizationSchema } from '@/lib/seo/structured-data'
+import { site } from '@/content/site'
 import './globals.css'
 
 const hostGrotesk = Host_Grotesk({
@@ -18,9 +22,31 @@ const archivo = Archivo({
 })
 
 export const metadata: Metadata = {
-  title: 'tenaasesores | Asesoría en Tenerife',
-  description:
-    'Asesoramiento y consultoría empresarial en Tenerife. Contabilidad, fiscalidad y laboral para autónomos, pymes y empresas digitales.',
+  metadataBase: new URL(site.url),
+  title: {
+    default: 'tenaasesores | Asesoría en Tenerife',
+    template: '%s',
+  },
+  description: site.description,
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_ES',
+    siteName: site.name,
+    title: 'tenaasesores | Asesoría en Tenerife',
+    description: site.description,
+    url: site.url,
+    images: [defaultOgImage],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'tenaasesores | Asesoría en Tenerife',
+    description: site.description,
+    images: [defaultOgImage.url],
+  },
   icons: {
     icon: [
       { url: '/brand/favicon.ico', sizes: '48x48' },
@@ -49,7 +75,12 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${hostGrotesk.variable} ${archivo.variable} bg-background`}
     >
+      <head>
+        <link rel="preconnect" href="https://images.pexels.com" />
+        <link rel="dns-prefetch" href="https://images.pexels.com" />
+      </head>
       <body className={`${archivo.className} antialiased`}>
+        <JsonLd data={organizationSchema()} />
         {children}
         <ConsentAnalytics />
       </body>
