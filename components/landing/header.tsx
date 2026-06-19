@@ -1,16 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronDown, Menu, X } from "lucide-react"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { BrandLogo } from "@/components/layout/brand-logo"
 import { contactHref, navItems } from "@/content/site"
@@ -26,6 +24,82 @@ function hasChildren(item: (typeof navItems)[number]): item is (typeof navItems)
   return "children" in item
 }
 
+function PlansNavDropdown({
+  item,
+  pathname,
+}: {
+  item: (typeof navItems)[number] & {
+    children: ReadonlyArray<{ label: string; href: string; description: string }>
+  }
+  pathname: string
+}) {
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isParentActive = item.children.some((child) => isNavActive(pathname, child.href))
+
+  useEffect(() => {
+    if (!open) return
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (containerRef.current?.contains(event.target as Node)) return
+      setOpen(false)
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false)
+    }
+
+    document.addEventListener("mousedown", handlePointerDown)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [open])
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        className={cn(
+          "inline-flex items-center gap-1 font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+          isParentActive || open ? "text-primary" : "text-muted-on-dark"
+        )}
+        aria-label="Abrir menú de planes"
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        {item.label}
+        <ChevronDown
+          className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")}
+          aria-hidden
+        />
+      </button>
+      {open ? (
+        <div className="absolute top-full left-1/2 z-50 mt-1.5 w-72 -translate-x-1/2 rounded-xl border border-agua/30 bg-background p-2 shadow-lg shadow-black/20">
+          <ul className="flex flex-col gap-0.5">
+            {item.children.map((child) => (
+              <PlansNavListItem
+                key={child.label}
+                label={child.label}
+                description={child.description}
+                href={child.href}
+                isActive={isNavActive(pathname, child.href)}
+                onNavigate={() => setOpen(false)}
+              />
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 function navItemClass(isActive: boolean) {
   return cn(
     "font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none",
@@ -33,30 +107,24 @@ function navItemClass(isActive: boolean) {
   )
 }
 
-const plansTriggerClass = cn(
-  navItemClass(false),
-  "group !h-auto !w-max gap-1 !rounded-none !bg-transparent !px-0 !py-0 !text-base !shadow-none",
-  "hover:!bg-transparent focus:!bg-transparent",
-  "data-[state=open]:!bg-transparent data-[state=open]:!text-primary",
-  "data-[state=open]:hover:!bg-transparent data-[state=open]:focus:!bg-transparent",
-  "hover:!text-primary focus:!text-primary"
-)
-
 function PlansNavListItem({
   label,
   description,
   href,
   isActive,
+  onNavigate,
 }: {
   label: string
   description: string
   href: string
   isActive: boolean
+  onNavigate?: () => void
 }) {
   return (
     <li>
       <Link
         href={href}
+        onClick={onNavigate}
         className={cn(
           "group flex flex-col gap-1 rounded-lg px-3 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
           "hover:bg-agua/20",
@@ -102,29 +170,9 @@ export function Header() {
             <NavigationMenuList className="gap-8">
               {navItems.map((item) => {
                 if (hasChildren(item)) {
-                  const isParentActive = item.children.some((child) =>
-                    isNavActive(pathname, child.href)
-                  )
                   return (
-                    <NavigationMenuItem key={item.label}>
-                      <NavigationMenuTrigger
-                        className={cn(plansTriggerClass, isParentActive && "!text-primary")}
-                      >
-                        {item.label}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent className="!rounded-xl !border !border-agua/30 !bg-background !text-on-dark p-2 shadow-lg shadow-black/20 md:left-1/2 md:w-72 md:-translate-x-1/2">
-                        <ul className="flex flex-col gap-0.5">
-                          {item.children.map((child) => (
-                            <PlansNavListItem
-                              key={child.label}
-                              label={child.label}
-                              description={child.description}
-                              href={child.href}
-                              isActive={isNavActive(pathname, child.href)}
-                            />
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
+                    <NavigationMenuItem key={item.label} className="!bg-transparent">
+                      <PlansNavDropdown item={item} pathname={pathname} />
                     </NavigationMenuItem>
                   )
                 }
@@ -187,11 +235,12 @@ export function Header() {
                         type="button"
                         className={cn(
                           "inline-flex w-full items-center justify-between py-2 text-left",
-                          navItemClass(isParentActive)
+                          navItemClass(isParentActive || isMobilePlansOpen)
                         )}
                         onClick={() => setIsMobilePlansOpen((prev) => !prev)}
                         tabIndex={isMenuOpen ? 0 : -1}
                         aria-expanded={isMobilePlansOpen}
+                        aria-haspopup="true"
                       >
                         {item.label}
                         <ChevronDown

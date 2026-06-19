@@ -186,11 +186,11 @@ const empresasTiers = [
     pricePrefix: "desde",
     period: "mes",
     summary:
-      "No encajamos tu negocio en un plan rígido. Adaptamos contabilidad, fiscal, laboral y tecnología a tu estructura, equipo y ritmo de crecimiento.",
+      "Diseñamos contabilidad, fiscal, laboral y tecnología según tu estructura, equipo y ritmo de crecimiento — con un paquete pensado solo para tu empresa.",
     ctaLabel: "Cuéntanos tu caso",
     highlight: true,
     items: [
-      "Alcance definido contigo, sin paquete cerrado",
+      "Alcance definido contigo, paquete personalizado y único",
       "Fiscal, contable y laboral según volumen y plantilla",
       "Constitución o cambios societarios si los necesitas",
       "Propuesta clara antes de comprometerte",
@@ -213,7 +213,7 @@ export const plansByAudience = {
     ...plansBase,
     title: ["Plan para empresas", "con visión de crecimiento"],
     subtitle:
-      "Cada empresa es única. Diseñamos contabilidad, fiscal, laboral y tecnología a tu medida — sin planes rígidos.",
+      "Cada empresa es única. Diseñamos contabilidad, fiscal, laboral y tecnología a tu medida, con condiciones claras desde el primer día.",
     tiers: empresasTiers,
     customizeFormAnchor: "personalizar-plan",
     planNote:

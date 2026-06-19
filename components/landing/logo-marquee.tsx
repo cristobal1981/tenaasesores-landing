@@ -51,7 +51,7 @@ function LogoGroup({
   )
 }
 
-export function LogoMarquee() {
+export function LogoMarquee({ variant = "standalone" }: { variant?: "standalone" | "embedded" }) {
   const groupRef = useRef<HTMLUListElement>(null)
   const [marqueeDistance, setMarqueeDistance] = useState(0)
   const [repeatCount, setRepeatCount] = useState(2)
@@ -82,8 +82,16 @@ export function LogoMarquee() {
       ? ({ "--marquee-distance": `${marqueeDistance}px` } as CSSProperties)
       : undefined
 
+  const isEmbedded = variant === "embedded"
+
   return (
-    <section className="section-divider relative overflow-hidden bg-background py-14 md:py-20">
+    <section
+      className={
+        isEmbedded
+          ? "relative overflow-hidden bg-background pb-20 pt-6 md:pb-28 md:pt-10"
+          : "section-divider relative overflow-hidden bg-background py-14 md:py-20"
+      }
+    >
       <SectionShell>
         <FadeIn className="mb-10 text-center md:mb-12">
           <div className="badge-on-dark mb-4">

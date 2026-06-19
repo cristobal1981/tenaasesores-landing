@@ -1,6 +1,7 @@
 export { Header } from "@/components/landing/header"
 export { Footer } from "@/components/landing/footer"
 export { Hero } from "@/components/landing/hero"
+export { HomeHeroBand } from "@/components/landing/home-hero-band"
 export { LogoMarquee } from "@/components/landing/logo-marquee"
 export { HomeStats } from "@/components/landing/home-stats"
 export { Services } from "@/components/landing/services"

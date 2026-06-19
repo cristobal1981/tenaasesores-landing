@@ -5,12 +5,9 @@ import { useEffect, useRef, useState } from "react"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { ArrowRight, Award, Eye, Zap } from "lucide-react"
 import { AnimatePresence, m, useReducedMotion } from "framer-motion"
-import { FloatingElement } from "@/components/animations"
 import { useHeroGsap } from "@/components/gsap/use-hero-gsap"
-import { SectionParallaxBackground } from "@/components/landing/section-parallax-background"
 import { SectionShell } from "@/components/layout/section-shell"
-import { hero, images } from "@/content/site"
-import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
+import { hero } from "@/content/site"
 
 const trustIcons = [Eye, Award, Zap]
 const ROTATING_WORD_WIDTH_BUFFER = 4
@@ -33,13 +30,11 @@ function RotatingWordMeasure({ word }: { word: string }) {
 }
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const wordMeasureRefs = useRef<Array<HTMLSpanElement | null>>([])
   const reducedMotion = useReducedMotion()
   const [activeWordIndex, setActiveWordIndex] = useState(0)
   const [wordWidths, setWordWidths] = useState<number[]>([])
-  const parallaxRef = useSectionParallax(sectionRef, { range: "hero" })
   const activeWord = hero.title.rotatingWords[activeWordIndex]
 
   useHeroGsap({ contentRef })
@@ -83,28 +78,8 @@ export function Hero() {
   }, [reducedMotion])
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden bg-hero-gradient py-20 md:py-24 lg:py-32"
-    >
-      <SectionParallaxBackground
-        src={images.hero}
-        parallaxRef={parallaxRef}
-        priority
-        overlay={
-          <div
-            className="absolute inset-0 bg-gradient-to-br from-background/92 via-background/82 to-card/95"
-            aria-hidden
-          />
-        }
-      />
-
-      <FloatingElement
-        className="absolute top-1/3 right-0 h-80 w-80 rounded-full bg-primary/12 blur-3xl"
-        duration={10}
-      />
-
-      <SectionShell className="relative z-10">
+    <div className="py-20 md:py-24 lg:py-32">
+      <SectionShell className="relative">
         <div ref={contentRef} className="mx-auto max-w-4xl text-center">
           <h1
             data-hero="title"
@@ -226,6 +201,6 @@ export function Hero() {
           </div>
         </div>
       </SectionShell>
-    </section>
+    </div>
   )
 }

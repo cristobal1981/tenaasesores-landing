@@ -229,6 +229,9 @@
   .bg-hero-gradient {
     @apply bg-gradient-to-br from-background via-card to-agua;
   }
+  .bg-home-hero-band {
+    @apply bg-gradient-to-br from-background via-card to-agua/70;
+  }
   .bg-section-dark {
     @apply bg-gradient-to-b from-background to-agua/40;
   }
@@ -294,6 +297,33 @@
         transparent
       )
       1;
+  }
+
+  .section-divider-bottom {
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in oklch, var(--agua) 35%, transparent) 20%,
+        color-mix(in oklch, var(--agua) 35%, transparent) 80%,
+        transparent
+      )
+      1;
+  }
+
+  .section-fade-line {
+    display: block;
+    height: 1px;
+    width: calc(100% - 2rem);
+    margin-inline: auto;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklch, var(--agua) 60%, transparent) 8%,
+      var(--primary) 50%,
+      color-mix(in oklch, var(--agua) 60%, transparent) 92%,
+      transparent 100%
+    );
   }
 
   .text-stat-on-light {

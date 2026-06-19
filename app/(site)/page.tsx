@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
 import {
-  Hero,
+  HomeHeroBand,
   LogoMarquee,
-  HomeStats,
   Services,
   Odoo,
   Philosophy,
@@ -22,9 +21,7 @@ export const metadata: Metadata = pageMetadata({
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <Hero />
-      <HomeStats />
-      <LogoMarquee />
+      <HomeHeroBand />
       <Services />
       <Philosophy />
       <Odoo />

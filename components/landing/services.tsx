@@ -12,8 +12,9 @@ export function Services() {
   return (
     <section
       id="servicios"
-      className="relative overflow-hidden bg-background py-20 md:py-28"
+      className="relative overflow-hidden bg-background pb-20 md:pb-28"
     >
+      <div className="section-fade-line mb-10 md:mb-14" aria-hidden />
       <div
         className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         aria-hidden
