@@ -17,7 +17,7 @@ export function HomeStats() {
       aria-label="Cifras de tenaasesores"
     >
       <SectionShell>
-        <ul className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-8">
+        <ul className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3 md:gap-8">
           {homeStats.items.map((stat) => (
             <li key={stat.label} className="text-center">
               <p
@@ -30,9 +30,6 @@ export function HomeStats() {
                 {formatStatValue(0, stat.prefix, stat.suffix)}
               </p>
               <p className="text-sm font-medium text-on-light md:text-base">{stat.label}</p>
-              {"sublabel" in stat && stat.sublabel ? (
-                <p className="mt-1 text-xs text-muted-on-light md:text-sm">{stat.sublabel}</p>
-              ) : null}
             </li>
           ))}
         </ul>

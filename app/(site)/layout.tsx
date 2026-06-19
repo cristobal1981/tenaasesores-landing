@@ -10,7 +10,7 @@ export default function SiteLayout({
   return (
     <>
       <Header />
-      <div className="min-h-screen pt-16 sm:pt-20">{children}</div>
+      <div className="min-h-screen pt-16 md:pt-20">{children}</div>
       <Footer />
       <CookieBanner />
       <SiteChatWidget />

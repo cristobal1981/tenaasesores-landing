@@ -23,29 +23,19 @@ export function FaqAccordionList({
   className,
 }: FaqAccordionListProps) {
   const baseId = useId()
-  const [openIndices, setOpenIndices] = useState<Set<number>>(() =>
-    defaultOpenIndex >= 0 && defaultOpenIndex < items.length
-      ? new Set([defaultOpenIndex])
-      : new Set()
+  const [openIndex, setOpenIndex] = useState<number | null>(() =>
+    defaultOpenIndex >= 0 && defaultOpenIndex < items.length ? defaultOpenIndex : null
   )
 
   const toggle = useCallback((index: number) => {
-    setOpenIndices((prev) => {
-      const next = new Set(prev)
-      if (next.has(index)) {
-        next.delete(index)
-      } else {
-        next.add(index)
-      }
-      return next
-    })
+    setOpenIndex((prev) => (prev === index ? null : index))
   }, [])
 
   return (
     <div role="group" aria-label={`Preguntas de ${sectionLabel}`} className={className}>
       <StaggerContainer className="space-y-3" staggerDelay={0.07}>
         {items.map((item, index) => {
-          const isOpen = openIndices.has(index)
+          const isOpen = openIndex === index
           const buttonId = `${baseId}-btn-${index}`
           const panelId = `${baseId}-panel-${index}`
 

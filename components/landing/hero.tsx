@@ -86,7 +86,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-hero-gradient pb-12 md:min-h-[calc(100dvh-5rem)] md:pb-16"
+      className="relative overflow-hidden bg-hero-gradient py-20 md:py-24 lg:py-32"
     >
       <SectionParallaxBackground
         src={images.hero}
@@ -115,10 +115,7 @@ export function Hero() {
         delay={4}
       />
 
-      <SectionShell
-        className="relative z-10 flex min-h-0 flex-1 flex-col"
-        innerClassName="flex flex-1 flex-col justify-center"
-      >
+      <SectionShell className="relative z-10">
         <div ref={contentRef} className="mx-auto max-w-4xl text-center">
           <h1
             data-hero="title"
@@ -198,7 +195,7 @@ export function Hero() {
 
           <div
             data-hero="ctas"
-            className="mb-0 flex flex-col justify-center gap-4 md:mb-16 sm:flex-row"
+            className="mb-0 flex flex-col justify-center gap-4 md:mb-10 sm:flex-row"
           >
             <MarketingButton asChild size="lg" className="px-8 text-base">
               <Link href="/contacto">

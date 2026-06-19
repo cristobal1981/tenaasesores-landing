@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Eye, ShieldCheck, Zap } from "lucide-react"
 import { IconFeatureCard } from "@/components/ui/icon-feature-card"
@@ -24,6 +25,34 @@ export function Odoo() {
           subtitle={odoo.subtitle}
           className="mb-14 max-w-3xl"
         />
+
+        <FadeIn className="mb-14">
+          <div className="rounded-2xl border border-on-dark/15 bg-surface-light/95 p-6 md:flex md:items-center md:gap-8 md:p-8">
+            <p className="mb-6 text-base leading-relaxed text-muted-on-light md:mb-0 md:flex-1">
+              {odoo.partners.text}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4 md:shrink-0">
+              <div className="flex items-center justify-center rounded-lg bg-white px-5 py-3 shadow-sm">
+                <Image
+                  src={odoo.partners.odoo.src}
+                  alt={odoo.partners.odoo.alt}
+                  width={odoo.partners.odoo.width}
+                  height={odoo.partners.odoo.height}
+                  className="h-10 w-auto object-contain md:h-12"
+                />
+              </div>
+              <div className="flex items-center justify-center rounded-lg bg-white px-4 py-3 shadow-sm">
+                <Image
+                  src={odoo.partners.holded.src}
+                  alt={odoo.partners.holded.alt}
+                  width={odoo.partners.holded.width}
+                  height={odoo.partners.holded.height}
+                  className="h-7 w-auto object-contain md:h-8"
+                />
+              </div>
+            </div>
+          </div>
+        </FadeIn>
 
         <StaggerContainer
           className="mb-16 grid gap-6 md:grid-cols-3"

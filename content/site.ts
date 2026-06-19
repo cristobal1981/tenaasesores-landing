@@ -72,6 +72,21 @@ export const odoo = {
   title: ["Contabilidad descentralizada,", "control profesional de verdad"],
   subtitle:
     "Tú tienes visibilidad y acceso en tiempo real; nosotros nos encargamos de que todo esté bien hecho, revisado y al día con la normativa.",
+  partners: {
+    text: "Somos partners oficiales de Odoo y Holded. Odoo es nuestra base para contabilidad, ERP e integración a medida; Holded nos permite ofrecer una vía ágil de facturación y gestión cuando encaja mejor con tu operativa.",
+    odoo: {
+      src: "/brand/partners/odoo_ready_partners_rgb.webp",
+      alt: "Odoo Ready Partner",
+      width: 160,
+      height: 48,
+    },
+    holded: {
+      src: "/brand/partners/holded.webp",
+      alt: "Holded Partner Silver",
+      width: 120,
+      height: 40,
+    },
+  },
   benefits: [
     {
       title: "Contabilidad descentralizada",
@@ -613,20 +628,12 @@ export const homeStats = {
       prefix: "",
       suffix: "",
       label: "Profesionales en equipo",
-      sublabel: "Trato directo en Tenerife",
     },
     {
       end: 15,
       prefix: "",
       suffix: "+",
-      label: "Años asesorando en Canarias",
-    },
-    {
-      end: 3,
-      prefix: "",
-      suffix: "",
-      label: "Áreas integradas",
-      sublabel: "Fiscal, contable y laboral",
+      label: "Años asesorando",
     },
   ],
 } as const

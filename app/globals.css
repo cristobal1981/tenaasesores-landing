@@ -292,6 +292,7 @@
     width: max-content;
     align-items: center;
     gap: 3.5rem;
+    will-change: transform;
     animation: logo-marquee 30s linear infinite;
   }
 
@@ -373,10 +374,10 @@
 
 @keyframes logo-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-33.333%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
