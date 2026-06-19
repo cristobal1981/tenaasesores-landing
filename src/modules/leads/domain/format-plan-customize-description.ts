@@ -6,6 +6,14 @@ import {
 } from "@/content/plan-customize-form"
 import type { ValidatedPlanCustomizeInquiry } from "@/lib/plan-customize/validate-inquiry"
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+}
+
 function yesNoLabel(value: "yes" | "no"): string {
   return planCustomizeYesNo.find((option) => option.value === value)?.label ?? value
 }
@@ -82,5 +90,7 @@ export function formatPlanCustomizeLeadDescription(
     lines.push(inquiry.notes)
   }
 
-  return lines.join("\n")
+  return lines
+    .map((line) => (line === "" ? "" : escapeHtml(line).replace(/\n/g, "<br/>")))
+    .join("<br/>")
 }

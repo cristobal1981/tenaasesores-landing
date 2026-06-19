@@ -6,7 +6,7 @@ import {
   Services,
   Odoo,
   Philosophy,
-  Testimonials,
+  // Testimonials,
 } from "@/src/modules/landing/ui"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { faqPage } from "@/content/faq"
@@ -28,7 +28,7 @@ export default function Home() {
       <Services />
       <Philosophy />
       <Odoo />
-      <Testimonials />
+      {/* <Testimonials /> — oculto hasta tener testimonios reales publicables */}
       <CtaBrisaBand
         title={faqPage.homeTeaser.title}
         subtitle={faqPage.homeTeaser.subtitle}

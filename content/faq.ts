@@ -183,11 +183,6 @@ export const faqSections: readonly FaqSection[] = [
         answer:
           "Te contactamos por email. Si hace falta, agendamos una llamada de seguimiento para resolver tus dudas y continuar con el proceso.",
       },
-      {
-        question: "¿Dónde está el formulario de contacto?",
-        answer:
-          "En la página de contacto puedes enviarnos tu consulta con nombre, email y un mensaje breve. El teléfono es opcional.",
-      },
     ],
   },
 ] as const
@@ -210,5 +205,5 @@ export const faqGeneral = {
 /** @deprecated Use faqSections contact section — kept for contact page compat */
 export const faqContact = {
   title: "Preguntas sobre la consulta",
-  items: faqSections[5].items.slice(0, 4),
+  items: faqSections[5].items,
 } as const

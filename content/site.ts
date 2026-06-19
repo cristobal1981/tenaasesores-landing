@@ -119,7 +119,7 @@ const autonomosTiers = [
     kind: "fixed",
     name: "Base",
     audience: "Autónomos con operativa estable y necesidades esenciales",
-    price: "69",
+    price: "59",
     period: "mes",
     summary: "Cobertura esencial para tener fiscal y contabilidad al día sin fricción.",
     responseSla: "Respuesta en 48h laborables",
@@ -154,7 +154,7 @@ const empresasTiers = [
     kind: "fixed",
     name: "Constitución de empresa",
     audience: "Para dar de alta tu negocio con fiscal y contabilidad desde el día uno",
-    price: "69",
+    price: "120",
     period: "mes",
     summary:
       "Tramitación de altas, elección de forma jurídica y puesta en marcha fiscal y contable con acompañamiento inicial.",
@@ -493,6 +493,9 @@ export const about = {
   ],
 } as const
 
+/** Oculto en home/footer/chatbot hasta activar sección (`testimonialsEnabled = true`). */
+export const testimonialsEnabled = false
+
 export const testimonials = {
   badge: "Testimonios",
   title: ["Negocios reales.", "Opiniones reales."],
@@ -534,15 +537,7 @@ export const contact = {
   socials: [
     {
       label: "LinkedIn",
-      href: "https://www.linkedin.com",
-    },
-    {
-      label: "Instagram",
-      href: "https://www.instagram.com",
-    },
-    {
-      label: "X",
-      href: "https://x.com",
+      href: "https://www.linkedin.com/company/tenaasesores",
     },
   ],
 } as const
@@ -653,7 +648,7 @@ export const footer = {
     { label: "Nosotros", href: "/nosotros" },
     { label: "Soy autónomo", href: "/plan-autonomos" },
     { label: "Soy empresa", href: "/plan-empresas" },
-    { label: "Testimonios", href: "/#testimonios" },
+    // { label: "Testimonios", href: "/#testimonios" }, // testimonialsEnabled
     { label: "Contacto", href: "/contacto" },
     { label: "FAQ", href: "/faq" },
   ],

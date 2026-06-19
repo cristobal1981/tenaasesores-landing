@@ -1,9 +1,15 @@
 import Link from "next/link"
 import { BrandLogo } from "@/components/layout/brand-logo"
 import { SectionShell } from "@/components/layout/section-shell"
-import { notImplementedPath } from "@/content/errors"
-import { footer, site } from "@/content/site"
+import { contact, footer, site } from "@/content/site"
 import { webIssueFooter, webIssueReportPath } from "@/content/web-issue"
+
+const socialLinkClassName =
+  "inline-flex min-h-11 items-center text-sm text-muted-on-dark transition-colors hover:text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+
+function isExternalHref(href: string): boolean {
+  return href.startsWith("http://") || href.startsWith("https://")
+}
 
 export function Footer() {
   return (
@@ -15,21 +21,26 @@ export function Footer() {
             <p className="mt-4 text-sm leading-relaxed text-muted-on-dark">
               {footer.description}
             </p>
-            <div className="mt-6">
+            <div className="mt-10">
               <h4 className="mb-3 font-sans text-sm font-semibold text-on-dark">Síguenos</h4>
               <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  href={notImplementedPath}
-                  className="inline-flex min-h-11 items-center text-sm text-muted-on-dark transition-colors hover:text-primary"
-                >
-                  LinkedIn
-                </Link>
-                <Link
-                  href={notImplementedPath}
-                  className="inline-flex min-h-11 items-center text-sm text-muted-on-dark transition-colors hover:text-primary"
-                >
-                  Instagram
-                </Link>
+                {contact.socials.map((social) =>
+                  isExternalHref(social.href) ? (
+                    <a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={socialLinkClassName}
+                    >
+                      {social.label}
+                    </a>
+                  ) : (
+                    <Link key={social.label} href={social.href} className={socialLinkClassName}>
+                      {social.label}
+                    </Link>
+                  )
+                )}
               </div>
             </div>
           </div>

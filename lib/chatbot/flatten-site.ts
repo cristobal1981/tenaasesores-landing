@@ -10,6 +10,7 @@ import {
   site,
   team,
   testimonials,
+  testimonialsEnabled,
 } from "@/content/site"
 import { faqHref, faqSections } from "@/content/faq"
 import {
@@ -320,17 +321,19 @@ export function flattenSiteContent(): KnowledgeChunk[] {
     }),
   )
 
-  for (const item of testimonials.items) {
-    chunks.push(
-      chunk({
-        id: `testimonial-${item.name.toLowerCase().replace(/\s+/g, "-")}`,
-        topic: "testimonios",
-        title: `Testimonio de ${item.name}`,
-        body: `${item.role}. ${item.content}`,
-        href: "/#testimonios",
-        keywords: ["testimonios", "opiniones", "clientes"],
-      }),
-    )
+  if (testimonialsEnabled) {
+    for (const item of testimonials.items) {
+      chunks.push(
+        chunk({
+          id: `testimonial-${item.name.toLowerCase().replace(/\s+/g, "-")}`,
+          topic: "testimonios",
+          title: `Testimonio de ${item.name}`,
+          body: `${item.role}. ${item.content}`,
+          href: "/#testimonios",
+          keywords: ["testimonios", "opiniones", "clientes"],
+        }),
+      )
+    }
   }
 
   return chunks
