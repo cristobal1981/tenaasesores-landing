@@ -47,8 +47,51 @@ function PlanCardGeometries({ index, highlight }: { index: number; highlight: bo
 
 type PlansAudience = keyof typeof plansByAudience
 
+type PlanTier = (typeof plansByAudience)[PlansAudience]["tiers"][number]
+
+function planTierBadge(tier: PlanTier): string | null {
+  if (!tier.highlight) return null
+  if ("badge" in tier && tier.badge) return tier.badge
+  return "Recomendado"
+}
+
+function PlanTierPrice({ tier }: { tier: PlanTier }) {
+  if (tier.kind === "fixed") {
+    return (
+      <>
+        <p className="mb-1 text-4xl font-bold text-on-dark">
+          {tier.price}
+          <span className="ml-1 text-xl text-muted-on-dark">€</span>
+          <span className="ml-2 text-base font-medium text-muted-on-dark">/{tier.period}</span>
+        </p>
+        <p className="mb-5 text-sm font-medium text-primary">{tier.responseSla}</p>
+      </>
+    )
+  }
+
+  if ("price" in tier && tier.price) {
+    return (
+      <p className="mb-5 text-4xl font-bold text-on-dark">
+        {"pricePrefix" in tier && tier.pricePrefix ? (
+          <span className="mr-2 text-base font-semibold text-primary">{tier.pricePrefix}</span>
+        ) : null}
+        {tier.price}
+        <span className="ml-1 text-xl text-muted-on-dark">€</span>
+        {"period" in tier && tier.period ? (
+          <span className="ml-2 text-base font-medium text-muted-on-dark">/{tier.period}</span>
+        ) : null}
+      </p>
+    )
+  }
+
+  return (
+    <p className="mb-5 text-sm font-medium text-primary">Propuesta tras revisar tu caso</p>
+  )
+}
+
 export function PlansPageClient({ audience }: { audience: PlansAudience }) {
   const plans = plansByAudience[audience]
+  const isSinglePlanLayout = audience === "empresas" || plans.tiers.length === 1
   const customizeHeadingId = useId()
   const scrollToCustomizeForm = useCallback(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -70,13 +113,19 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
     <>
     <section className="py-16 md:py-20">
       <SectionShell>
-        <StaggerContainer className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2" staggerDelay={0.1}>
+        <StaggerContainer
+          className={cn(
+            "mx-auto grid max-w-4xl gap-5",
+            isSinglePlanLayout ? "grid-cols-1" : "md:grid-cols-2"
+          )}
+          staggerDelay={0.1}
+        >
           {plans.tiers.map((tier, index) => (
             <StaggerItem key={tier.name}>
               <div className="relative h-full">
-                {tier.highlight ? (
+                {planTierBadge(tier) ? (
                   <span className="absolute top-0 right-6 z-20 -translate-y-[35%] rounded-full border border-primary/55 bg-primary px-3 py-1 text-[11px] font-semibold tracking-[0.12em] text-background uppercase shadow-md shadow-primary/30">
-                    Recomendado
+                    {planTierBadge(tier)}
                   </span>
                 ) : null}
                 <article
@@ -92,25 +141,21 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
                     <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
                         <h2 className="text-2xl font-semibold text-on-dark">{tier.name}</h2>
-                        <p className="mt-1 text-sm text-muted-on-dark">{tier.audience}</p>
+                        <p
+                          className={cn(
+                            "leading-snug",
+                            "audienceSubtitle" in tier && tier.audienceSubtitle
+                              ? "mt-2 text-base font-medium text-primary md:text-lg"
+                              : "mt-1 text-sm text-muted-on-dark"
+                          )}
+                        >
+                          {tier.audience}
+                        </p>
                       </div>
                     </div>
                     <p className="mb-4 text-sm leading-relaxed text-muted-on-dark">{tier.summary}</p>
 
-                    {tier.kind === "fixed" ? (
-                      <>
-                        <p className="mb-1 text-4xl font-bold text-on-dark">
-                          {tier.price}
-                          <span className="ml-1 text-xl text-muted-on-dark">€</span>
-                          <span className="ml-2 text-base font-medium text-muted-on-dark">/{tier.period}</span>
-                        </p>
-                        <p className="mb-5 text-sm font-medium text-primary">{tier.responseSla}</p>
-                      </>
-                    ) : (
-                      <p className="mb-5 text-sm font-medium text-primary">
-                        Propuesta tras revisar tu caso
-                      </p>
-                    )}
+                    <PlanTierPrice tier={tier} />
 
                     <ul className="mb-7 grid gap-3 md:flex-1">
                       {tier.items.map((item) => (

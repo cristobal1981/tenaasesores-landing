@@ -9,12 +9,23 @@ export function formatPlanTierPriceLabel(tier: PlanTier): string {
   if (tier.kind === "fixed") {
     return `${tier.name} (${tier.price}€/${tier.period})`
   }
+  if ("price" in tier && tier.price) {
+    const prefix = "pricePrefix" in tier && tier.pricePrefix ? `${tier.pricePrefix} ` : ""
+    const period = "period" in tier && tier.period ? tier.period : "mes"
+    return `${tier.name} (${prefix}${tier.price}€/${period})`
+  }
   return `${tier.name} (propuesta tras formulario en la página)`
 }
 
 export function formatPlanTierBody(tier: PlanTier): string {
-  const pricePart =
-    tier.kind === "fixed" ? `${tier.price}€/${tier.period}, ` : "sin precio en web, "
+  let pricePart = "sin precio en web, "
+  if (tier.kind === "fixed") {
+    pricePart = `${tier.price}€/${tier.period}, `
+  } else if ("price" in tier && tier.price) {
+    const prefix = "pricePrefix" in tier && tier.pricePrefix ? `${tier.pricePrefix} ` : ""
+    const period = "period" in tier && tier.period ? tier.period : "mes"
+    pricePart = `${prefix}${tier.price}€/${period}, `
+  }
   return `${tier.name}: ${pricePart}${tier.summary}`
 }
 

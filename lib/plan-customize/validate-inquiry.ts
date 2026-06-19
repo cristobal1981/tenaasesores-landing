@@ -1,5 +1,5 @@
 import { contactForm } from "@/content/contact-form"
-import { planCustomizeForm, type PlanCustomizeAudience } from "@/content/plan-customize-form"
+import { planCustomizeForm, type PlanCustomizeAudience, empresasEmployeeCountValidationMessage, empresasHasEmployeesValidationMessage } from "@/content/plan-customize-form"
 import { isLikelyValidPhone } from "@/lib/contact/validate-inquiry"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -110,12 +110,12 @@ export function getPlanCustomizeStepValidationError(
         return planCustomizeForm.validation.newConstitution
       }
       if (!parseYesNo(values.hasEmployees)) {
-        return planCustomizeForm.validation.hasEmployees
+        return empresasHasEmployeesValidationMessage(values.isNewConstitution)
       }
       if (values.hasEmployees === "yes") {
         const count = Number.parseInt(values.employeeCount, 10)
         if (!Number.isFinite(count) || count < 1) {
-          return planCustomizeForm.validation.employeeCount
+          return empresasEmployeeCountValidationMessage(values.isNewConstitution)
         }
       }
     }

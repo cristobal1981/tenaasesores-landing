@@ -177,36 +177,23 @@ const autonomosTiers = [
 
 const empresasTiers = [
   {
-    kind: "fixed",
-    name: "Constitución de empresa",
-    audience: "Para dar de alta tu negocio con fiscal y contabilidad desde el día uno",
+    kind: "custom",
+    name: "Plan a medida",
+    badge: "Personalizado",
+    audience: "Cada empresa es distinta — diseñamos el alcance contigo",
+    audienceSubtitle: true,
     price: "120",
+    pricePrefix: "desde",
     period: "mes",
     summary:
-      "Tramitación de altas, elección de forma jurídica y puesta en marcha fiscal y contable con acompañamiento inicial.",
-    responseSla: "Respuesta en 48h laborables",
-    ctaLabel: "Quiero empezar",
-    highlight: false,
-    items: [
-      "Asesoramiento en forma jurídica (autónomo, SL, etc.)",
-      "Tramitación de altas y licencias",
-      "Plan contable y obligaciones tributarias configuradas",
-      "Primeros meses con soporte cercano",
-    ],
-  },
-  {
-    kind: "custom",
-    name: "Personalizado",
-    audience: "Empresas en marcha que necesitan cobertura a medida",
-    summary:
-      "Diseñamos fiscal, contable, laboral y soporte en Odoo según estructura, equipo y ritmo de crecimiento de tu empresa.",
-    ctaLabel: "Personalizar tu plan",
+      "No encajamos tu negocio en un plan rígido. Adaptamos contabilidad, fiscal, laboral y tecnología a tu estructura, equipo y ritmo de crecimiento.",
+    ctaLabel: "Cuéntanos tu caso",
     highlight: true,
     items: [
-      "Cobertura acorde a volumen y número de empleados",
-      "Prioridad de respuesta acordada",
-      "Seguimiento estratégico recurrente si lo necesitas",
-      "Propuesta detallada antes de comprometerte",
+      "Alcance definido contigo, sin paquete cerrado",
+      "Fiscal, contable y laboral según volumen y plantilla",
+      "Constitución o cambios societarios si los necesitas",
+      "Propuesta clara antes de comprometerte",
     ],
   },
 ] as const
@@ -226,11 +213,11 @@ export const plansByAudience = {
     ...plansBase,
     title: ["Plan para empresas", "con visión de crecimiento"],
     subtitle:
-      "Constitución con precio de referencia o plan personalizado — recomendado cuando ya estás en marcha o necesitas más alcance.",
+      "Cada empresa es única. Diseñamos contabilidad, fiscal, laboral y tecnología a tu medida — sin planes rígidos.",
     tiers: empresasTiers,
     customizeFormAnchor: "personalizar-plan",
     planNote:
-      "El plan Constitución de empresa muestra un precio orientativo que puedes acordar con nuestros asesores. El plan personalizado se adapta mejor a tus necesidades.",
+      "Los planes para empresas empiezan desde 120 €/mes como referencia orientativa. La propuesta final depende de tu actividad, equipo y alcance.",
   },
 } as const
 
@@ -627,16 +614,16 @@ export const homeStats = {
       label: "Clientes activos",
     },
     {
-      end: 7,
-      prefix: "",
-      suffix: "",
-      label: "Profesionales en equipo",
-    },
-    {
       end: 15,
       prefix: "+",
       suffix: "",
       label: "Años asesorando",
+    },
+    {
+      end: 7,
+      prefix: "",
+      suffix: "",
+      label: "Profesionales en equipo",
     },
   ],
 } as const

@@ -17,6 +17,8 @@ import {
   planCustomizeForm,
   planCustomizeTaxRegions,
   planCustomizeYesNo,
+  empresasEmployeeCountLabel,
+  empresasHasEmployeesLabel,
   type PlanCustomizeAudience,
 } from "@/content/plan-customize-form"
 import { FieldLabel } from "@/components/forms/field-label"
@@ -295,6 +297,13 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     )
   }
 
+  const selectAllServices = () => {
+    setServices(serviceOptions.map((option) => option.value))
+  }
+
+  const empresasEmployeesQuestionLabel = empresasHasEmployeesLabel(isNewConstitution)
+  const empresasEmployeeCountQuestionLabel = empresasEmployeeCountLabel(isNewConstitution)
+
   const resetWizard = useCallback(() => {
     setStep(1)
     setIsRegisteredAutonomo("")
@@ -517,7 +526,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               />
               <SegmentedChoice
                 id={`${panelId}-has-employees`}
-                label={planCustomizeForm.step1.empresas.hasEmployeesLabel}
+                label={empresasEmployeesQuestionLabel}
                 value={hasEmployees}
                 onChange={(value) => {
                   setHasEmployees(value)
@@ -530,7 +539,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               {hasEmployees === "yes" ? (
                 <div>
                   <FieldLabel htmlFor={`${panelId}-employee-count`} required>
-                    {planCustomizeForm.step1.empresas.employeeCountLabel}
+                    {empresasEmployeeCountQuestionLabel}
                   </FieldLabel>
                   <Input
                     id={`${panelId}-employee-count`}
@@ -567,6 +576,17 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
           <FieldLabel id={`${panelId}-services-hint`} required>
             {planCustomizeForm.step2.servicesLabel}
           </FieldLabel>
+          <div className="flex flex-wrap items-center gap-3">
+            <MarketingButton
+              type="button"
+              marketingVariant="secondary"
+              className="min-h-11"
+              aria-label={planCustomizeForm.step2.selectAllAriaLabel}
+              onClick={selectAllServices}
+            >
+              {planCustomizeForm.step2.selectAllLabel}
+            </MarketingButton>
+          </div>
           <ul
             className="grid w-full gap-3 sm:grid-cols-2"
             role="group"

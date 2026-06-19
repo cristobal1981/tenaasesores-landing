@@ -2,6 +2,8 @@ import {
   planCustomizeForm,
   planCustomizeTaxRegions,
   planCustomizeYesNo,
+  empresasEmployeeCountLabel,
+  empresasHasEmployeesLabel,
   type PlanCustomizeAudience,
 } from "@/content/plan-customize-form"
 import type { ValidatedPlanCustomizeInquiry } from "@/lib/plan-customize/validate-inquiry"
@@ -59,11 +61,11 @@ export function formatPlanCustomizeLeadDescription(
       `- ${planCustomizeForm.step1.empresas.newConstitutionLabel} ${yesNoLabel(inquiry.isNewConstitution)}`
     )
     lines.push(
-      `- ${planCustomizeForm.step1.empresas.hasEmployeesLabel} ${yesNoLabel(inquiry.hasEmployees)}`
+      `- ${empresasHasEmployeesLabel(inquiry.isNewConstitution)} ${yesNoLabel(inquiry.hasEmployees)}`
     )
     if (inquiry.hasEmployees === "yes" && inquiry.employeeCount != null) {
       lines.push(
-        `- ${planCustomizeForm.step1.empresas.employeeCountLabel} ${inquiry.employeeCount}`
+        `- ${empresasEmployeeCountLabel(inquiry.isNewConstitution)} ${inquiry.employeeCount}`
       )
     }
   }

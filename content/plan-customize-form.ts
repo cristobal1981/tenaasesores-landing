@@ -22,7 +22,7 @@ export const planCustomizeForm = {
     },
     empresas: {
       eyebrow: "Plan personalizado · empresas",
-      lead: "Si tu caso no encaja en Constitución de empresa, aquí preparamos la propuesta a medida.",
+      lead: "Cuéntanos tu situación y preparamos una propuesta a medida — sin paquetes cerrados.",
     },
   },
   steps: {
@@ -45,7 +45,9 @@ export const planCustomizeForm = {
     empresas: {
       newConstitutionLabel: "¿Es una nueva constitución?",
       hasEmployeesLabel: "¿Tiene empleados?",
+      hasEmployeesLabelFuture: "¿Tendrá empleados?",
       employeeCountLabel: "¿Cuántos empleados?",
+      employeeCountLabelFuture: "¿Cuántos empleados tendrá?",
       employeeCountPlaceholder: "Ej. 3",
     },
   },
@@ -53,6 +55,8 @@ export const planCustomizeForm = {
     title: "Qué necesitas",
     description: "Marca todo lo que quieras incluir en la propuesta.",
     servicesLabel: "Servicios",
+    selectAllLabel: "Me llevo el pack completo",
+    selectAllAriaLabel: "Seleccionar todos los servicios",
     digitalizationHint:
       "También te ayudamos con la gestión de herramientas de digitalización: ERPs, migraciones y puesta al día de tus sistemas.",
     serviceOptions: {
@@ -97,7 +101,9 @@ export const planCustomizeForm = {
     hireEmployees: "Indica si vas a contratar empleados.",
     newConstitution: "Indica si es una nueva constitución.",
     hasEmployees: "Indica si la empresa tiene empleados.",
+    hasEmployeesFuture: "Indica si la empresa tendrá empleados.",
     employeeCount: "Indica cuántos empleados tiene la empresa.",
+    employeeCountFuture: "Indica cuántos empleados tendrá la empresa.",
     revenue: "Indica tu facturación anual estimada en euros.",
     services: "Selecciona al menos un servicio.",
     activity: "Describe brevemente tu actividad.",
@@ -139,3 +145,27 @@ export const planCustomizeForm = {
   },
   privacyNote: "Al enviar aceptas la política de privacidad",
 } as const
+
+export function empresasHasEmployeesLabel(isNewConstitution: string): string {
+  return isNewConstitution === "yes"
+    ? planCustomizeForm.step1.empresas.hasEmployeesLabelFuture
+    : planCustomizeForm.step1.empresas.hasEmployeesLabel
+}
+
+export function empresasEmployeeCountLabel(isNewConstitution: string): string {
+  return isNewConstitution === "yes"
+    ? planCustomizeForm.step1.empresas.employeeCountLabelFuture
+    : planCustomizeForm.step1.empresas.employeeCountLabel
+}
+
+export function empresasHasEmployeesValidationMessage(isNewConstitution: string): string {
+  return isNewConstitution === "yes"
+    ? planCustomizeForm.validation.hasEmployeesFuture
+    : planCustomizeForm.validation.hasEmployees
+}
+
+export function empresasEmployeeCountValidationMessage(isNewConstitution: string): string {
+  return isNewConstitution === "yes"
+    ? planCustomizeForm.validation.employeeCountFuture
+    : planCustomizeForm.validation.employeeCount
+}
