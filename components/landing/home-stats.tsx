@@ -13,7 +13,7 @@ export function HomeStats() {
   return (
     <section
       ref={sectionRef}
-      className="border-y border-agua/20 bg-surface-light py-12 md:py-16"
+      className="section-divider bg-surface-light py-12 md:py-16"
       aria-label="Cifras de tenaasesores"
     >
       <SectionShell>
@@ -21,7 +21,7 @@ export function HomeStats() {
           {homeStats.items.map((stat) => (
             <li key={stat.label} className="text-center">
               <p
-                className="mb-2 text-3xl font-bold tracking-tight text-primary md:text-4xl lg:text-[2.5rem]"
+                className="text-stat-on-light mb-2 text-3xl font-bold tracking-tight md:text-4xl lg:text-[2.5rem]"
                 data-stat-counter
                 data-stat-end={stat.end}
                 data-stat-prefix={stat.prefix}

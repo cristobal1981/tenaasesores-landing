@@ -1,7 +1,8 @@
+import Image from "next/image"
 import Link from "next/link"
 import { BrandLogo } from "@/components/layout/brand-logo"
 import { SectionShell } from "@/components/layout/section-shell"
-import { contact, footer, site } from "@/content/site"
+import { contact, footer, odoo, site } from "@/content/site"
 import { webIssueFooter, webIssueReportPath } from "@/content/web-issue"
 
 const socialLinkClassName =
@@ -94,15 +95,41 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="mt-10 text-center text-xs leading-relaxed text-muted-on-dark/90 sm:text-left">
-          {webIssueFooter.prompt}{" "}
-          <Link
-            href={webIssueReportPath}
-            className="text-muted-on-dark underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        <div className="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+          <p className="text-center text-xs leading-relaxed text-muted-on-dark/90 sm:text-left">
+            {webIssueFooter.prompt}{" "}
+            <Link
+              href={webIssueReportPath}
+              className="text-muted-on-dark underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              {webIssueFooter.linkLabel}
+            </Link>
+          </p>
+
+          <div
+            className="flex shrink-0 items-center justify-end gap-3 sm:gap-4"
+            aria-label="Partners oficiales Odoo y Holded"
           >
-            {webIssueFooter.linkLabel}
-          </Link>
-        </p>
+            <div className="rounded bg-white">
+              <Image
+                src={odoo.partners.odoo.batch.src}
+                alt={odoo.partners.odoo.batch.alt}
+                width={odoo.partners.odoo.batch.width}
+                height={odoo.partners.odoo.batch.height}
+                className="h-8 w-auto object-contain"
+              />
+            </div>
+            <div className="rounded bg-white">
+              <Image
+                src={odoo.partners.holded.batch.src}
+                alt={odoo.partners.holded.batch.alt}
+                width={odoo.partners.holded.batch.width}
+                height={odoo.partners.holded.batch.height}
+                className="h-8 w-auto object-contain"
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="mt-6 flex flex-col items-center border-t border-agua/30 pt-6 text-center">
           <p className="text-sm text-muted-on-dark">
@@ -110,6 +137,6 @@ export function Footer() {
           </p>
         </div>
       </SectionShell>
-    </footer>
+    </footer >
   )
 }

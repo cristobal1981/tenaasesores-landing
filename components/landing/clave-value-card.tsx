@@ -29,7 +29,7 @@ export function ClaveValueCard({
         isActive
           ? "border-agua/45 bg-surface-light shadow-[0_12px_40px_-16px_rgba(4,29,35,0.18)]"
           : "border-on-light/10 bg-on-light/[0.04]",
-        !isActive && hasActive && "opacity-50",
+        !isActive && hasActive && "opacity-60",
         className
       )}
     >
@@ -39,7 +39,7 @@ export function ClaveValueCard({
             <span
               className={cn(
                 "transition-colors duration-300",
-                isActive ? "text-on-light" : "text-on-light/85"
+                isActive ? "text-on-light" : "text-on-light"
               )}
             >
               {titleParts.before}
@@ -48,7 +48,7 @@ export function ClaveValueCard({
           <span
             className={cn(
               "transition-colors duration-300",
-              isActive ? "text-agua" : hasActive ? "text-on-light/45" : "text-accent-on-light/45"
+              isActive ? "text-agua" : hasActive ? "text-on-light-muted" : "text-accent-on-light"
             )}
           >
             {titleParts.highlight}
@@ -56,7 +56,7 @@ export function ClaveValueCard({
           <span
             className={cn(
               "transition-colors duration-300",
-              isActive ? "text-on-light" : "text-on-light/85"
+              isActive ? "text-on-light" : "text-on-light"
             )}
           >
             {titleParts.after}
@@ -66,7 +66,7 @@ export function ClaveValueCard({
       <p
         className={cn(
           "flex-1 text-sm leading-relaxed transition-[opacity,transform] duration-300 sm:text-base",
-          isActive ? "text-muted-on-light" : "text-muted-on-light/90"
+          isActive ? "text-muted-on-light" : "text-muted-on-light"
         )}
       >
         {value.description}

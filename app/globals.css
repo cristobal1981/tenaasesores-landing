@@ -8,7 +8,7 @@
  * on-dark #f0f6f6 on surface-dark #041d23 — ~12.5:1
  * muted-on-dark #b2d0d5 on surface-dark — ~5.2:1
  * on-light #041d23 on surface-light #f0f6f6 — ~12.5:1
- * on-light-muted #4a6f6a on surface-light — ~4.6:1
+ * on-light-muted #4f6b67 on surface-light — ~4.8:1
  * accent-on-light #01635c on surface-light — ~5.8:1
  * primary-foreground on primary (button) — ~7:1
  * on-light on brisa #d6f2e8 — ~10:1
@@ -23,7 +23,7 @@
   --on-light: #041d23;
   --muted-on-dark: #b2d0d5;
   --muted-on-light: #4a6f6a;
-  --on-light-muted: #5a7571;
+  --on-light-muted: #4f6b67;
   --accent-on-light: #01635c;
 
   --background: var(--surface-dark);
@@ -78,7 +78,7 @@
   --on-light: #041d23;
   --muted-on-dark: #b2d0d5;
   --muted-on-light: #4a6f6a;
-  --on-light-muted: #5a7571;
+  --on-light-muted: #4f6b67;
   --accent-on-light: #01635c;
   --background: var(--surface-dark);
   --foreground: var(--on-dark);
@@ -222,6 +222,10 @@
     animation-delay: -11s;
   }
 
+  .hero-display-title {
+    font-size: clamp(1.875rem, 4vw + 0.5rem, 3.75rem);
+  }
+
   .bg-hero-gradient {
     @apply bg-gradient-to-br from-background via-card to-agua;
   }
@@ -280,24 +284,51 @@
     @apply font-semibold bg-secondary text-brisa hover:bg-secondary/90;
   }
 
+  .section-divider {
+    border-block: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in oklch, var(--agua) 35%, transparent) 20%,
+        color-mix(in oklch, var(--agua) 35%, transparent) 80%,
+        transparent
+      )
+      1;
+  }
+
+  .text-stat-on-light {
+    @apply text-accent-on-light;
+  }
+
+  .text-stat-on-dark {
+    @apply text-primary;
+  }
+
   .logo-marquee-mask {
     position: relative;
     overflow: hidden;
-    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
   }
 
   .logo-marquee-track {
     display: flex;
     width: max-content;
     align-items: center;
-    gap: 3.5rem;
     will-change: transform;
-    animation: logo-marquee 30s linear infinite;
+    animation: logo-marquee 40s linear infinite;
   }
 
   .logo-marquee-mask:hover .logo-marquee-track {
     animation-play-state: paused;
+  }
+
+  .logo-marquee-group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 3.5rem;
+    padding-right: 3.5rem;
   }
 
   .logo-marquee-item {
@@ -306,6 +337,19 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+
+  .logo-marquee-image {
+    opacity: 0.85;
+    filter: grayscale(1);
+    transition:
+      opacity 0.3s ease,
+      filter 0.3s ease;
+  }
+
+  .logo-marquee-mask:hover .logo-marquee-image {
+    opacity: 1;
+    filter: grayscale(0);
   }
 
   /*
@@ -377,7 +421,7 @@
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(calc(-1 * var(--marquee-distance, 50%)), 0, 0);
   }
 }
 
@@ -424,6 +468,18 @@
     flex-wrap: wrap;
     width: 100%;
     justify-content: center;
+    gap: 2rem;
+  }
+
+  .logo-marquee-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 0;
+  }
+
+  .logo-marquee-image {
+    opacity: 1;
+    filter: none;
   }
 
   .logo-marquee-mask {

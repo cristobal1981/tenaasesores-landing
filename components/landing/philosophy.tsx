@@ -95,7 +95,7 @@ export function Philosophy() {
                         isActive
                           ? "border-agua bg-agua text-on-dark"
                           : "border-agua/25 bg-surface-light text-accent-on-light",
-                        isDimmed && "opacity-45",
+                        isDimmed && "opacity-60",
                         !reducedMotion && isActive && "motion-safe:scale-105",
                         reducedMotion && isActive && "ring-2 ring-agua ring-offset-2 ring-offset-surface-light"
                       )}

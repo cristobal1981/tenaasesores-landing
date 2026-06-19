@@ -11,7 +11,6 @@ import { SectionParallaxBackground } from "@/components/landing/section-parallax
 import { SectionShell } from "@/components/layout/section-shell"
 import { hero, images } from "@/content/site"
 import { useSectionParallax } from "@/lib/gsap/use-section-parallax"
-import { cn } from "@/lib/utils"
 
 const trustIcons = [Eye, Award, Zap]
 const ROTATING_WORD_WIDTH_BUFFER = 4
@@ -94,32 +93,22 @@ export function Hero() {
         priority
         overlay={
           <div
-            className="absolute inset-0 bg-gradient-to-br from-background/88 via-background/78 to-card/92"
+            className="absolute inset-0 bg-gradient-to-br from-background/92 via-background/82 to-card/95"
             aria-hidden
           />
         }
       />
 
       <FloatingElement
-        className="absolute top-20 right-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
-        duration={8}
-      />
-      <FloatingElement
-        className="absolute bottom-0 left-0 h-80 w-80 rounded-full bg-agua/40 blur-3xl"
+        className="absolute top-1/3 right-0 h-80 w-80 rounded-full bg-primary/12 blur-3xl"
         duration={10}
-        delay={2}
-      />
-      <FloatingElement
-        className="absolute top-1/2 left-1/4 h-64 w-64 rounded-full bg-primary/5 blur-2xl"
-        duration={12}
-        delay={4}
       />
 
       <SectionShell className="relative z-10">
         <div ref={contentRef} className="mx-auto max-w-4xl text-center">
           <h1
             data-hero="title"
-            className="mx-auto mb-4 max-w-4xl text-3xl leading-[1.15] font-bold text-balance text-on-dark sm:text-4xl md:text-5xl lg:text-6xl"
+            className="hero-display-title mx-auto mb-4 max-w-4xl leading-[1.15] font-bold text-balance text-on-dark"
           >
             <span className="block">
               <span>{hero.title.prefix} </span>
@@ -223,13 +212,11 @@ export function Hero() {
               return (
                 <div
                   key={item.title}
-                  data-hero="trust-card"
-                  className="flex items-center justify-center gap-3 rounded-xl border border-agua/30 bg-surface-dark/50 p-4 backdrop-blur-sm transition-colors hover:border-primary/50"
+                  data-hero="trust-item"
+                  className="flex items-start justify-center gap-3 text-left"
                 >
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/20">
-                    <Icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="text-left">
+                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <div>
                     <p className="font-bold text-on-dark">{item.title}</p>
                     <p className="text-sm text-muted-on-dark">{item.subtitle}</p>
                   </div>

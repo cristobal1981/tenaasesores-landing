@@ -27,8 +27,8 @@ export function useHeroGsap({ contentRef }: UseHeroGsapOptions) {
         const title = content.querySelector<HTMLElement>('[data-hero="title"]')
         const subtitle = content.querySelector<HTMLElement>('[data-hero="subtitle"]')
         const ctas = content.querySelector<HTMLElement>('[data-hero="ctas"]')
-        const trustCards = gsap.utils.toArray<HTMLElement>(
-          '[data-hero="trust-card"]',
+        const trustItems = gsap.utils.toArray<HTMLElement>(
+          '[data-hero="trust-item"]',
           content
         )
 
@@ -39,7 +39,7 @@ export function useHeroGsap({ contentRef }: UseHeroGsapOptions) {
           .from(subtitle, { opacity: 0, y: 24, duration: 0.5 }, "-=0.35")
           .from(ctas, { opacity: 0, y: 20, duration: 0.45 }, "-=0.35")
           .from(
-            trustCards,
+            trustItems,
             { opacity: 0, y: 24, duration: 0.45, stagger: 0.12 },
             "-=0.25"
           )

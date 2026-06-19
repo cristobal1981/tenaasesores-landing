@@ -62,29 +62,40 @@ export const hero = {
   ctaSecondary: "Ver Servicios",
   trust: [
     { title: "Acceso 24/7", subtitle: "Tus datos cuando los necesites" },
-    { title: "Partners Odoo", subtitle: "Implementación y supervisión" },
+    { title: "Partners Odoo y Holded", subtitle: "Implementación y supervisión" },
     { title: "Automatización", subtitle: "Menos errores, más tiempo" },
   ],
 } as const
 
 export const odoo = {
-  badge: "Odoo · Partners oficiales",
+  badge: "Odoo y Holded · Partners oficiales",
   title: ["Contabilidad descentralizada,", "control profesional de verdad"],
   subtitle:
     "Tú tienes visibilidad y acceso en tiempo real; nosotros nos encargamos de que todo esté bien hecho, revisado y al día con la normativa.",
   partners: {
-    text: "Somos partners oficiales de Odoo y Holded. Odoo es nuestra base para contabilidad, ERP e integración a medida; Holded nos permite ofrecer una vía ágil de facturación y gestión cuando encaja mejor con tu operativa.",
     odoo: {
-      src: "/brand/partners/odoo_ready_partners_rgb.webp",
-      alt: "Odoo Ready Partner",
-      width: 160,
-      height: 48,
+      batch: {
+        src: "/brand/partners/odoo-batch.webp",
+        alt: "Odoo Ready Partner",
+        width: 220,
+        height: 88,
+      },
+      text: "Somos partners oficiales de Odoo. Es nuestra base para contabilidad, ERP e integración a medida: implementación, supervisión profesional y visibilidad en tiempo real para tu negocio.",
     },
     holded: {
-      src: "/brand/partners/holded.webp",
-      alt: "Holded Partner Silver",
-      width: 120,
-      height: 40,
+      logo: {
+        src: "/brand/partners/holded-white.webp",
+        alt: "Holded",
+        width: 140,
+        height: 36,
+      },
+      batch: {
+        src: "/brand/partners/holded-batch.webp",
+        alt: "Holded Asesoría Partner Silver",
+        width: 168,
+        height: 64,
+      },
+      text: "También somos partners oficiales de Holded, con certificación Silver. Cuando tu operativa encaja mejor con facturación y gestión ágil, te ofrecemos esta vía complementaria con el mismo equipo que supervisa tu contabilidad.",
     },
   },
   benefits: [
@@ -631,8 +642,8 @@ export const homeStats = {
     },
     {
       end: 15,
-      prefix: "",
-      suffix: "+",
+      prefix: "+",
+      suffix: "",
       label: "Años asesorando",
     },
   ],
