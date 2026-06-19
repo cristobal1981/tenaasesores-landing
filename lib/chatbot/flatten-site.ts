@@ -13,6 +13,7 @@ import {
   testimonialsEnabled,
 } from "@/content/site"
 import { faqHref, faqSections } from "@/content/faq"
+import { formatStatValue } from "@/lib/gsap/format-stat-value"
 import {
   formatPlanTierBody,
   planTierHref,
@@ -297,27 +298,27 @@ export function flattenSiteContent(): KnowledgeChunk[] {
     )
   }
 
-  about.paragraphs.forEach((paragraph, index) => {
-    chunks.push(
-      chunk({
-        id: `about-p${index}`,
-        topic: "nosotros",
-        title: about.title.join(" "),
-        body: paragraph,
-        href: "/nosotros",
-        keywords: ["nosotros", "pymes", "autonomos", "odoo", "tenerife"],
-      }),
-    )
-  })
+  chunks.push(
+    chunk({
+      id: "about-overview",
+      topic: "nosotros",
+      title: about.title.join(" "),
+      body: about.subtitle,
+      href: "/nosotros",
+      keywords: ["nosotros", "pymes", "autonomos", "odoo", "tenerife", "tarifas"],
+    }),
+  )
 
   chunks.push(
     chunk({
-      id: "about-features",
+      id: "about-stats",
       topic: "nosotros",
-      title: "Ventajas de trabajar con nosotros",
-      body: about.features.join(". "),
+      title: "Cifras de tenaasesores",
+      body: about.stats
+        .map((stat) => `${formatStatValue(stat.end, stat.prefix, stat.suffix)} ${stat.label}`)
+        .join(". "),
       href: "/nosotros",
-      keywords: ["permanencia", "tarifas", "respuesta", "asesor"],
+      keywords: ["permanencia", "tarifas", "respuesta", "clientes", "satisfaccion"],
     }),
   )
 

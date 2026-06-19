@@ -501,21 +501,13 @@ export const philosophy = {
 export const about = {
   badge: "Sobre tenaasesores",
   title: ["Pequeños pero", "muy comprometidos."],
-  paragraphs: [
-    "No somos una gran corporación, y eso es precisamente nuestra ventaja. Cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Conocemos tu negocio, tu sector y tus preocupaciones.",
-    "Llevamos años ayudando a pymes, autónomos y empresas digitales en Tenerife a gestionar su día a día fiscal, contable y laboral. Como partners oficiales de Odoo, combinamos tecnología en tiempo real con supervisión humana: sin humo, sin promesas vacías.",
-  ],
-  features: [
-    "Atención directa con tu asesor asignado",
-    "Respuesta garantizada en menos de 24 horas",
-    "Sin permanencias ni letra pequeña",
-    "Tarifas claras desde el primer día",
-  ],
+  subtitle:
+    "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales en Tenerife en fiscal, contable y laboral. Como partners oficiales de Odoo, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
   stats: [
-    { value: "+150", label: "Clientes activos" },
-    { value: "98%", label: "Satisfacción" },
-    { value: "24h", label: "Tiempo respuesta" },
-    { value: "0", label: "Permanencias" },
+    { end: 150, prefix: "+", suffix: "", label: "Clientes activos" },
+    { end: 98, prefix: "", suffix: "%", label: "Satisfacción del cliente" },
+    { end: 24, prefix: "", suffix: "h", label: "Respuesta garantizada" },
+    { end: 0, prefix: "", suffix: "", label: "Permanencias" },
   ],
 } as const
 
