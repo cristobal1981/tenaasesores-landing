@@ -232,6 +232,14 @@
   .bg-home-hero-band {
     @apply bg-gradient-to-br from-background via-card to-agua/70;
   }
+  .bg-home-hero-surface {
+    background: radial-gradient(
+      ellipse 90% 70% at 50% 42%,
+      #072f38 0%,
+      #06252c 55%,
+      #051f27 100%
+    );
+  }
   .bg-section-dark {
     @apply bg-gradient-to-b from-background to-agua/40;
   }

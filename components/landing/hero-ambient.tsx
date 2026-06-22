@@ -60,7 +60,7 @@ const ambientIcons: AmbientIconConfig[] = [
 const ambientRings = [
   {
     sizeClass: "h-[min(90vw,520px)] w-[min(90vw,520px)]",
-    strokeClass: "stroke-primary/10",
+    strokeClass: "stroke-primary/16",
     duration: 2.6,
     delay: 0.2,
     spinDuration: 140,
@@ -68,7 +68,7 @@ const ambientRings = [
   },
   {
     sizeClass: "h-[min(70vw,380px)] w-[min(70vw,380px)]",
-    strokeClass: "stroke-agua/15",
+    strokeClass: "stroke-agua/22",
     duration: 2.2,
     delay: 0.6,
     spinDuration: 110,
@@ -235,7 +235,7 @@ export function HeroAmbient() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div
-        className="absolute inset-0 opacity-[0.035]"
+        className="absolute inset-0 opacity-[0.05]"
         style={{ backgroundImage: GRID_PATTERN }}
       />
       <FloatingElement

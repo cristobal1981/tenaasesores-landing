@@ -10,7 +10,7 @@ export function HomeHeroBand() {
   return (
     <section className="relative overflow-hidden">
       <div className="relative z-[1]">
-        <div className="relative overflow-hidden bg-background">
+        <div className="relative overflow-hidden bg-home-hero-surface">
           <HeroAmbient />
           <FloatingElement
             className="absolute top-1/4 right-0 h-80 w-80 rounded-full bg-primary/10 blur-3xl"
