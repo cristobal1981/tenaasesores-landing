@@ -9,7 +9,7 @@ export const site = {
   name: "tenaasesores",
   tagline: "Asesores y Abogados",
   description:
-    "Asesoramiento y consultoría empresarial en Tenerife. Servicios profesionales especializados en empresas digitales: fiscalidad, contabilidad, laboral y constitución de empresas.",
+    "Asesoramiento y consultoría empresarial online. Servicios profesionales especializados en empresas digitales: fiscalidad, contabilidad, laboral y constitución de empresas.",
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.tenaasesores.es",
   location: "Tenerife, España",
   email: "info@tenaasesores.es",
@@ -81,6 +81,10 @@ export const odoo = {
         height: 88,
       },
       text: "Somos partners oficiales de Odoo. Es nuestra base para contabilidad, ERP e integración a medida: implementación, supervisión profesional y visibilidad en tiempo real para tu negocio.",
+      verifyLink: {
+        href: "https://www.odoo.com/es_ES/accounting-firms/tena-asesores-y-abogados-slp-20287821?country_id=67",
+        label: "Compruébalo",
+      },
     },
     holded: {
       logo: {
@@ -96,6 +100,10 @@ export const odoo = {
         height: 64,
       },
       text: "También somos partners oficiales de Holded, con certificación Silver. Cuando tu operativa encaja mejor con facturación y gestión ágil, te ofrecemos esta vía complementaria con el mismo equipo que supervisa tu contabilidad.",
+      verifyLink: {
+        href: "https://www.holded.com/es/directorio-asesorias/tena-asesores-y-abogados-s-l-p",
+        label: "Compruébalo",
+      },
     },
   },
   benefits: [
@@ -147,8 +155,8 @@ const autonomosTiers = [
     audience: "Autónomos con operativa estable y necesidades esenciales",
     price: "59",
     period: "mes",
-    summary: "Cobertura esencial para tener fiscal y contabilidad al día sin fricción.",
-    responseSla: "Respuesta en 48h laborables",
+    summary: "Cobertura esencial para tener fiscal y contabilidad al día.",
+    responseSla: "Respuesta en 24h laborables",
     ctaLabel: "Quiero empezar",
     highlight: false,
     items: [
@@ -161,7 +169,7 @@ const autonomosTiers = [
   {
     kind: "custom",
     name: "Personalizado",
-    audience: "Cuando necesitas más volumen, laboral u Odoo en el mismo equipo",
+    audience: "Cuando necesitas más volumen, laboral u Odoo/Holded en el mismo equipo",
     summary:
       "Combinamos contabilidad, fiscal, laboral o tecnología según tu facturación, empleados y herramientas actuales.",
     ctaLabel: "Personalizar tu plan",
@@ -169,7 +177,7 @@ const autonomosTiers = [
     items: [
       "Alcance definido contigo, sin paquete rígido",
       "Gestión laboral y nóminas según plantilla",
-      "Integración Odoo u otras herramientas si las usas",
+      "Integración Odoo, Holded u otras herramientas si las usas",
       "Propuesta clara antes de contratar",
     ],
   },
@@ -182,7 +190,7 @@ const empresasTiers = [
     badge: "Personalizado",
     audience: "Cada empresa es distinta — diseñamos el alcance contigo",
     audienceSubtitle: true,
-    price: "120",
+    price: "150",
     pricePrefix: "desde",
     period: "mes",
     summary:
@@ -249,7 +257,7 @@ export const services = {
       {
         title: "Formación",
         description:
-          "Formación reglada para el desarrollo profesional del personal de tu empresa. Como entidad colaboradora con organizaciones acreditadas, te ayudamos a aprovechar los créditos de la Seguridad Social destinados a la capacitación de tus empleados.",
+          "Somos entidad acreditada: formamos a tu equipo en competencias profesionales y en el uso práctico de plataformas como Odoo o Holded.",
       },
     ],
   },
@@ -353,7 +361,7 @@ export const services = {
     },
     {
       slug: "constitucion",
-      title: "Constitución de empresas",
+      title: "Constitución de empresas/Autónomos",
       intro:
         "Te ayudamos a dar de alta tu negocio eligiendo la forma jurídica más adecuada, con puesta en marcha fiscal y contable desde el primer día.",
       sections: [
@@ -403,7 +411,7 @@ export const services = {
       slug: "contable",
       title: "Gestión contable",
       description:
-        "Registro, informes financieros y supervisión contable con acceso en Odoo y control profesional.",
+        "Registro, informes financieros y supervisión contable con acceso en Odoo/Holded y control profesional.",
     },
     {
       slug: "laboral",
@@ -413,7 +421,7 @@ export const services = {
     },
     {
       slug: "constitucion",
-      title: "Constitución de empresas",
+      title: "Constitución de empresas/Autónomos",
       description:
         "Alta de tu negocio con la forma jurídica adecuada y acompañamiento en los primeros meses.",
     },
@@ -424,19 +432,19 @@ export const team = {
   badge: "Nuestro equipo",
   title: ["Personas reales,", "trato directo."],
   subtitle:
-    "Seis profesionales en Tenerife. Sin call center ni intermediarios: conoces quién lleva tu expediente.",
+    "Seis profesionales online. Sin call center ni intermediarios: conoces quién lleva tu expediente.",
   members: [
     {
       name: "Cristóbal",
       role: "Socio · Dirección y fiscal",
       photo: "/team/cristobal.avif",
-      bio: "Más de quince años asesorando pymes y autónomos. Especialista en planificación fiscal y cumplimiento tributario en Canarias.",
+      bio: "Más de quince años asesorando pymes y autónomos. Especialista en planificación fiscal y cumplimiento tributario Estatal y REF.",
     },
     {
       name: "Ariana",
-      role: "Área contable y Odoo",
+      role: "Área contable y Odoo/Holded",
       photo: "/team/ariana.avif",
-      bio: "Supervisa la contabilidad en Odoo y los cierres mensuales. Le gusta que los números cuadren y que el cliente los entienda.",
+      bio: "Supervisa la contabilidad en Odoo y Holded, y los cierres mensuales. Le gusta que los números cuadren y que el cliente los entienda.",
     },
     {
       name: "Irene",
@@ -446,15 +454,15 @@ export const team = {
     },
     {
       name: "David",
-      role: "Constitución y altas",
+      role: "Área contable y Odoo/Holded",
       photo: "/team/david.avif",
-      bio: "Acompaña a nuevos negocios desde el primer día: forma jurídica, altas y puesta en marcha contable y fiscal.",
+      bio: "Lleva la contabilidad al día en Odoo y Holded, y coordina los cierres mensuales. Cree en dejar los números ordenados y explicados, no solo entregados.",
     },
     {
       name: "Jesús",
-      role: "Contabilidad y revisión",
+      role: "Área Laboral",
       photo: "/team/jesus.avif",
-      bio: "Revisa asientos, conciliaciones y documentación. Puente entre lo que haces en Odoo y la supervisión del equipo.",
+      bio: "Cuida nóminas, contratos y trámites con la Seguridad Social. Cuando surge una duda laboral, la resuelve con calma y en lenguaje llano.",
     },
     {
       name: "Guillermo",
@@ -474,7 +482,7 @@ export const philosophy = {
   badge: "Nuestra filosofía",
   title: ["Tu asesoría debería ayudarte,", "no convertirse en un problema más"],
   subtitle:
-    "Si tu gestoría actual no responde a tiempo, te genera más dudas que soluciones o simplemente no te entiende, quizá es momento de cambiar. Trabajamos con una filosofía",
+    "Si tu asesoría actual no responde a tiempo, te genera más dudas que soluciones o simplemente no te entiende, quizá es momento de cambiar. Trabajamos con una filosofía",
   acronym: "CLAVE",
   values: [
     { letter: "C", title: "CERCANÍA", description: "Conocemos tu negocio como si fuera el nuestro. Trato directo y personal." },
@@ -489,11 +497,11 @@ export const about = {
   badge: "Sobre tenaasesores",
   title: ["Pequeños pero", "muy comprometidos."],
   subtitle:
-    "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales en Tenerife en fiscal, contable y laboral. Como partners oficiales de Odoo, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
+    "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales ubicados en Tenerife en fiscal, contable y laboral. Como partners oficiales de Odoo y Holded, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
   stats: [
     { end: 150, prefix: "+", suffix: "", label: "Clientes activos" },
-    { end: 98, prefix: "", suffix: "%", label: "Satisfacción del cliente" },
     { end: 24, prefix: "", suffix: "h", label: "Respuesta garantizada" },
+    { end: 6, prefix: "", suffix: "", label: "Profesionales en equipo" },
     { end: 0, prefix: "", suffix: "", label: "Permanencias" },
   ],
 } as const
@@ -620,7 +628,7 @@ export const homeStats = {
       label: "Años asesorando",
     },
     {
-      end: 7,
+      end: 6,
       prefix: "",
       suffix: "",
       label: "Profesionales en equipo",
@@ -633,7 +641,7 @@ export type { FaqItem, FaqSection } from "@/content/faq"
 
 export const footer = {
   description:
-    "Asesoramiento y consultoría empresarial en Tenerife. Partners oficiales Odoo: contabilidad en tiempo real, fiscal y laboral para autónomos, pymes y empresas digitales.",
+    "Asesoramiento y consultoría empresarial online. Partners oficiales Odoo y Holded: contabilidad en tiempo real, fiscal y laboral para autónomos, pymes y empresas digitales.",
   services: [
     { label: "Gestión fiscal", href: "/servicios#fiscal" },
     { label: "Gestión contable", href: "/servicios#contable" },

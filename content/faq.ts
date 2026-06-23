@@ -149,7 +149,7 @@ export const faqSections: readonly FaqSection[] = [
       {
         question: "¿Trabajáis solo con empresas en Tenerife?",
         answer:
-          "Nuestro equipo está en Tenerife, pero también trabajamos con autónomos y pymes de otras zonas cuando encaja el servicio.",
+          "Nuestro equipo está físicamente en Tenerife, pero también trabajamos con autónomos y pymes de otras zonas de forma online .",
       },
       {
         question: "¿Con quién hablaré si contrato?",

@@ -5,6 +5,27 @@ import { FadeIn } from "@/components/animations"
 import { odoo } from "@/content/site"
 import { cn } from "@/lib/utils"
 
+const partnerVerifyLinkClassName =
+  "text-primary underline-offset-4 transition-colors hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+
+type PartnerVerifyLinkProps = {
+  href: string
+  label: string
+}
+
+function PartnerVerifyLink({ href, label }: PartnerVerifyLinkProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={partnerVerifyLinkClassName}
+    >
+      {label}
+    </a>
+  )
+}
+
 export function OdooCredential() {
   return (
     <div className="relative mx-auto mb-16 max-w-4xl">
@@ -25,7 +46,11 @@ export function OdooCredential() {
           />
         </div>
         <p className="prose-width mx-auto mt-8 text-base leading-relaxed text-muted-on-dark md:text-lg">
-          {odoo.partners.odoo.text}
+          {odoo.partners.odoo.text}{" "}
+          <PartnerVerifyLink
+            href={odoo.partners.odoo.verifyLink.href}
+            label={odoo.partners.odoo.verifyLink.label}
+          />
         </p>
       </FadeIn>
     </div>
@@ -45,7 +70,11 @@ export function HoldedPartnerStrip() {
             className="h-8 w-auto object-contain md:h-9"
           />
           <p className="prose-width text-sm leading-relaxed text-muted-on-dark md:text-base">
-            {odoo.partners.holded.text}
+            {odoo.partners.holded.text}{" "}
+            <PartnerVerifyLink
+              href={odoo.partners.holded.verifyLink.href}
+              label={odoo.partners.holded.verifyLink.label}
+            />
           </p>
           <Image
             src={odoo.partners.holded.batch.src}
