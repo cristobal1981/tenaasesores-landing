@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Plan para empresas y pymes en Tenerife | tenaasesores",
   description:
-    "Plan a medida para empresas y pymes en Tenerife: fiscal, contable y laboral adaptado a tu negocio. Planes desde 120 €/mes.",
+    "Plan a medida para empresas y pymes en Tenerife: fiscal, contable y laboral adaptado a tu negocio. Planes desde 150 €/mes.",
   path: "/plan-empresas",
 })
 

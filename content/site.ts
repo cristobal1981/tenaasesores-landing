@@ -225,7 +225,7 @@ export const plansByAudience = {
     tiers: empresasTiers,
     customizeFormAnchor: "personalizar-plan",
     planNote:
-      "Los planes para empresas empiezan desde 120 €/mes como referencia orientativa. La propuesta final depende de tu actividad, equipo y alcance.",
+      "Los planes para empresas empiezan desde 150 €/mes como referencia orientativa. La propuesta final depende de tu actividad, equipo y alcance.",
   },
 } as const
 
