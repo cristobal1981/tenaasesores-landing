@@ -631,10 +631,10 @@ export const homeStats = {
       label: "Años asesorando",
     },
     {
-      end: 6,
+      end: 98,
       prefix: "",
-      suffix: "",
-      label: "Profesionales en equipo",
+      suffix: "%",
+      label: "Satisfacción de clientes",
     },
   ],
 } as const
