@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { Archivo, Host_Grotesk } from 'next/font/google'
 import { JsonLd } from '@/components/seo/json-ld'
 import { ConsentAnalytics } from '@/components/legal/consent-analytics'
+import { GoogleConsentDefaults } from '@/components/legal/google-consent-defaults'
+import { GoogleConsentSync } from '@/components/legal/google-consent-sync'
+import { getGaId } from '@/lib/analytics/ga-config'
 import { defaultOgImage } from '@/lib/seo/metadata'
 import { getIndexingRobots } from '@/lib/seo/env'
 import { organizationSchema } from '@/lib/seo/structured-data'
@@ -62,6 +66,8 @@ export const metadata: Metadata = {
   manifest: '/brand/site.webmanifest',
 }
 
+const gaId = getGaId()
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -74,12 +80,21 @@ export default function RootLayout({
       className={`${hostGrotesk.variable} ${archivo.variable} bg-background`}
     >
       <head>
+        <GoogleConsentDefaults />
         <link rel="preconnect" href="https://images.pexels.com" />
         <link rel="dns-prefetch" href="https://images.pexels.com" />
+        {gaId ? (
+          <>
+            <link rel="preconnect" href="https://www.googletagmanager.com" />
+            <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+          </>
+        ) : null}
       </head>
       <body className={`${archivo.className} antialiased`}>
         <JsonLd data={organizationSchema()} />
         {children}
+        <GoogleConsentSync />
+        {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
         <ConsentAnalytics />
       </body>
     </html>

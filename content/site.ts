@@ -495,7 +495,7 @@ export const philosophy = {
 
 export const about = {
   badge: "Sobre tenaasesores",
-  title: ["Pequeños pero", "muy comprometidos."],
+  title: ["Equipo ágil y", "muy comprometido."],
   subtitle:
     "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales con sede en Tenerife y asesoramiento online en fiscal, contable y laboral. Como partners oficiales de Odoo y Holded, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
   stats: [

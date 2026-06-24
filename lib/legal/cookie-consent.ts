@@ -1,4 +1,5 @@
 import { cookieConsentStorageKey } from "@/content/legal"
+import { updateGoogleConsent } from "@/lib/analytics/google-consent"
 
 export const cookieConsentUpdatedEvent = "cookie-consent-updated" as const
 
@@ -45,6 +46,7 @@ export function writeCookieConsent(analytics: boolean): CookieConsent {
   try {
     localStorage.setItem(cookieConsentStorageKey, JSON.stringify(consent))
     if (typeof window !== "undefined") {
+      updateGoogleConsent(analytics)
       window.dispatchEvent(
         new CustomEvent(cookieConsentUpdatedEvent, { detail: consent })
       )

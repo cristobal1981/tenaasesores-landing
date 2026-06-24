@@ -15,7 +15,7 @@ export const legalEntity = {
   email: site.email,
   phone: site.phone.display,
   website: site.url,
-  lastUpdated: "2026-06-05",
+  lastUpdated: "2026-06-24",
 } as const
 
 export type LegalPageSlug = keyof typeof legalPages
@@ -48,6 +48,22 @@ export const cookieRegistry = [
     purpose: "Medición agregada de visitas y rendimiento del sitio (Vercel Analytics).",
     duration: "Según política de Vercel",
     provider: "Vercel Inc.",
+  },
+  {
+    name: "_ga",
+    type: "Analítica",
+    purpose:
+      "Distinguir usuarios de forma anónima y calcular estadísticas de visitas (Google Analytics 4).",
+    duration: "2 años",
+    provider: "Google Ireland Ltd.",
+  },
+  {
+    name: "_gid",
+    type: "Analítica",
+    purpose:
+      "Distinguir usuarios durante la sesión actual para estadísticas de visitas (Google Analytics 4).",
+    duration: "24 horas",
+    provider: "Google Ireland Ltd.",
   },
   {
     name: cookieConsentStorageKey,
@@ -161,6 +177,7 @@ export const legalPages = {
         title: "8. Protección de datos y cookies",
         paragraphs: [
           "El tratamiento de datos personales se describe en la Política de privacidad. El uso de cookies y tecnologías similares se detalla en la Política de cookies.",
+          "El sitio utiliza herramientas de medición web (**Google Analytics 4** y **Vercel Analytics**) sujetas a tu consentimiento, conforme a lo indicado en dichas políticas.",
         ],
         listItems: [
           "Política de privacidad: /privacidad",
@@ -221,6 +238,7 @@ export const legalPages = {
           "**Reportar un problema con la web:** la URL de la página, el tipo de incidencia y la descripción. Estos datos no pasan por nuestros servidores: se envían a **tecnico@tenaasesores.es** a través del cliente de correo de tu dispositivo cuando tú confirmas el envío.",
           "**Asistente Sappo:** el asistente funciona en tu navegador; *no enviamos el contenido de tus mensajes a servidores*. Solo guardamos en tu dispositivo una preferencia para no repetir la presentación inicial (ver /cookies).",
           "**Datos técnicos:** dirección IP (para limitar abusos en formularios, sin incluirla en el registro de consultas), cookies y almacenamiento local si aceptas o usas funciones del sitio (ver /cookies).",
+          "**Datos de navegación (analítica):** si aceptas las cookies analíticas, podemos recabar información sobre páginas visitadas, tiempo de permanencia, origen del tráfico, tipo de dispositivo y navegador, e interacciones con el sitio mediante **Google Analytics 4** y **Vercel Analytics**.",
         ],
       },
       {
@@ -266,11 +284,23 @@ export const legalPages = {
           "Hosting y despliegue: Vercel Inc.",
           "Gestión de clientes (CRM): Odoo — leads de formulario de contacto y plan personalizado",
           "Analítica: Vercel Analytics (datos agregados de uso)",
+          "Analítica: Google Analytics 4 (Google Ireland Ltd.)",
+        ],
+      },
+      {
+        id: "google-analytics",
+        title: "7. Google Analytics 4",
+        paragraphs: [
+          "Utilizamos **Google Analytics 4**, un servicio de analítica web prestado por **Google Ireland Ltd.**, con la finalidad de obtener información **estadística** sobre el tráfico y el comportamiento de navegación en el sitio (por ejemplo, páginas visitadas, tiempo en página, origen del tráfico, tipo de dispositivo y navegador, y eventos de interacción).",
+          "Google Analytics recoge la dirección IP del usuario, pero **GA4 no almacena la IP completa**: la trunca antes de su tratamiento para dificultar la identificación directa.",
+          "Este tratamiento se basa en tu **consentimiento** a las cookies analíticas. Puedes revocarlo en cualquier momento según se indica en /cookies.",
+          "Google puede tratar los datos en servidores ubicados fuera del Espacio Económico Europeo, incluidos Estados Unidos. Google declara que aplica las garantías previstas en el RGPD, en particular el **marco de privacidad de datos UE-EE.UU. (EU-U.S. Data Privacy Framework)** y sus **cláusulas contractuales tipo**.",
+          "Puedes consultar más información en la política de privacidad de Google: https://policies.google.com/privacy",
         ],
       },
       {
         id: "derechos",
-        title: "7. Derechos de las personas interesadas",
+        title: "8. Derechos de las personas interesadas",
         paragraphs: [
           "Puedes ejercer los derechos de **acceso, rectificación, supresión, oposición, limitación y portabilidad** escribiendo a **info@tenaasesores.es**, adjuntando copia de un documento que acredite tu identidad.",
           "Si retiras el consentimiento, *ello no afectará a la licitud del tratamiento* basado en el consentimiento previo a su retirada.",
@@ -278,21 +308,21 @@ export const legalPages = {
       },
       {
         id: "reclamacion",
-        title: "8. Reclamación ante la autoridad de control",
+        title: "9. Reclamación ante la autoridad de control",
         paragraphs: [
           "Tienes derecho a presentar una reclamación ante la **Agencia Española de Protección de Datos (AEPD)** si consideras que el tratamiento no se ajusta a la normativa: https://www.aepd.es",
         ],
       },
       {
         id: "seguridad",
-        title: "9. Medidas de seguridad",
+        title: "10. Medidas de seguridad",
         paragraphs: [
           "Aplicamos medidas técnicas y organizativas apropiadas para proteger los datos personales frente a accesos no autorizados, pérdida o alteración, en función del riesgo del tratamiento.",
         ],
       },
       {
         id: "cookies-ref",
-        title: "10. Cookies",
+        title: "11. Cookies",
         paragraphs: [
           "Para información detallada sobre cookies y tecnologías similares, consulta nuestra Política de cookies en /cookies.",
         ],
@@ -329,7 +359,7 @@ export const legalPages = {
         ],
         listItems: [
           "Técnicas o necesarias: imprescindibles para el funcionamiento del sitio y recordar tu elección de consentimiento.",
-          "Analíticas: nos permiten medir de forma agregada cómo se utiliza el sitio (Vercel Analytics).",
+          "Analíticas: nos permiten medir de forma agregada cómo se utiliza el sitio (**Google Analytics 4** y **Vercel Analytics**).",
           "Preferencias: recuerdan ajustes de la interfaz, como no volver a mostrar la presentación del asistente Sappo.",
         ],
       },
@@ -344,6 +374,7 @@ export const legalPages = {
         id: "terceros",
         title: "5. Cookies de terceros",
         paragraphs: [
+          "**Google Analytics 4** (Google Ireland Ltd.) puede instalar las cookies **_ga** y **_gid** para estadísticas de visitas cuando aceptas las cookies analíticas. Puedes consultar su política de privacidad en https://policies.google.com/privacy",
           "Vercel Analytics y Speed Insights pueden instalar cookies propias para estadísticas de visitas y rendimiento. Puedes consultar su política de privacidad en el sitio de Vercel.",
           "Algunas imágenes del sitio se cargan desde **Pexels** (images.pexels.com). Tu navegador puede comunicar datos técnicos de la solicitud (por ejemplo, dirección IP) al proveedor de la imagen.",
           "Este sitio no utiliza cookies de publicidad comportamental de terceros en el momento de la última actualización de esta política.",
@@ -353,7 +384,8 @@ export const legalPages = {
         id: "analytics-nota",
         title: "6. Analítica y consentimiento",
         paragraphs: [
-          "Las cookies analíticas (Vercel Analytics y Speed Insights) **solo se activan si las aceptas** en el banner de cookies. Si las rechazas, *no cargamos herramientas de medición de terceros* para analítica ni rendimiento.",
+          "Utilizamos **Google Consent Mode v2**: por defecto, los parámetros `analytics_storage` y `ad_storage` se configuran en **denied** hasta que indiques tu preferencia en el banner. Si aceptas, se activan las cookies analíticas de **Google Analytics 4** (`_ga`, `_gid`). Si rechazas, Google puede seguir recibiendo señales agregadas sin cookies identificativas.",
+          "Las herramientas de **Vercel Analytics** y **Speed Insights** **solo se cargan si aceptas** las cookies analíticas en el banner. Si las rechazas, *no cargamos* esas herramientas de medición.",
           "Tu elección se guarda en el almacenamiento local del navegador. Puedes cambiarla borrando los datos del sitio o eliminando la clave **«cookie-consent»** y recargando la página.",
         ],
       },
@@ -385,7 +417,7 @@ export const legalPages = {
 export const cookieBannerCopy = {
   title: "Cookies en este sitio",
   description:
-    "Usamos cookies técnicas y, con tu permiso, cookies analíticas para mejorar el sitio. Puedes leer más en nuestra política de cookies o de privacidad.",
+    "Usamos cookies técnicas y, con tu permiso, cookies analíticas (Google Analytics y Vercel) para mejorar el sitio. Puedes leer más en nuestra política de cookies o de privacidad.",
   acceptLabel: "Aceptar cookies",
   rejectLabel: "Rechazar cookies no esenciales",
   cookiesLinkLabel: "Política de cookies",

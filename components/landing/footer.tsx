@@ -117,6 +117,7 @@ export function Footer() {
                 width={odoo.partners.odoo.batch.width}
                 height={odoo.partners.odoo.batch.height}
                 className="h-8 w-auto object-contain"
+                style={{ width: "auto" }}
               />
             </div>
             <div className="rounded bg-white">
@@ -126,6 +127,7 @@ export function Footer() {
                 width={odoo.partners.holded.batch.width}
                 height={odoo.partners.holded.batch.height}
                 className="h-8 w-auto object-contain"
+                style={{ width: "auto" }}
               />
             </div>
           </div>

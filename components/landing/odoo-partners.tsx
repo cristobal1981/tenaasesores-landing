@@ -42,6 +42,7 @@ export function OdooCredential() {
             width={odoo.partners.odoo.batch.width}
             height={odoo.partners.odoo.batch.height}
             className="h-20 w-auto object-contain md:h-28 lg:h-32"
+            style={{ width: "auto" }}
             priority
           />
         </div>
@@ -68,6 +69,7 @@ export function HoldedPartnerStrip() {
             width={odoo.partners.holded.logo.width}
             height={odoo.partners.holded.logo.height}
             className="h-8 w-auto object-contain md:h-9"
+            style={{ width: "auto" }}
           />
           <p className="prose-width text-sm leading-relaxed text-muted-on-dark md:text-base">
             {odoo.partners.holded.text}{" "}
@@ -82,6 +84,7 @@ export function HoldedPartnerStrip() {
             width={odoo.partners.holded.batch.width}
             height={odoo.partners.holded.batch.height}
             className="h-14 w-auto object-contain md:h-16"
+            style={{ width: "auto" }}
           />
         </div>
       </div>
