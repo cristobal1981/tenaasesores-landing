@@ -25,7 +25,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: 'tenaasesores | Asesoría en Tenerife',
+    default: 'tenaasesores | Asesoría online para autónomos y pymes',
     template: '%s',
   },
   description: site.description,
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_ES',
     siteName: site.name,
-    title: 'tenaasesores | Asesoría en Tenerife',
+    title: 'tenaasesores | Asesoría online para autónomos y pymes',
     description: site.description,
     url: site.url,
     images: [defaultOgImage],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'tenaasesores | Asesoría en Tenerife',
+    title: 'tenaasesores | Asesoría online para autónomos y pymes',
     description: site.description,
     images: [defaultOgImage.url],
   },

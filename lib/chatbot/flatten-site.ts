@@ -47,7 +47,18 @@ export function flattenSiteContent(): KnowledgeChunk[] {
       title: `${site.name} — ${site.tagline}`,
       body: `${site.description} Ubicación: ${site.location}. Email: ${site.email}. Teléfono: ${site.phone.display}. Horario laborables: ${site.hours.weekdays}. Fin de semana: ${site.hours.weekend}.`,
       href: contactHref,
-      keywords: ["tenaasesores", "asesoria", "gestoria", "tenerife", "consultoria", "empresas digitales"],
+      keywords: ["tenaasesores", "asesoria", "gestoria", "online", "consultoria", "empresas digitales"],
+    }),
+  )
+
+  chunks.push(
+    chunk({
+      id: "site-scope",
+      topic: "general",
+      title: "Ámbito de atención",
+      body: "Oficina en Los Realejos (Tenerife). Asesoramiento online para autónomos, pymes y empresas digitales, también fuera de la isla.",
+      href: faqHref,
+      keywords: ["online", "remoto", "ubicacion", "tenerife", "canarias", "peninsula", "zona", "madrid", "barcelona"],
     }),
   )
 
@@ -268,7 +279,7 @@ export function flattenSiteContent(): KnowledgeChunk[] {
       title: team.title.join(" "),
       body: team.subtitle,
       href: "/nosotros",
-      keywords: ["equipo", "profesionales", "tenerife", "asesor"],
+      keywords: ["equipo", "profesionales", "online", "asesor"],
     }),
   )
 
@@ -305,7 +316,7 @@ export function flattenSiteContent(): KnowledgeChunk[] {
       title: about.title.join(" "),
       body: about.subtitle,
       href: "/nosotros",
-      keywords: ["nosotros", "pymes", "autonomos", "odoo", "tenerife", "tarifas"],
+      keywords: ["nosotros", "pymes", "autonomos", "odoo", "online", "tarifas"],
     }),
   )
 

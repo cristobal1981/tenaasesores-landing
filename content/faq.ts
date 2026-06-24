@@ -147,9 +147,9 @@ export const faqSections: readonly FaqSection[] = [
     description: "Dónde estamos, horario y trato directo.",
     items: [
       {
-        question: "¿Trabajáis solo con empresas en Tenerife?",
+        question: "¿Atendéis solo en Tenerife?",
         answer:
-          "Nuestro equipo está físicamente en Tenerife, pero también trabajamos con autónomos y pymes de otras zonas de forma online .",
+          "Nuestra oficina está en Los Realejos (Tenerife), pero atendemos a autónomos y pymes de otras zonas con asesoramiento online.",
       },
       {
         question: "¿Con quién hablaré si contrato?",

@@ -27,26 +27,42 @@ function LogoGroup({
       aria-hidden={ariaHidden}
       aria-label={ariaLabel}
     >
-      {logoMarquee.items.map((logo) => (
+      {logoMarquee.items.map((logo) => {
+        const usesFluidSize = "fluidSize" in logo && logo.fluidSize
+        const scaleStyle =
+          logo.scale !== 1
+            ? { transform: `scale(${logo.scale})`, transformOrigin: "center" as const }
+            : undefined
+
+        return (
         <li key={logo.name} className="logo-marquee-item">
-          <div className="flex shrink-0 items-center justify-center" style={slotStyle}>
-            <Image
-              src={logo.src}
-              alt={logo.alt}
-              width={logoMarquee.slotWidth}
-              height={logoMarquee.slotHeight}
-              loading="lazy"
-              decoding="async"
-              className="logo-marquee-image max-h-full max-w-full object-contain"
-              style={
-                logo.scale !== 1
-                  ? { transform: `scale(${logo.scale})`, transformOrigin: "center" }
-                  : undefined
-              }
-            />
+          <div className="relative flex shrink-0 items-center justify-center" style={slotStyle}>
+            {usesFluidSize ? (
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                fill
+                loading="lazy"
+                decoding="async"
+                sizes={`${logoMarquee.slotWidth}px`}
+                className="logo-marquee-image object-contain"
+              />
+            ) : (
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                width={logoMarquee.slotWidth}
+                height={logoMarquee.slotHeight}
+                loading="lazy"
+                decoding="async"
+                className="logo-marquee-image max-h-full max-w-full object-contain"
+                style={scaleStyle}
+              />
+            )}
           </div>
         </li>
-      ))}
+        )
+      })}
     </ul>
   )
 }

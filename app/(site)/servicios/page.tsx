@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Servicios de asesoría fiscal, contable y laboral | tenaasesores",
   description:
-    "Servicios de asesoría en Tenerife: gestión fiscal, contable, laboral y constitución de empresas. Supervisión profesional con Odoo y trato cercano.",
+    "Servicios de asesoría online: gestión fiscal, contable, laboral y constitución de empresas. Supervisión profesional con Odoo y trato cercano.",
   path: "/servicios",
 })
 

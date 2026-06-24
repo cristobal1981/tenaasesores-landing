@@ -16,7 +16,9 @@ const FAQ_ENTRIES: FaqEntry[] = [
       question: item.question,
       answer: item.answer,
       href: `${faqHref}#${section.slug}`,
-      aliases: [] as string[],
+      aliases: item.question.includes("solo en Tenerife")
+        ? (["solo tenerife", "fuera de tenerife", "trabajais en madrid", "atendeis online"] as string[])
+        : ([] as string[]),
     }))
   ),
   ...faqContact.items.map((item) => ({

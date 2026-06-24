@@ -1,6 +1,7 @@
 "use client"
 
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { useEffect, useState } from "react"
 import {
   cookieConsentUpdatedEvent,
@@ -25,5 +26,10 @@ export function ConsentAnalytics() {
 
   if (!enabled) return null
 
-  return <Analytics />
+  return (
+    <>
+      <Analytics />
+      <SpeedInsights />
+    </>
+  )
 }

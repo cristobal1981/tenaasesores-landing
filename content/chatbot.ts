@@ -35,6 +35,7 @@ export const quickReplies = [
   { label: "Servicios", query: "servicios fiscal contable laboral" },
   { label: "Planes", query: "que planes hay" },
   { label: "Horario", query: "horario de atención" },
+  { label: "¿Atendéis online?", query: "atendéis fuera de tenerife online" },
   { label: "Teléfono", query: "teléfono de contacto" },
   { label: "Odoo", query: "Odoo partners" },
   { label: "Equipo", query: "equipo profesionales" },
@@ -65,8 +66,8 @@ export const intentDefinitions: IntentDefinition[] = [
   },
   {
     id: "location",
-    patterns: [/donde/, /ubicacion/, /direccion/, /tenerife/, /canarias/],
-    keywords: ["ubicacion", "tenerife", "canarias", "donde"],
+    patterns: [/donde/, /ubicacion/, /direccion/, /tenerife/, /canarias/, /online/, /remoto/],
+    keywords: ["ubicacion", "tenerife", "canarias", "donde", "online", "remoto"],
   },
   {
     id: "contact",

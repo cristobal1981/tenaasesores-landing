@@ -12,9 +12,9 @@ import { faqPage } from "@/content/faq"
 import { pageMetadata } from "@/lib/seo/metadata"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Asesoría fiscal y contable en Tenerife | tenaasesores",
+  title: "Asesoría fiscal y contable online | tenaasesores",
   description:
-    "Asesoría en Tenerife para autónomos y pymes: fiscal, contable y laboral con Odoo, trato directo y primera consulta gratuita.",
+    "Asesoría online para autónomos y pymes: fiscal, contable y laboral con Odoo, trato directo y primera consulta gratuita.",
   path: "/",
 })
 

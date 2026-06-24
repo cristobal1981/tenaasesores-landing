@@ -70,7 +70,7 @@ export function matchIntent(query: string): ChatReply | null {
       case "location":
         return {
           source: "intent",
-          text: `Estamos en ${site.location}. Asesoramiento para autónomos, pymes y empresas digitales.`,
+          text: `Oficina en Los Realejos (Tenerife). Asesoramiento online para autónomos, pymes y empresas digitales.`,
           href: "/nosotros",
           linkLabel: "Conocer al equipo",
         }

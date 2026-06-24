@@ -5,9 +5,9 @@ import { breadcrumbSchema } from "@/lib/seo/structured-data"
 import { pageMetadata } from "@/lib/seo/metadata"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Plan para empresas y pymes en Tenerife | tenaasesores",
+  title: "Plan para empresas y pymes — asesoría online | tenaasesores",
   description:
-    "Plan a medida para empresas y pymes en Tenerife: fiscal, contable y laboral adaptado a tu negocio. Planes desde 150 €/mes.",
+    "Plan a medida para empresas y pymes: fiscal, contable y laboral adaptado a tu negocio. Planes desde 150 €/mes.",
   path: "/plan-empresas",
 })
 

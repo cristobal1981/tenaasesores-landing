@@ -11,7 +11,7 @@ export const site = {
   description:
     "Asesoramiento y consultoría empresarial online. Servicios profesionales especializados en empresas digitales: fiscalidad, contabilidad, laboral y constitución de empresas.",
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.tenaasesores.es",
-  location: "Tenerife, España",
+  location: "Oficina en Los Realejos, Tenerife",
   email: "info@tenaasesores.es",
   technicalEmail: "tecnico@tenaasesores.es",
   phone: {
@@ -497,7 +497,7 @@ export const about = {
   badge: "Sobre tenaasesores",
   title: ["Pequeños pero", "muy comprometidos."],
   subtitle:
-    "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales ubicados en Tenerife en fiscal, contable y laboral. Como partners oficiales de Odoo y Holded, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
+    "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales con sede en Tenerife y asesoramiento online en fiscal, contable y laboral. Como partners oficiales de Odoo y Holded, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
   stats: [
     { end: 150, prefix: "+", suffix: "", label: "Clientes activos" },
     { end: 24, prefix: "", suffix: "h", label: "Respuesta garantizada" },
@@ -581,6 +581,7 @@ export const logoMarquee = {
       src: "/partners/logo-bluenewable.webp",
       url: "https://bluenewables.com/",
       scale: 1,
+      fluidSize: true,
     },
     {
       name: "Youwind",
@@ -588,6 +589,7 @@ export const logoMarquee = {
       src: "/partners/logo-youwind.webp",
       url: "https://youwindrenewables.com/",
       scale: 1,
+      fluidSize: true,
     },
     {
       name: "Agnos PCB",
@@ -602,6 +604,7 @@ export const logoMarquee = {
       src: "/partners/logo-nubelia.webp",
       url: "https://nubeliacloud.com/",
       scale: 1,
+      fluidSize: true,
     },
     {
       name: "Mecainca",

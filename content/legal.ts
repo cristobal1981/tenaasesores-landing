@@ -344,7 +344,7 @@ export const legalPages = {
         id: "terceros",
         title: "5. Cookies de terceros",
         paragraphs: [
-          "Vercel Analytics puede instalar cookies propias para estadísticas de visitas. Puedes consultar su política de privacidad en el sitio de Vercel.",
+          "Vercel Analytics y Speed Insights pueden instalar cookies propias para estadísticas de visitas y rendimiento. Puedes consultar su política de privacidad en el sitio de Vercel.",
           "Algunas imágenes del sitio se cargan desde **Pexels** (images.pexels.com). Tu navegador puede comunicar datos técnicos de la solicitud (por ejemplo, dirección IP) al proveedor de la imagen.",
           "Este sitio no utiliza cookies de publicidad comportamental de terceros en el momento de la última actualización de esta política.",
         ],
@@ -353,7 +353,7 @@ export const legalPages = {
         id: "analytics-nota",
         title: "6. Analítica y consentimiento",
         paragraphs: [
-          "Las cookies analíticas (Vercel Analytics) **solo se activan si las aceptas** en el banner de cookies. Si las rechazas, *no cargamos herramientas de medición de terceros* para analítica.",
+          "Las cookies analíticas (Vercel Analytics y Speed Insights) **solo se activan si las aceptas** en el banner de cookies. Si las rechazas, *no cargamos herramientas de medición de terceros* para analítica ni rendimiento.",
           "Tu elección se guarda en el almacenamiento local del navegador. Puedes cambiarla borrando los datos del sitio o eliminando la clave **«cookie-consent»** y recargando la página.",
         ],
       },

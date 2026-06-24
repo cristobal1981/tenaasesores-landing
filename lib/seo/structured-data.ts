@@ -11,8 +11,8 @@ export function organizationSchema() {
     email: site.email,
     telephone: site.phone.display,
     areaServed: {
-      "@type": "Place",
-      name: site.location,
+      "@type": "Country",
+      name: "España",
     },
     address: {
       "@type": "PostalAddress",

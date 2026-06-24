@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Plan para autónomos — precio orientativo desde 69 €/mes | tenaasesores",
   description:
-    "Plan mensual para autónomos en Tenerife: fiscal y contabilidad al día con precio orientativo, plan Base o personalizado según tu operativa.",
+    "Plan mensual para autónomos: fiscal y contabilidad al día con precio orientativo, plan Base o personalizado según tu operativa.",
   path: "/plan-autonomos",
 })
 

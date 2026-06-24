@@ -5,7 +5,7 @@ export const defaultOgImage = {
   url: "/brand/android-chrome-512x512.png",
   width: 512,
   height: 512,
-  alt: "tenaasesores — asesoría en Tenerife",
+  alt: "tenaasesores — asesoría online",
 } as const
 
 type PageMetadataInput = {

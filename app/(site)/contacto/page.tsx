@@ -5,9 +5,9 @@ import { breadcrumbSchema } from "@/lib/seo/structured-data"
 import { pageMetadata } from "@/lib/seo/metadata"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contacto | Consulta gratuita en Tenerife | tenaasesores",
+  title: "Contacto | Consulta gratuita | tenaasesores",
   description:
-    "Solicita tu consulta gratuita con tenaasesores en Tenerife. Respuesta en menos de 24 horas laborables, sin compromiso.",
+    "Solicita tu consulta gratuita con tenaasesores. Respuesta en menos de 24 horas laborables, sin compromiso.",
   path: "/contacto",
 })
 
