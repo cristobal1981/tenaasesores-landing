@@ -1,8 +1,8 @@
 export const brand = {
   wordmark: "tenaasesores",
-  wordmarkHighlight: "tena",
-  wordmarkRest: "asesores",
-  logoSrc: "/brand/syntia-isotipo.webp",
+  logoSrc: "/brand/tenaasesores-bg_dark.webp",
+  logoWidth: 503,
+  logoHeight: 128,
 } as const
 
 export const site = {

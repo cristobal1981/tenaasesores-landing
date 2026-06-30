@@ -9,19 +9,16 @@ type BrandLogoProps = {
 
 export function BrandLogo({ className, priority = false }: BrandLogoProps) {
   return (
-    <Link href="/" className={`flex items-center gap-3 ${className ?? ""}`}>
+    <Link href="/" className={`inline-flex shrink-0 ${className ?? ""}`}>
       <Image
         src={brand.logoSrc}
-        alt=""
-        width={40}
-        height={40}
+        alt={brand.wordmark}
+        width={brand.logoWidth}
+        height={brand.logoHeight}
         priority={priority}
-        className="h-8 w-8 shrink-0 sm:h-10 sm:w-10"
+        className="h-12 w-auto object-contain md:h-16"
+        style={{ width: "auto" }}
       />
-      <span className="font-sans text-2xl font-semibold lowercase tracking-tight sm:text-3xl">
-        <span className="text-brisa">{brand.wordmarkHighlight}</span>
-        <span className="text-muted-on-dark">{brand.wordmarkRest}</span>
-      </span>
     </Link>
   )
 }
