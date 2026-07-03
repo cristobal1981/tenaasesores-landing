@@ -41,6 +41,10 @@ const nextConfig = {
         headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
       },
       {
+        source: "/solicitud-alta-autonomo/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
         source: "/:path*",
         headers: [{ key: "X-Robots-Tag", value: "index, follow" }],
       },
