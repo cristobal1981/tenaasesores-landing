@@ -2,6 +2,7 @@ import type { ValidatedAltaAutonomoSubmission } from "@/lib/alta-autonomo/valida
 import type { OnboardingAddressCatalog } from "@/lib/alta-autonomo/onboarding-catalog"
 
 const SECRET_HEADER = "X-Landing-Onboarding-Secret"
+const VERCEL_BYPASS_HEADER = "x-vercel-protection-bypass"
 
 type ValidateTokenApiResponse = {
   ok?: boolean
@@ -53,11 +54,47 @@ function getClientConfig() {
   return { baseUrl: baseUrl.replace(/\/+$/, ""), secret }
 }
 
-function buildHeaders(secret: string): HeadersInit {
-  return {
-    "Content-Type": "application/json",
+function getVercelProtectionBypass(): string | undefined {
+  const value =
+    process.env.SYNTIA_VERCEL_PROTECTION_BYPASS?.trim() ||
+    process.env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim()
+  return value || undefined
+}
+
+function buildSyntiaRequestHeaders(secret: string, withJsonContentType = false): HeadersInit {
+  const headers: Record<string, string> = {
     [SECRET_HEADER]: secret,
   }
+
+  if (withJsonContentType) {
+    headers["Content-Type"] = "application/json"
+  }
+
+  const bypassSecret = getVercelProtectionBypass()
+  if (bypassSecret) {
+    headers[VERCEL_BYPASS_HEADER] = bypassSecret
+  }
+
+  return headers
+}
+
+async function readJsonBody<T>(response: Response): Promise<T | null> {
+  const rawBody = (await response.text()).trim()
+  if (!rawBody) return null
+
+  try {
+    return JSON.parse(rawBody) as T
+  } catch {
+    return null
+  }
+}
+
+function mapUpstreamError(status: number, payloadError?: string): string {
+  if (payloadError) return payloadError
+  if (status === 401) return "unauthorized"
+  if (status === 403) return "forbidden"
+  if (status === 503 || status === 502) return "odoo_unavailable"
+  return "upstream_unavailable"
 }
 
 export async function validateAltaAutonomoOnboardingToken(
@@ -67,31 +104,54 @@ export async function validateAltaAutonomoOnboardingToken(
   const url = new URL("/api/onboarding/alta-autonomo/validate", baseUrl)
   url.searchParams.set("token", token)
 
-  const response = await fetch(url, {
-    method: "GET",
-    cache: "no-store",
-    headers: {
-      [SECRET_HEADER]: secret,
-    },
-  })
-
-  let payload: ValidateTokenApiResponse | null = null
+  let response: Response
   try {
-    payload = (await response.json()) as ValidateTokenApiResponse
-  } catch {
-    payload = null
+    response = await fetch(url, {
+      method: "GET",
+      cache: "no-store",
+      headers: buildSyntiaRequestHeaders(secret),
+    })
+  } catch (error) {
+    console.error("[alta-autonomo] validate fetch failed", {
+      baseUrl,
+      error,
+    })
+    return {
+      ok: false,
+      status: 0,
+      valid: false,
+      error: "upstream_unreachable",
+    }
   }
 
-  const isValid = Boolean(payload?.valid ?? (response.ok && payload?.ok !== false))
+  const payload = await readJsonBody<ValidateTokenApiResponse>(response)
+  const hasCatalog = Boolean(payload?.catalog?.countries?.length)
+
+  if (!response.ok || response.status === 204 || !payload?.ok || !hasCatalog) {
+    const error = mapUpstreamError(response.status, payload?.error)
+    console.error("[alta-autonomo] validate upstream rejected", {
+      baseUrl,
+      status: response.status,
+      error,
+      hasPayload: Boolean(payload),
+      hasCatalog,
+    })
+    return {
+      ok: false,
+      status: response.status,
+      valid: false,
+      error,
+    }
+  }
+
   return {
-    ok: response.ok,
+    ok: true,
     status: response.status,
-    valid: isValid,
-    recipientEmail: payload?.recipientEmail,
-    expiresAt: payload?.expiresAt,
-    catalog: payload?.catalog,
-    message: payload?.message,
-    error: payload?.error,
+    valid: true,
+    recipientEmail: payload.recipientEmail,
+    expiresAt: payload.expiresAt,
+    catalog: payload.catalog,
+    message: payload.message,
   }
 }
 
@@ -101,25 +161,42 @@ export async function submitAltaAutonomoOnboarding(
   const { baseUrl, secret } = getClientConfig()
   const url = new URL("/api/onboarding/alta-autonomo/submit", baseUrl)
 
-  const response = await fetch(url, {
-    method: "POST",
-    cache: "no-store",
-    headers: buildHeaders(secret),
-    body: JSON.stringify(data),
-  })
-
-  let payload: SubmitApiResponse | null = null
+  let response: Response
   try {
-    payload = (await response.json()) as SubmitApiResponse
-  } catch {
-    payload = null
+    response = await fetch(url, {
+      method: "POST",
+      cache: "no-store",
+      headers: buildSyntiaRequestHeaders(secret, true),
+      body: JSON.stringify(data),
+    })
+  } catch (error) {
+    console.error("[alta-autonomo] submit fetch failed", {
+      baseUrl,
+      error,
+    })
+    return {
+      ok: false,
+      status: 0,
+      error: "upstream_unreachable",
+    }
+  }
+
+  const payload = await readJsonBody<SubmitApiResponse>(response)
+
+  if (!response.ok || response.status === 204 || !payload) {
+    return {
+      ok: false,
+      status: response.status,
+      error: mapUpstreamError(response.status, payload?.error),
+      fieldErrors: payload?.fieldErrors,
+    }
   }
 
   return {
-    ok: response.ok && payload?.ok !== false,
+    ok: payload.ok !== false,
     status: response.status,
-    message: payload?.message,
-    error: payload?.error,
-    fieldErrors: payload?.fieldErrors,
+    message: payload.message,
+    error: payload.error,
+    fieldErrors: payload.fieldErrors,
   }
 }

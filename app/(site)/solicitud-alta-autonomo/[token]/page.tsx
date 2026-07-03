@@ -81,6 +81,10 @@ export default async function SolicitudAltaAutonomoTokenPage({ params }: PagePro
     const tokenResult = await validateAltaAutonomoOnboardingToken(safeToken)
 
     if (!tokenResult.ok || !tokenResult.valid || !tokenResult.catalog) {
+      console.error("[alta-autonomo] token validation rejected", {
+        status: tokenResult.status,
+        error: tokenResult.error,
+      })
 
       const error = resolveAltaAutonomoAccessError(tokenResult.error)
 
