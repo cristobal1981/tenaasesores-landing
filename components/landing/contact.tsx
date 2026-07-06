@@ -354,7 +354,7 @@ export function Contact() {
                         <span>Lunes a Viernes · {site.hours.weekdays}</span>
                       </div>
                       <div className="mt-1 text-xs text-muted-on-dark">
-                        Puede variar por festivos y dias especiales.
+                        Puede variar por festivos y días especiales.
                       </div>
                     </ContactChannelCard>
                   </div>
@@ -362,7 +362,7 @@ export function Contact() {
                   <div className="mt-7 rounded-2xl border border-primary/35 bg-primary/14 p-4">
                     <p className="mb-3 inline-flex items-center gap-2 text-sm font-bold tracking-wide text-on-dark uppercase">
                       <Sparkles className="h-4 w-4 text-primary" />
-                      Siguenos
+                      Síguenos
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {contact.socials

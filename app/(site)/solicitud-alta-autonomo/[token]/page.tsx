@@ -28,9 +28,9 @@ type PageProps = {
 
 export const metadata: Metadata = {
 
-  title: "Solicitud alta autonomo | tenaasesores",
+  title: "Solicitud alta autónomo | tenaasesores",
 
-  description: "Formulario privado para tramitar el alta de autonomo.",
+  description: "Formulario privado para tramitar el alta de autónomo.",
 
   robots: { index: false, follow: false },
 
@@ -81,11 +81,6 @@ export default async function SolicitudAltaAutonomoTokenPage({ params }: PagePro
     const tokenResult = await validateAltaAutonomoOnboardingToken(safeToken)
 
     if (!tokenResult.ok || !tokenResult.valid || !tokenResult.catalog) {
-      console.error("[alta-autonomo] token validation rejected", {
-        status: tokenResult.status,
-        error: tokenResult.error,
-      })
-
       const error = resolveAltaAutonomoAccessError(tokenResult.error)
 
       return (

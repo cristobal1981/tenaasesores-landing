@@ -153,7 +153,8 @@ const autonomosTiers = [
     kind: "fixed",
     name: "Base",
     audience: "Autónomos con operativa estable y necesidades esenciales",
-    price: "59",
+    price: "55",
+    pricePrefix: "desde",
     period: "mes",
     summary: "Cobertura esencial para tener fiscal y contabilidad al día.",
     responseSla: "Respuesta en 24h laborables",
@@ -215,7 +216,7 @@ export const plansByAudience = {
     tiers: autonomosTiers,
     customizeFormAnchor: "personalizar-plan",
     planNote:
-      "El plan Base muestra un precio orientativo que puedes acordar con nuestros asesores. El plan personalizado se adapta mejor a tus necesidades.",
+      "El plan Base empieza desde 55 €/mes como referencia orientativa. El plan personalizado se adapta mejor si tu caso no encaja en un paquete fijo.",
   },
   empresas: {
     ...plansBase,

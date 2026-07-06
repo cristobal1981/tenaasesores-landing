@@ -7,7 +7,8 @@ type PlanTier =
 
 export function formatPlanTierPriceLabel(tier: PlanTier): string {
   if (tier.kind === "fixed") {
-    return `${tier.name} (${tier.price}€/${tier.period})`
+    const prefix = "pricePrefix" in tier && tier.pricePrefix ? `${tier.pricePrefix} ` : ""
+    return `${tier.name} (${prefix}${tier.price}€/${tier.period})`
   }
   if ("price" in tier && tier.price) {
     const prefix = "pricePrefix" in tier && tier.pricePrefix ? `${tier.pricePrefix} ` : ""
@@ -20,7 +21,7 @@ export function formatPlanTierPriceLabel(tier: PlanTier): string {
 export function formatPlanTierBody(tier: PlanTier): string {
   let pricePart = "sin precio en web, "
   if (tier.kind === "fixed") {
-    pricePart = `${tier.price}€/${tier.period}, `
+    pricePart = `${"pricePrefix" in tier && tier.pricePrefix ? `${tier.pricePrefix} ` : ""}${tier.price}€/${tier.period}, `
   } else if ("price" in tier && tier.price) {
     const prefix = "pricePrefix" in tier && tier.pricePrefix ? `${tier.pricePrefix} ` : ""
     const period = "period" in tier && tier.period ? tier.period : "mes"

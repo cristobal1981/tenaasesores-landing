@@ -38,29 +38,22 @@ export const altaAutonomoFormContent = {
     nif: "12345678Z o X1234567L",
     telefono: "+34 600 000 000",
     email: "tu@email.com",
-    direccion: "Calle, numero, piso...",
+    direccion: "Calle, número, piso...",
     ciudad: "Tu ciudad",
     codigo_postal: "38001",
     pais: "España",
     actividad: "Describe tu actividad principal",
     ingresos_anuales: "10000",
     iban: "ES00 0000 0000 0000 0000 0000",
-    comentarios: "Cuentanos cualquier detalle adicional",
+    comentarios: "Cuéntanos cualquier detalle adicional",
   },
   hero: {
-    eyebrow: "Solicitud alta autonomo",
-    title: "Activa tu alta de autonomo con soporte completo",
+    eyebrow: "Solicitud alta autónomo",
+    title: "Activa tu alta de autónomo con soporte completo",
     subtitle:
       "Revisamos tu caso y tramitamos el alta con un proceso claro. Completa este formulario y te guiaremos en cada paso.",
   },
   panel: {
-    title: "Información importante",
-    infoItems: [
-      "Necesitamos tus datos fiscales y bancarios para validar la documentación antes de tramitar.",
-      "Si ya eres autónomo, revisamos tu situación actual antes de cambiar de asesoría.",
-      "Si no eres autónomo, definimos contigo la fecha de alta y revisamos posibles bonificaciones.",
-      "El mínimo de ingresos estimados para este circuito es de 10.000 € al año.",
-    ],
     faqNotice: "Antes de enviar, puedes revisar las dudas frecuentes justo debajo.",
   },
   actions: {
@@ -150,7 +143,7 @@ export const altaAutonomoFormContent = {
   },
   faqSection: {
     title: "Preguntas frecuentes sobre el alta",
-    description: "Resolvemos las dudas mas habituales antes de iniciar el tramite.",
+    description: "Resolvemos las dudas más habituales antes de iniciar el trámite.",
     items: [
       {
         question: "¿Cuánto tardáis en revisar la solicitud?",

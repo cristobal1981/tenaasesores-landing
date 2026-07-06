@@ -95,7 +95,7 @@ export const faqSections: readonly FaqSection[] = [
       {
         question: "¿Qué plan me conviene si soy autónomo?",
         answer:
-          "Depende de tu operativa. El plan Base cubre necesidades esenciales con un precio orientativo desde 69 €/mes. Si necesitas más alcance — laboral, Odoo o mayor volumen —, el plan Personalizado se adapta a tu caso. En la página de autónomos puedes comparar qué incluye cada uno.",
+          "Depende de tu operativa. El plan Base cubre necesidades esenciales desde 55 €/mes. Si necesitas más alcance — laboral, Odoo o mayor volumen —, el plan Personalizado se adapta a tu caso. En la página de autónomos puedes comparar qué incluye cada uno.",
       },
       {
         question: "¿Y si tengo una empresa o pyme?",
