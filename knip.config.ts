@@ -18,8 +18,7 @@ const config: KnipConfig = {
     "components/ui/gradient-card.tsx",
     "src/modules/contact/infrastructure/contact-email-gateway.ts",
   ],
-  ignoreBinaries: ["eslint"],
-  ignoreDependencies: ["postcss", "tw-animate-css", "postcss-load-config"],
+  ignoreDependencies: ["postcss-load-config"],
   ignoreExportsUsedInFile: {
     interface: true,
     type: true,

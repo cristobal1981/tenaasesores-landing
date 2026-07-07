@@ -39,9 +39,12 @@ export function WebIssueReportPage({ initialPageUrl = "" }: WebIssueReportPagePr
   const [formReady, setFormReady] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  useEffect(() => {
+  // Sync de la prop: ajuste de estado durante el render, no en efecto.
+  const [prevInitialPageUrl, setPrevInitialPageUrl] = useState(initialPageUrl)
+  if (prevInitialPageUrl !== initialPageUrl) {
+    setPrevInitialPageUrl(initialPageUrl)
     setPageUrl(initialPageUrl)
-  }, [initialPageUrl])
+  }
 
   useEffect(() => {
     const timer = window.setTimeout(() => setFormReady(true), MIN_FORM_DELAY_MS)

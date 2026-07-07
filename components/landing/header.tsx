@@ -57,9 +57,12 @@ function PlansNavDropdown({
     }
   }, [open])
 
-  useEffect(() => {
+  // Cierre al navegar: ajuste de estado durante el render, no en efecto.
+  const [prevPathname, setPrevPathname] = useState(pathname)
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname)
     setOpen(false)
-  }, [pathname])
+  }
 
   return (
     <div ref={containerRef} className="relative">
@@ -152,10 +155,13 @@ export function Header() {
   const [isMobilePlansOpen, setIsMobilePlansOpen] = useState(false)
   const pathname = usePathname()
 
-  useEffect(() => {
+  // Cierre al navegar: ajuste de estado durante el render, no en efecto.
+  const [prevPathname, setPrevPathname] = useState(pathname)
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname)
     setIsMobilePlansOpen(false)
     setIsMenuOpen(false)
-  }, [pathname])
+  }
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 border-b border-agua/30 bg-background">

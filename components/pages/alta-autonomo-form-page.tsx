@@ -52,7 +52,7 @@ export function AltaAutonomoFormPage({
 }: AltaAutonomoFormPageProps) {
   const defaultCountryId = String(addressCatalog.defaultCountryId)
   const honeypotId = useId()
-  const formStartedAtRef = useRef(Date.now())
+  const formStartedAtRef = useRef(0)
   const successFocusRef = useRef<HTMLDivElement>(null)
 
   const [nombre, setNombre] = useState("")
@@ -94,9 +94,11 @@ export function AltaAutonomoFormPage({
     [addressCatalog.provinces, pais]
   )
 
+  // Hidratación del borrador diferida a un tick: evita setState síncrono en efecto.
   useEffect(() => {
-    const draft = readAltaAutonomoFormDraft(token)
-    if (draft) {
+    const id = window.setTimeout(() => {
+      const draft = readAltaAutonomoFormDraft(token)
+      if (draft) {
       setNombre(draft.nombre)
       setApellidos(draft.apellidos)
       setNif(draft.nif)
@@ -116,14 +118,17 @@ export function AltaAutonomoFormPage({
       setPais(isStoredOdooId(draft.pais) ? draft.pais : defaultCountryId)
       setActividad(draft.actividad)
       setIngresosAnuales(draft.ingresosAnuales)
-      setIban(draft.iban)
-      setComentarios(draft.comentarios)
-      setPrivacyAccepted(draft.privacyAccepted)
-    }
-    setDraftHydrated(true)
+        setIban(draft.iban)
+        setComentarios(draft.comentarios)
+        setPrivacyAccepted(draft.privacyAccepted)
+      }
+      setDraftHydrated(true)
+    }, 0)
+    return () => window.clearTimeout(id)
   }, [token, initialEmail, defaultCountryId])
 
   useEffect(() => {
+    formStartedAtRef.current = Date.now()
     const timer = window.setTimeout(
       () => setFormReady(true),
       altaAutonomoFormContent.limits.minSubmitDelayMs
@@ -230,7 +235,6 @@ export function AltaAutonomoFormPage({
       comentarios,
       privacidad: privacyAccepted,
       company,
-      formStartedAt: formStartedAtRef.current,
     }),
     [
       token,
@@ -281,7 +285,13 @@ export function AltaAutonomoFormPage({
       return
     }
 
-    const issues = getAltaAutonomoValidationIssues(payload)
+    // formStartedAt se añade aquí (event handler): las reglas de React prohíben leer refs en render.
+    const submission: AltaAutonomoSubmissionPayload = {
+      ...payload,
+      formStartedAt: formStartedAtRef.current,
+    }
+
+    const issues = getAltaAutonomoValidationIssues(submission)
     markFieldErrors(issues)
 
     if (issues.length > 0) {
@@ -295,7 +305,7 @@ export function AltaAutonomoFormPage({
       const response = await fetch("/api/solicitud-alta-autonomo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(submission),
       })
 
       const apiPayload = (await response.json()) as {

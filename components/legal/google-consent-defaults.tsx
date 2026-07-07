@@ -5,6 +5,9 @@ export function GoogleConsentDefaults() {
   if (!getGaId()) return null
 
   return (
+    // Válido: este componente solo se renderiza desde app/layout.tsx (root layout);
+    // la regla no puede seguir el uso a través de ficheros.
+    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
     <Script id="google-consent-default" strategy="beforeInteractive">
       {`
         window.dataLayer = window.dataLayer || [];

@@ -53,20 +53,25 @@ export function LegalPageContent({ slug }: LegalPageContentProps) {
     setActiveSectionId((previous) => (previous === currentId ? previous : currentId))
   }, [sectionIds])
 
-  useEffect(() => {
+  // Reset al cambiar de página legal: ajuste de estado durante el render, no en efecto.
+  const [prevSlug, setPrevSlug] = useState(slug)
+  if (prevSlug !== slug) {
+    setPrevSlug(slug)
     setActiveSectionId(sectionIds[0] ?? "")
-    updateActiveSection()
-  }, [slug, sectionIds, updateActiveSection])
+  }
 
   useEffect(() => {
+    // Cálculo inicial en rAF: la regla prohíbe setState síncrono en el cuerpo del efecto.
+    const raf = window.requestAnimationFrame(updateActiveSection)
     window.addEventListener("scroll", updateActiveSection, { passive: true })
     window.addEventListener("resize", updateActiveSection, { passive: true })
 
     return () => {
+      window.cancelAnimationFrame(raf)
       window.removeEventListener("scroll", updateActiveSection)
       window.removeEventListener("resize", updateActiveSection)
     }
-  }, [updateActiveSection])
+  }, [slug, updateActiveSection])
 
   return (
     <section className="border-t border-agua/20 bg-surface-light py-12 md:py-16">

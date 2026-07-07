@@ -1,5 +1,5 @@
 import { intentDefinitions } from "@/content/chatbot"
-import { contact, contactHref, odoo, plansByAudience, services, site, team } from "@/content/site"
+import { contactHref, odoo, plansByAudience, site, team } from "@/content/site"
 import { formatPlanTierPriceLabel } from "@/lib/chatbot/plan-tier-summary"
 import { planCustomizeForm } from "@/content/plan-customize-form"
 import { normalizeText } from "./normalize"

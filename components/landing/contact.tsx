@@ -40,7 +40,7 @@ export function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
   const reducedMotion = useReducedMotion()
   const honeypotId = useId()
-  const formStartedAtRef = useRef(Date.now())
+  const formStartedAtRef = useRef(0)
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
@@ -53,6 +53,7 @@ export function Contact() {
   const successFocusRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    formStartedAtRef.current = Date.now()
     const timer = window.setTimeout(() => setFormReady(true), contactForm.limits.minSubmitDelayMs)
     return () => window.clearTimeout(timer)
   }, [])

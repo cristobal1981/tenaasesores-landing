@@ -114,7 +114,8 @@
     "fiscalidad",
     "ctas",
     "altaAutonomo",
-    "Autonomo"
+    "Autonomo",
+    "síncrono"
   ],
   "ignoreRegExpList": [
     "/^\\s+[a-z0-9_]+:\\s/",

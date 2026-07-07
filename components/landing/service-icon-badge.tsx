@@ -1,5 +1,5 @@
 import { getServiceAccent } from "@/lib/service-accent"
-import { getServiceIconBySlug } from "@/lib/service-icons"
+import { serviceIconsBySlug } from "@/lib/service-icons"
 import { cn } from "@/lib/utils"
 
 const sizeStyles = {
@@ -24,7 +24,7 @@ type ServiceIconBadgeProps = {
 }
 
 export function ServiceIconBadge({ slug, size = "md", className }: ServiceIconBadgeProps) {
-  const Icon = getServiceIconBySlug(slug)
+  const Icon = serviceIconsBySlug[slug] ?? serviceIconsBySlug.fiscal
   const accent = getServiceAccent(slug)
   const styles = sizeStyles[size]
 

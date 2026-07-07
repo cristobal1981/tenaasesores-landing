@@ -70,83 +70,51 @@ export default async function SolicitudAltaAutonomoTokenPage({ params }: PagePro
 
 
 
-  let recipientEmail: string | undefined
-
-  let catalog: OnboardingAddressCatalog | undefined
-
-
+  let tokenResult: Awaited<ReturnType<typeof validateAltaAutonomoOnboardingToken>> | null = null
 
   try {
-
-    const tokenResult = await validateAltaAutonomoOnboardingToken(safeToken)
-
-    if (!tokenResult.ok || !tokenResult.valid || !tokenResult.catalog) {
-      const error = resolveAltaAutonomoAccessError(tokenResult.error)
-
-      return (
-
-        <AltaAutonomoAccessError
-
-          variant={error.variant}
-
-          title={error.title}
-
-          body={error.body}
-
-          hint={error.hint}
-
-        />
-
-      )
-
-    }
-
-    recipientEmail = tokenResult.recipientEmail
-
-    catalog = tokenResult.catalog
-
+    tokenResult = await validateAltaAutonomoOnboardingToken(safeToken)
   } catch (error) {
-
     console.error("[alta-autonomo] token validation failed", error)
-
-    const accessError = resolveAltaAutonomoServiceError()
-
-
-
-    return (
-
-      <AltaAutonomoAccessError
-
-        variant={accessError.variant}
-
-        title={accessError.title}
-
-        body={accessError.body}
-
-        hint={accessError.hint}
-
-      />
-
-    )
-
   }
 
+  if (!tokenResult) {
+    const accessError = resolveAltaAutonomoServiceError()
 
+    return (
+      <AltaAutonomoAccessError
+        variant={accessError.variant}
+        title={accessError.title}
+        body={accessError.body}
+        hint={accessError.hint}
+      />
+    )
+  }
+
+  if (!tokenResult.ok || !tokenResult.valid || !tokenResult.catalog) {
+    const error = resolveAltaAutonomoAccessError(tokenResult.error)
+
+    return (
+      <AltaAutonomoAccessError
+        variant={error.variant}
+        title={error.title}
+        body={error.body}
+        hint={error.hint}
+      />
+    )
+  }
+
+  const recipientEmail: string | undefined = tokenResult.recipientEmail
+
+  const catalog: OnboardingAddressCatalog = tokenResult.catalog
 
   return (
-
     <AltaAutonomoFormPage
-
       token={safeToken}
-
       initialEmail={recipientEmail}
-
       addressCatalog={catalog}
-
     />
-
   )
-
 }
 
 

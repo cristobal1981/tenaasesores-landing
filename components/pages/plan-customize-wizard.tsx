@@ -37,10 +37,7 @@ import {
   canSubmitPlanCustomizeFromClient,
   recordPlanCustomizeClientSubmission,
 } from "@/lib/plan-customize/rate-limit"
-import {
-  getPlanCustomizeStepValidationError,
-  isValidAnnualRevenueInput,
-} from "@/lib/plan-customize/validate-inquiry"
+import { getPlanCustomizeStepValidationError } from "@/lib/plan-customize/validate-inquiry"
 import { formStepEase } from "@/lib/forms/motion-tokens"
 import { cn } from "@/lib/utils"
 
@@ -227,7 +224,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
   const panelId = useId()
   const stepLiveId = useId()
   const honeypotId = useId()
-  const formStartedAtRef = useRef(Date.now())
+  const formStartedAtRef = useRef(0)
   const reducedMotion = useReducedMotion()
 
   const [step, setStep] = useState(1)
@@ -251,6 +248,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
   const [stepError, setStepError] = useState<string | null>(null)
 
   useEffect(() => {
+    formStartedAtRef.current = Date.now()
     const timer = window.setTimeout(
       () => setFormReady(true),
       planCustomizeForm.limits.minSubmitDelayMs
@@ -260,20 +258,36 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
 
   const formSubmitStub = isFormSubmitStubEnabled()
 
-  const formValues: PlanFormValues = {
-    isRegisteredAutonomo,
-    willHireEmployees,
-    isNewConstitution,
-    hasEmployees,
-    employeeCount,
-    annualRevenue,
-    services,
-    activity,
-    taxRegion,
-    name,
-    email,
-    phone,
-  }
+  const formValues: PlanFormValues = useMemo(
+    () => ({
+      isRegisteredAutonomo,
+      willHireEmployees,
+      isNewConstitution,
+      hasEmployees,
+      employeeCount,
+      annualRevenue,
+      services,
+      activity,
+      taxRegion,
+      name,
+      email,
+      phone,
+    }),
+    [
+      isRegisteredAutonomo,
+      willHireEmployees,
+      isNewConstitution,
+      hasEmployees,
+      employeeCount,
+      annualRevenue,
+      services,
+      activity,
+      taxRegion,
+      name,
+      email,
+      phone,
+    ]
+  )
 
   const isCurrentStepComplete = useMemo(
     () => isStepComplete(step, audience, formValues),
@@ -285,9 +299,12 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     [audience, formValues]
   )
 
-  useEffect(() => {
+  // Limpieza del error al cambiar de paso: ajuste de estado durante el render, no en efecto.
+  const [prevStep, setPrevStep] = useState(step)
+  if (prevStep !== step) {
+    setPrevStep(step)
     setStepError(null)
-  }, [step])
+  }
 
   const serviceOptions = planCustomizeForm.step2.serviceOptions[audience]
 

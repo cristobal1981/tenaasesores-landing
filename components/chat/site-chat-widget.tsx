@@ -37,10 +37,10 @@ export function SiteChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const reducedMotion = usePrefersReducedMotion()
 
-  const closeChat = useCallback(() => setIsOpen(false), [])
-
   const [isOpen, setIsOpen] = useState(false)
   const [showIntro, setShowIntro] = useState(false)
+
+  const closeChat = useCallback(() => setIsOpen(false), [])
 
   const dismissIntro = useCallback(() => {
     setShowIntro(false)

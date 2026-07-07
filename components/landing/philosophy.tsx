@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo, useState } from "react"
 import { useReducedMotion } from "framer-motion"
-import { FadeIn } from "@/components/animations"
 import { ClaveValueCard } from "@/components/landing/clave-value-card"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
