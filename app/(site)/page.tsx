@@ -1,13 +1,15 @@
 import type { Metadata } from "next"
 import {
   HomeHeroBand,
+  HomeStats,
+  LogoMarquee,
   Services,
   Odoo,
   Philosophy,
   // Testimonials,
 } from "@/src/modules/landing/ui"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
-import { faqPage } from "@/content/faq"
+import { homeFinalCta } from "@/content/site"
 import { pageMetadata } from "@/lib/seo/metadata"
 
 export const metadata: Metadata = pageMetadata({
@@ -20,16 +22,19 @@ export const metadata: Metadata = pageMetadata({
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <HomeHeroBand />
-      <Services />
+      <section className="section-divider-bottom">
+        <HomeHeroBand />
+        <HomeStats />
+      </section>
+      <LogoMarquee variant="embedded" />
       <Philosophy />
+      <Services />
       <Odoo />
       {/* <Testimonials /> — oculto hasta tener testimonios reales publicables */}
       <CtaBrisaBand
-        title={faqPage.homeTeaser.title}
-        subtitle={faqPage.homeTeaser.subtitle}
-        label={faqPage.homeTeaser.label}
-        href={faqPage.homeTeaser.href}
+        title={homeFinalCta.title}
+        subtitle={homeFinalCta.subtitle}
+        label={homeFinalCta.label}
       />
     </main>
   )

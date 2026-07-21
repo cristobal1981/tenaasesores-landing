@@ -28,14 +28,14 @@ function PartnerVerifyLink({ href, label }: PartnerVerifyLinkProps) {
 
 export function OdooCredential() {
   return (
-    <div className="relative mx-auto mb-16 max-w-4xl">
+    <div className="relative mx-auto max-w-4xl">
       <div
         className="pointer-events-none absolute top-0 left-1/2 -z-10 h-48 w-[min(90vw,420px)] -translate-x-1/2 -translate-y-1/4 rounded-full bg-primary/10 blur-[80px]"
         aria-hidden
       />
 
       <FadeIn className="text-center">
-        <div className="mx-auto inline-flex ">
+        <div className="mx-auto inline-flex">
           <Image
             src={odoo.partners.odoo.batch.src}
             alt={odoo.partners.odoo.batch.alt}

@@ -51,27 +51,57 @@ export const contactHref = "/contacto" as const
 
 export const hero = {
   title: {
-    prefix: "Asesoría",
-    rotatingWords: ["Innovadora", "Personalizada", "Estratégica"],
-    bridgeWord: "",
-    secondLine: "",
+    prefix: "Control",
+    rotatingWords: ["fiscal", "contable", "laboral"],
+    bridgeWord: "real para negocios que quieren avanzar",
+    secondLine: "sin perseguir a su asesoría",
   },
   subtitle:
-    "Asesoría estratégica que convierte datos en crecimiento. Gestionamos obligaciones legales, automatizamos procesos y potenciamos tu negocio. Contabilidad analítica y expertise en Odoo y Holded con la personalización de nuestros profesionales.",
-  ctaPrimary: "Solicitar Consulta Gratis",
-  ctaSecondary: "Ver Servicios",
+    "Fiscal, contabilidad y laboral con respuesta ágil, control claro y un equipo que sí te contesta.",
+  ctaPrimary: "Solicitar consulta gratuita",
+  ctaSecondary: "Explorar servicios",
+  audienceLabel: "Autónomos y empresas",
+  proofLabel: "Partners oficiales Odoo y Holded",
+  signalTitle: "Lo que cambia cuando todo está bien montado",
+  signals: [
+    {
+      title: "Respuesta en menos de 24h",
+      description: "Dudas resueltas antes de que bloqueen decisiones o plazos.",
+    },
+    {
+      title: "Datos visibles en tiempo real",
+      description: "Tu negocio deja de depender de correos y hojas perdidas.",
+    },
+    {
+      title: "Equipo humano + tecnología",
+      description: "Control profesional sin perder cercanía ni contexto.",
+    },
+  ],
+  spotlight: {
+    eyebrow: "Sistema de trabajo",
+    title: "Menos ruido. Más visibilidad. Mejor criterio.",
+    description:
+      "Ordenamos tu operativa para que decidas mejor y pierdas menos tiempo persiguiendo respuestas.",
+    points: [
+      "Fiscal, contable y laboral en mismo equipo",
+      "Supervisión real sobre Odoo y Holded",
+      "Procesos diseñados para crecer sin caos",
+    ],
+  },
   trust: [
-    { title: "Acceso 24/7", subtitle: "Tus datos cuando los necesites" },
-    { title: "Partners Odoo y Holded", subtitle: "Implementación y supervisión" },
-    { title: "Automatización", subtitle: "Menos errores, más tiempo" },
+    { title: "150+ clientes activos", subtitle: "Autónomos, pymes y empresas digitales" },
+    { title: "Partners Odoo y Holded", subtitle: "Implantación, revisión y acompañamiento" },
+    { title: "Máximo 24h", subtitle: "Compromiso real de respuesta laborable" },
   ],
 } as const
 
 export const odoo = {
   badge: "Odoo y Holded · Partners oficiales",
-  title: ["Contabilidad descentralizada,", "control profesional de verdad"],
+  title: ["Tecnología útil,", "supervisión profesional de verdad"],
   subtitle:
-    "Tú tienes visibilidad y acceso en tiempo real; nosotros nos encargamos de que todo esté bien hecho, revisado y al día con la normativa.",
+    "Tecnología cuando aporta control, velocidad y menos trabajo manual.",
+  intro:
+    "Integramos Odoo o Holded dentro de tu operativa fiscal, contable y laboral. Sin herramientas sueltas. Sin más complejidad.",
   partners: {
     odoo: {
       batch: {
@@ -108,40 +138,40 @@ export const odoo = {
   },
   benefits: [
     {
-      title: "Contabilidad descentralizada",
+      title: "Visibilidad sin dependencia",
       description:
-        "Consulta tu situación contable cuando quieras, desde cualquier dispositivo.",
+        "Tus cifras, documentos y procesos dejan de vivir en cadenas de emails y cierres opacos.",
     },
     {
-      title: "Supervisión profesional",
+      title: "Criterio encima de automatización",
       description:
-        "Controlamos, revisamos y garantizamos el cumplimiento normativo de tu negocio.",
+        "Automatizar no basta: revisamos, corregimos y garantizamos cumplimiento normativo.",
     },
     {
-      title: "Automatización de procesos",
+      title: "Operativa preparada para crecer",
       description:
-        "Menos tareas manuales, menos errores y más tiempo para lo que importa.",
+        "Menos carga manual, menos errores y más capacidad para escalar con orden.",
     },
   ],
-  stepsTitle: "Tres pasos para arrancar en Odoo",
+  stepsTitle: "Cómo lo aterrizamos",
   steps: [
     {
-      title: "Paquete fiscal a medida",
+      title: "Diseñamos estructura y obligaciones",
       description:
-        "Definimos plan contable, impuestos y obligaciones desde el primer día.",
+        "Definimos plan contable, impuestos, circuitos y responsabilidades desde inicio.",
     },
     {
-      title: "Bancos sincronizados",
+      title: "Conectamos operativa real",
       description:
-        "Conectamos tus cuentas para importar movimientos y evitar errores manuales.",
+        "Bancos, facturación y documentación quedan conectados para reducir trabajo manual.",
     },
     {
-      title: "Facturas automáticas",
+      title: "Revisamos y optimizamos contigo",
       description:
-        "Captura OCR o recepción por email para centralizar la documentación de proveedores.",
+        "Acompañamos cierres, ajustes y mejoras para que sistema siga sirviendo al negocio.",
     },
   ],
-  cta: "Hablemos de tu migración a Odoo",
+  cta: "Ver si tu operativa encaja",
 } as const
 
 const plansBase = {
@@ -231,10 +261,18 @@ export const plansByAudience = {
 } as const
 
 export const services = {
-  badge: "Nuestros Servicios",
-  title: ["Todo lo que necesitas", "en un solo lugar"],
+  badge: "Qué resolvemos",
+  title: ["Fiscal, contable y laboral", "con una sola visión del negocio"],
   subtitle:
-    "¿Quieres trabajar con Odoo pero no sabes por dónde empezar? Un solo equipo para contabilidad, fiscal, laboral y puesta en marcha.",
+    "Un mismo equipo coordina áreas clave para que tengas menos fricción y más claridad.",
+  leadTitle: "Asesoría para negocios que necesitan ver claro y moverse rápido",
+  leadBody:
+    "Trabajamos para que tu negocio deje de perseguir a su asesoría y empiece a usarla para decidir mejor.",
+  highlights: [
+    "Un interlocutor que entiende conjunto.",
+    "Respuesta rápida y con contexto.",
+    "Tecnología solo cuando simplifica.",
+  ],
   pageIntro: {
     badge: "Servicios",
     title: ["Servicios y", "propuesta de valor"],
@@ -480,10 +518,10 @@ export const team = {
 } as const
 
 export const philosophy = {
-  badge: "Nuestra filosofía",
-  title: ["Tu asesoría debería ayudarte,", "no convertirse en un problema más"],
+  badge: "Cómo trabajamos",
+  title: ["Tu asesoría no debería frenarte,", "debería darte claridad para decidir"],
   subtitle:
-    "Si tu asesoría actual no responde a tiempo, te genera más dudas que soluciones o simplemente no te entiende, quizá es momento de cambiar. Trabajamos con una filosofía",
+    "Cinco principios para que tu asesoría sume claridad, no fricción.",
   acronym: "CLAVE",
   values: [
     { letter: "C", title: "CERCANÍA", description: "Conocemos tu negocio como si fuera el nuestro. Trato directo y personal." },
@@ -492,6 +530,19 @@ export const philosophy = {
     { letter: "V", title: "VALOR", description: "No solo cumplimos, te ayudamos a crecer y optimizar tu negocio." },
     { letter: "E", title: "EXPERIENCIA", description: "Años resolviendo lo que otros complican. Sabemos lo que hacemos." },
   ],
+  manifestoTitle: "Lo notarás en el día a día",
+  manifestoPoints: [
+    "Sabes quién lleva tu caso.",
+    "Recibes respuestas claras.",
+    "La tecnología simplifica, no complica.",
+  ],
+} as const
+
+export const homeFinalCta = {
+  title: "Si tu negocio ya va en serio, tu asesoría también debería estar a la altura.",
+  subtitle:
+    "Cuéntanos tu caso. Te diremos rápido si podemos ayudarte.",
+  label: "Hablar con tenaasesores",
 } as const
 
 export const about = {

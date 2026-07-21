@@ -226,6 +226,25 @@
     font-size: clamp(1.875rem, 4vw + 0.5rem, 3.75rem);
   }
 
+  .home-hero-title {
+    font-size: clamp(2.75rem, 7.5vw, 6.15rem);
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+
+  .home-clave-letter {
+    font-size: clamp(6rem, 22vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -0.06em;
+  }
+
+  .home-service-panel {
+    border: 1px solid color-mix(in oklch, var(--agua) 22%, transparent);
+    background: color-mix(in oklch, var(--on-dark) 4%, transparent);
+    padding: 2rem;
+    min-height: 22rem;
+  }
+
   .bg-hero-gradient {
     @apply bg-gradient-to-br from-background via-card to-agua;
   }
@@ -234,10 +253,11 @@
   }
   .bg-home-hero-surface {
     background: radial-gradient(
-      ellipse 90% 70% at 50% 42%,
-      #072f38 0%,
-      #06252c 55%,
-      #051f27 100%
+      ellipse 92% 74% at 50% 38%,
+      #0a3944 0%,
+      #062a33 42%,
+      #051f27 72%,
+      #041a20 100%
     );
   }
   .bg-section-dark {
@@ -325,13 +345,15 @@
   }
   /* Banda CTA ancha — Verde Brisa + Agua (manual Syntia) */
   .section-cta-brisa {
-    @apply w-full bg-brisa py-16 md:py-20;
+    background:
+      linear-gradient(180deg, rgba(214, 242, 232, 0.98), rgba(214, 242, 232, 0.94));
+    @apply w-full py-16 md:py-20;
   }
   .section-cta-brisa-title {
-    @apply text-2xl font-bold text-on-light sm:text-3xl;
+    @apply text-3xl leading-[1.04] font-semibold text-on-light sm:text-4xl md:text-[3.25rem];
   }
   .section-cta-brisa-body {
-    @apply text-lg text-muted-on-light;
+    @apply text-base leading-relaxed text-muted-on-light sm:text-[1.05rem];
   }
   .section-cta-brisa-btn {
     @apply font-semibold bg-secondary text-brisa hover:bg-secondary/90;

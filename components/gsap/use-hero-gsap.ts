@@ -38,11 +38,13 @@ export function useHeroGsap({ contentRef }: UseHeroGsapOptions) {
         tl.from(title, { opacity: 0, y: 32, duration: 0.55 })
           .from(subtitle, { opacity: 0, y: 24, duration: 0.5 }, "-=0.35")
           .from(ctas, { opacity: 0, y: 20, duration: 0.45 }, "-=0.35")
-          .from(
+        if (trustItems.length) {
+          tl.from(
             trustItems,
             { opacity: 0, y: 24, duration: 0.45, stagger: 0.12 },
             "-=0.25"
           )
+        }
       })
 
       return () => mm.revert()
