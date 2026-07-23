@@ -61,7 +61,7 @@ export function HomeHeroBand() {
   }, [reducedMotion])
 
   return (
-    <section className="relative flex min-h-[calc(100svh-220px)] flex-col overflow-hidden bg-home-hero-surface">
+    <section className="relative flex flex-1 flex-col overflow-hidden bg-home-hero-surface">
       <HomeThreeField />
       <div
         className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,rgba(1,222,162,0.12)_0%,rgba(4,29,35,0)_50%)]"

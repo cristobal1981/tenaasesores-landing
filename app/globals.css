@@ -69,6 +69,13 @@
   --sidebar-accent-foreground: var(--on-dark);
   --sidebar-border: #0d4a58;
   --sidebar-ring: #01dea2;
+  --site-header-height: 4rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --site-header-height: 3.5rem;
+  }
 }
 
 .dark {
@@ -232,17 +239,41 @@
     text-wrap: balance;
   }
 
-  .home-clave-letter {
-    font-size: clamp(6rem, 22vw, 14rem);
-    line-height: 0.85;
-    letter-spacing: -0.06em;
+  .home-clave-card-letter {
+    font-family: var(--font-host-grotesk), system-ui, sans-serif;
+    font-size: clamp(3rem, min(62cqw, 90cqh), 11rem);
+    line-height: 0.72;
+    letter-spacing: -0.04em;
   }
 
-  .home-service-panel {
-    border: 1px solid color-mix(in oklch, var(--agua) 22%, transparent);
-    background: color-mix(in oklch, var(--on-dark) 4%, transparent);
-    padding: 2rem;
-    min-height: 22rem;
+  .section-eyebrow {
+    font-family: var(--font-host-grotesk), system-ui, sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .section-eyebrow-on-dark {
+    color: var(--primary);
+  }
+
+  .section-eyebrow-on-light {
+    color: var(--accent-on-light);
+  }
+
+  .section-title {
+    font-family: var(--font-host-grotesk), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .section-subtitle {
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.65;
   }
 
   .bg-hero-gradient {
@@ -262,21 +293,6 @@
   }
   .bg-section-dark {
     @apply bg-gradient-to-b from-background to-agua/40;
-  }
-  .badge-on-dark {
-    @apply inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-3 py-1.5;
-  }
-  .badge-on-dark-lg {
-    @apply inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-2;
-  }
-  .badge-label-on-dark {
-    @apply font-sans text-xs font-medium tracking-wide text-on-dark uppercase;
-  }
-  .badge-on-light {
-    @apply inline-flex items-center gap-2 rounded-full border border-on-light/15 bg-on-light/5 px-3 py-1.5;
-  }
-  .badge-label-on-light {
-    @apply font-sans text-xs font-medium tracking-wide text-on-light uppercase;
   }
   .input-on-dark {
     @apply border-agua/30 bg-on-dark/10 text-on-dark placeholder:text-muted-on-dark focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none;
@@ -373,6 +389,18 @@
 
   .section-divider-bottom {
     border-bottom: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in oklch, var(--agua) 35%, transparent) 20%,
+        color-mix(in oklch, var(--agua) 35%, transparent) 80%,
+        transparent
+      )
+      1;
+  }
+
+  .section-divider-top {
+    border-top: 1px solid transparent;
     border-image: linear-gradient(
         90deg,
         transparent,
@@ -558,6 +586,10 @@
   }
 
   .animate-sappo-fab {
+    animation: none;
+  }
+
+  .animate-ping {
     animation: none;
   }
 

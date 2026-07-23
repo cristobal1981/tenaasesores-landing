@@ -1,5 +1,6 @@
 import { SiteChatWidget } from "@/components/chat/site-chat-widget"
 import { CookieBanner } from "@/components/legal/cookie-banner"
+import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider"
 import { Header, Footer } from "@/src/modules/landing/ui"
 
 export default function SiteLayout({
@@ -10,7 +11,9 @@ export default function SiteLayout({
   return (
     <>
       <Header />
-      <div className="min-h-screen pt-16 md:pt-20">{children}</div>
+      <SmoothScrollProvider>
+        <div className="min-h-screen pt-[var(--site-header-height)]">{children}</div>
+      </SmoothScrollProvider>
       <Footer />
       <CookieBanner />
       <SiteChatWidget />

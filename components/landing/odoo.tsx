@@ -10,6 +10,7 @@ import {
   HoldedPartnerStrip,
   OdooCredential,
 } from "@/components/landing/odoo-partners"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
 import { odoo } from "@/content/site"
 
@@ -24,26 +25,15 @@ export function Odoo() {
       className="section-divider relative overflow-hidden bg-surface-dark py-24 md:py-32"
     >
       <SectionShell className="mx-auto max-w-4xl">
-        <p
-          data-home-reveal
-          className="mb-5 text-center text-[0.72rem] font-semibold tracking-[0.2em] text-primary uppercase"
-        >
-          {odoo.badge}
-        </p>
-        <h2
-          data-home-reveal
-          className="mb-6 text-center text-[clamp(2rem,5vw,3.75rem)] leading-[1.06] font-semibold tracking-[-0.04em] text-on-dark"
-        >
-          {odoo.title[0]}
-          <br />
-          <span className="text-muted-on-dark">{odoo.title[1]}</span>
-        </h2>
-        <p
-          data-home-reveal
-          className="prose-width mx-auto mb-16 text-center text-base leading-relaxed text-muted-on-dark sm:text-lg"
-        >
-          {odoo.subtitle}
-        </p>
+        <SectionIntro
+          className="mx-auto mb-16"
+          eyebrow={odoo.badge}
+          title={odoo.title}
+          subtitle={odoo.subtitle}
+          align="center"
+          tone="dark"
+          reveal
+        />
 
         <div data-home-reveal className="mb-20 border-y border-agua/18 py-12">
           <OdooCredential />

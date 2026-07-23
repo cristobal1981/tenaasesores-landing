@@ -16,7 +16,7 @@ export function BrandLogo({ className, priority = false }: BrandLogoProps) {
         width={brand.logoWidth}
         height={brand.logoHeight}
         priority={priority}
-        className="h-12 w-auto object-contain md:h-16"
+        className="h-12 w-auto object-contain md:h-11"
         style={{ width: "auto" }}
       />
     </Link>

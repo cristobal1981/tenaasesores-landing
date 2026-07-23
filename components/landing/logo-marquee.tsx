@@ -2,7 +2,8 @@
 
 import Image from "next/image"
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react"
-import { FadeIn } from "@/components/animations"
+import { useHomeSectionReveal } from "@/components/gsap/use-home-section-reveal"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
 import { logoMarquee } from "@/content/site"
 
@@ -68,9 +69,12 @@ function LogoGroup({
 }
 
 export function LogoMarquee({ variant = "standalone" }: { variant?: "standalone" | "embedded" }) {
+  const sectionRef = useRef<HTMLElement>(null)
   const groupRef = useRef<HTMLUListElement>(null)
   const [marqueeDistance, setMarqueeDistance] = useState(0)
   const [repeatCount, setRepeatCount] = useState(2)
+
+  useHomeSectionReveal({ sectionRef })
 
   useEffect(() => {
     const group = groupRef.current
@@ -102,6 +106,7 @@ export function LogoMarquee({ variant = "standalone" }: { variant?: "standalone"
 
   return (
     <section
+      ref={sectionRef}
       className={
         isEmbedded
           ? "relative overflow-hidden bg-background pb-20 pt-6 md:pb-28 md:pt-10"
@@ -109,12 +114,16 @@ export function LogoMarquee({ variant = "standalone" }: { variant?: "standalone"
       }
     >
       <SectionShell>
-        <FadeIn className="mb-10 text-center md:mb-12">
-          <div className="badge-on-dark mb-4">
-            <span className="badge-label-on-dark">{logoMarquee.badge}</span>
-          </div>
-          <p className="text-lg font-medium text-on-dark">{logoMarquee.title}</p>
-        </FadeIn>
+        <div className="mb-10 text-center md:mb-12">
+          <SectionIntro
+            eyebrow={logoMarquee.badge}
+            title={logoMarquee.title}
+            align="center"
+            tone="dark"
+            size="support"
+            reveal
+          />
+        </div>
       </SectionShell>
 
       <div className="logo-marquee-mask relative left-1/2 w-screen -translate-x-1/2">

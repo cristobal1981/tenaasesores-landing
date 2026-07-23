@@ -19,7 +19,7 @@ export function FaqPage() {
   return (
     <main className="min-h-screen">
       <DarkPageHero
-        badge={faqPage.badge}
+        eyebrow={faqPage.badge}
         title={faqPage.title}
         lead={faqPage.subtitle}
         align="left"

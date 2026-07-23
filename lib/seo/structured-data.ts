@@ -1,11 +1,13 @@
 import { faqSections } from "@/content/faq"
-import { site } from "@/content/site"
+import { legalEntity } from "@/content/legal"
+import { contact, site } from "@/content/site"
 
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": ["ProfessionalService", "AccountingService"],
     name: site.name,
+    alternateName: legalEntity.businessName,
     description: site.description,
     url: site.url,
     email: site.email,
@@ -16,10 +18,12 @@ export function organizationSchema() {
     },
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Tenerife",
-      addressRegion: "Canarias",
+      streetAddress: "Calle El Toscal, nº 29, 1º pta 7",
+      addressLocality: "Los Realejos",
+      addressRegion: "Santa Cruz de Tenerife",
       addressCountry: "ES",
     },
+    sameAs: contact.socials.map((social) => social.href),
   }
 }
 

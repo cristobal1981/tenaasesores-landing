@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { FadeIn } from "@/components/animations"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { cn } from "@/lib/utils"
 
 type MarketingSectionHeadingProps = {
@@ -24,39 +25,14 @@ export function MarketingSectionHeading({
   align = "center",
   tone = "dark",
   titleLine2Tone = "muted",
-  as: Heading = "h2",
+  as = "h2",
   size = "section",
   className,
   subtitleClassName,
   subtitleProse = true,
   children,
 }: MarketingSectionHeadingProps) {
-  const [lineA, lineB] = Array.isArray(title) ? title : [title, null]
-  const hasTitle = Boolean(lineA) || Boolean(lineB)
-  const isDark = tone === "dark"
   const isCenter = align === "center"
-
-  const badgeClass = isDark ? "badge-on-dark" : "badge-on-light"
-  const badgeLabelClass = isDark ? "badge-label-on-dark" : "badge-label-on-light"
-
-  const titleSizeClass =
-    size === "compact"
-      ? "text-2xl sm:text-3xl lg:text-4xl"
-      : size === "page"
-        ? "text-3xl leading-[1.15] sm:text-4xl lg:text-5xl"
-        : "text-3xl leading-[1.2] sm:text-4xl lg:text-5xl"
-
-  const titleMarginClass = size === "compact" ? "mb-0" : size === "page" ? "mb-6" : "mb-6"
-
-  const line2Class = cn(
-    titleLine2Tone === "primary"
-      ? "text-primary"
-      : isDark
-        ? "text-muted-on-dark"
-        : "text-on-light-muted"
-  )
-
-  const subtitleToneClass = isDark ? "text-muted-on-dark" : "text-muted-on-light"
 
   return (
     <FadeIn
@@ -65,45 +41,21 @@ export function MarketingSectionHeading({
         size === "compact" ? "mb-14 max-w-2xl" : size === "page" ? "max-w-3xl" : "mb-16 max-w-2xl",
         isCenter && size !== "compact" && "max-w-2xl",
         size === "section" && subtitle && isCenter && "max-w-2xl",
-        className
+        className,
       )}
     >
-      {badge ? (
-        <div className={cn(badgeClass, "mb-6")}>
-          <span className={badgeLabelClass}>{badge}</span>
-        </div>
-      ) : null}
-      {hasTitle ? (
-        <Heading
-          className={cn(
-            "font-bold text-balance",
-            titleSizeClass,
-            titleMarginClass,
-            isDark ? "text-on-dark" : "text-on-light"
-          )}
-        >
-          {lineA}
-          {lineB ? (
-            <>
-              <br />
-              <span className={line2Class}>{lineB}</span>
-            </>
-          ) : null}
-        </Heading>
-      ) : null}
-      {subtitle ? (
-        <p
-          className={cn(
-            "leading-relaxed",
-            size === "compact" ? "" : "text-lg",
-            isCenter && subtitleProse ? "prose-width mx-auto" : "",
-            subtitleToneClass,
-            subtitleClassName
-          )}
-        >
-          {subtitle}
-        </p>
-      ) : null}
+      <SectionIntro
+        eyebrow={badge}
+        title={title}
+        subtitle={subtitle}
+        align={align}
+        tone={tone}
+        titleLine2Tone={titleLine2Tone}
+        as={as}
+        size={size}
+        subtitleClassName={cn(!subtitleProse && "max-w-none", subtitleClassName)}
+        className="max-w-none"
+      />
       {children}
     </FadeIn>
   )

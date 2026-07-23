@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { FadeIn } from "@/components/animations"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
 import { cn } from "@/lib/utils"
 
@@ -12,7 +13,6 @@ const darkHeroGradients = {
 
 type DarkPageHeroProps = {
   eyebrow?: string
-  badge?: string
   title: string | readonly [string, string]
   titleLine2Tone?: "primary" | "muted"
   lead?: ReactNode
@@ -24,7 +24,6 @@ type DarkPageHeroProps = {
 
 export function DarkPageHero({
   eyebrow,
-  badge,
   title,
   titleLine2Tone = "muted",
   lead,
@@ -33,7 +32,6 @@ export function DarkPageHero({
   gradient = "default",
   className,
 }: DarkPageHeroProps) {
-  const [lineA, lineB] = Array.isArray(title) ? title : [title, null]
   const isCenter = align === "center"
 
   return (
@@ -51,43 +49,17 @@ export function DarkPageHero({
       />
       <SectionShell>
         <FadeIn className={cn("relative mx-auto max-w-3xl", isCenter && "text-center")}>
-          {badge ? (
-            <div className="badge-on-dark mb-6">
-              <span className="badge-label-on-dark">{badge}</span>
-            </div>
-          ) : eyebrow ? (
-            <p className="mb-3 text-sm font-medium tracking-wide text-primary uppercase">
-              {eyebrow}
-            </p>
-          ) : null}
-          <h1
-            className={cn(
-              "font-bold text-balance text-on-dark",
-              isCenter
-                ? "mb-6 text-3xl leading-[1.15] sm:text-4xl lg:text-5xl"
-                : "mb-4 text-3xl leading-[1.15] sm:text-4xl"
-            )}
-          >
-            {lineA}
-            {lineB ? (
-              <>
-                <br />
-                <span className={titleLine2Tone === "primary" ? "text-primary" : "text-muted-on-dark"}>
-                  {lineB}
-                </span>
-              </>
-            ) : null}
-          </h1>
-          {lead ? (
-            <p
-              className={cn(
-                "text-lg leading-relaxed text-muted-on-dark",
-                isCenter && "prose-width mx-auto"
-              )}
-            >
-              {lead}
-            </p>
-          ) : null}
+          <SectionIntro
+            eyebrow={eyebrow}
+            title={title}
+            subtitle={lead}
+            align={align}
+            tone="dark"
+            titleLine2Tone={titleLine2Tone}
+            as="h1"
+            size="page"
+            className="max-w-none"
+          />
         </FadeIn>
       </SectionShell>
     </section>

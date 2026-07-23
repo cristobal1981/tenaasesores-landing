@@ -69,7 +69,7 @@ function PlansNavDropdown({
       <button
         type="button"
         className={cn(
-          "inline-flex items-center gap-1 font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+          "inline-flex items-center gap-1 font-sans text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
           isParentActive || open ? "text-primary" : "text-muted-on-dark"
         )}
         aria-label="Abrir menú de planes"
@@ -105,7 +105,7 @@ function PlansNavDropdown({
 
 function navItemClass(isActive: boolean) {
   return cn(
-    "font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none",
+    "font-sans text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none",
     isActive ? "text-primary" : "text-muted-on-dark"
   )
 }
@@ -166,14 +166,14 @@ export function Header() {
   return (
     <header className="fixed top-0 right-0 left-0 z-50 border-b border-agua/30 bg-background">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20">
+        <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-[var(--site-header-height)]">
           <BrandLogo className="justify-self-start" priority />
 
           <NavigationMenu
             viewport={false}
             className="hidden max-w-none flex-none justify-self-center md:flex"
           >
-            <NavigationMenuList className="gap-8">
+            <NavigationMenuList className="gap-6">
               {navItems.map((item) => {
                 if (hasChildren(item)) {
                   return (
@@ -200,7 +200,7 @@ export function Header() {
           </NavigationMenu>
 
           <div className="hidden justify-self-end md:flex">
-            <MarketingButton asChild>
+            <MarketingButton asChild size="sm">
               <Link href={contactHref}>Consulta Gratis</Link>
             </MarketingButton>
           </div>

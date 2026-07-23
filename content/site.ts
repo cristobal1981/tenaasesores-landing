@@ -62,32 +62,6 @@ export const hero = {
   ctaSecondary: "Explorar servicios",
   audienceLabel: "Autónomos y empresas",
   proofLabel: "Partners oficiales Odoo y Holded",
-  signalTitle: "Lo que cambia cuando todo está bien montado",
-  signals: [
-    {
-      title: "Respuesta en menos de 24h",
-      description: "Dudas resueltas antes de que bloqueen decisiones o plazos.",
-    },
-    {
-      title: "Datos visibles en tiempo real",
-      description: "Tu negocio deja de depender de correos y hojas perdidas.",
-    },
-    {
-      title: "Equipo humano + tecnología",
-      description: "Control profesional sin perder cercanía ni contexto.",
-    },
-  ],
-  spotlight: {
-    eyebrow: "Sistema de trabajo",
-    title: "Menos ruido. Más visibilidad. Mejor criterio.",
-    description:
-      "Ordenamos tu operativa para que decidas mejor y pierdas menos tiempo persiguiendo respuestas.",
-    points: [
-      "Fiscal, contable y laboral en mismo equipo",
-      "Supervisión real sobre Odoo y Holded",
-      "Procesos diseñados para crecer sin caos",
-    ],
-  },
   trust: [
     { title: "150+ clientes activos", subtitle: "Autónomos, pymes y empresas digitales" },
     { title: "Partners Odoo y Holded", subtitle: "Implantación, revisión y acompañamiento" },
@@ -525,16 +499,25 @@ export const philosophy = {
   acronym: "CLAVE",
   values: [
     { letter: "C", title: "CERCANÍA", description: "Conocemos tu negocio como si fuera el nuestro. Trato directo y personal." },
-    { letter: "L", title: "CLARIDAD", description: "Sin letra pequeña ni sorpresas. Tarifas claras desde el primer día." },
+    { letter: "L", title: "LLANEZA", description: "Sin letra pequeña ni sorpresas. Tarifas claras desde el primer día." },
     { letter: "A", title: "AGILIDAD", description: "Respuestas rápidas cuando más las necesitas. Máximo 24 horas." },
     { letter: "V", title: "VALOR", description: "No solo cumplimos, te ayudamos a crecer y optimizar tu negocio." },
     { letter: "E", title: "EXPERIENCIA", description: "Años resolviendo lo que otros complican. Sabemos lo que hacemos." },
   ],
   manifestoTitle: "Lo notarás en el día a día",
   manifestoPoints: [
-    "Sabes quién lleva tu caso.",
-    "Recibes respuestas claras.",
-    "La tecnología simplifica, no complica.",
+    {
+      title: "Sabes quién lleva tu caso.",
+      detail: "Un nombre y un contacto directo, no un buzón genérico.",
+    },
+    {
+      title: "Recibes respuestas claras.",
+      detail: "Sin tecnicismos que haya que volver a preguntar.",
+    },
+    {
+      title: "La tecnología simplifica, no complica.",
+      detail: "Odoo y Holded trabajando para ti, no al revés.",
+    },
   ],
 } as const
 
@@ -675,18 +658,23 @@ export const homeStats = {
       prefix: "+",
       suffix: "",
       label: "Clientes activos",
+      colorClass: "text-[var(--service-fiscal)]",
     },
     {
       end: 15,
       prefix: "+",
       suffix: "",
       label: "Años asesorando",
+      colorClass: "text-[var(--service-contable)]",
     },
     {
       end: 98,
       prefix: "",
       suffix: "%",
       label: "Satisfacción de clientes",
+      colorClass: "text-[var(--service-laboral)]",
+      colorFrom: "var(--service-laboral)",
+      colorTo: "var(--primary)",
     },
   ],
 } as const
