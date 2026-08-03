@@ -1,0 +1,29 @@
+{
+  "redirects": [
+    {
+      "source": "/appointment",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/planes",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/shop/cart",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/noticias-2",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}
