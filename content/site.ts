@@ -53,11 +53,9 @@ export const hero = {
   title: {
     prefix: "Control",
     rotatingWords: ["fiscal", "contable", "laboral"],
-    bridgeWord: "real para negocios que quieren avanzar",
-    secondLine: "sin perseguir a su asesoría",
   },
   subtitle:
-    "Fiscal, contabilidad y laboral con respuesta ágil, control claro y un equipo que sí te contesta.",
+    "Real para negocios que quieren avanzar, sin perseguir a su asesoría: respuesta ágil, control claro y un equipo que sí te contesta.",
   ctaPrimary: "Solicitar consulta gratuita",
   ctaSecondary: "Explorar servicios",
   audienceLabel: "Autónomos y empresas",
@@ -84,7 +82,7 @@ export const odoo = {
         width: 220,
         height: 88,
       },
-      text: "Somos partners oficiales de Odoo. Es nuestra base para contabilidad, ERP e integración a medida: implementación, supervisión profesional y visibilidad en tiempo real para tu negocio.",
+      text: "Nuestra base para contabilidad, ERP e integración a medida: implementación, supervisión profesional y visibilidad en tiempo real para tu negocio.",
       verifyLink: {
         href: "https://www.odoo.com/es_ES/accounting-firms/tena-asesores-y-abogados-slp-20287821?country_id=67",
         label: "Compruébalo",
@@ -103,7 +101,7 @@ export const odoo = {
         width: 168,
         height: 64,
       },
-      text: "También somos partners oficiales de Holded, con certificación Silver. Cuando tu operativa encaja mejor con facturación y gestión ágil, te ofrecemos esta vía complementaria con el mismo equipo que supervisa tu contabilidad.",
+      text: "Partners oficiales de Holded: la vía complementaria cuando tu operativa encaja mejor con facturación y gestión ágil, con el mismo equipo que supervisa tu contabilidad.",
       verifyLink: {
         href: "https://www.holded.com/es/directorio-asesorias/tena-asesores-y-abogados-s-l-p",
         label: "Compruébalo",
@@ -258,14 +256,14 @@ export const services = {
     title: ["Más que cumplir obligaciones,", "impulsamos tu negocio"],
     items: [
       {
-        title: "Cumplimiento digital",
-        description:
-          "Te adaptamos al entorno digital cumpliendo con todas las normativas exigidas por los organismos públicos. Soluciones personalizadas para que tus procesos, sistemas y documentación estén alineados con los requisitos legales, minimizando riesgos y maximizando la eficiencia.",
-      },
-      {
         title: "Portal de cliente",
         description:
           "Ponemos a tu disposición un portal de clientes seguro y personalizado. Accede a tu documentación, comparte archivos, realiza consultas y gestiona trámites de forma rápida y eficiente, con acceso en Odoo cuando lo necesites.",
+      },
+      {
+        title: "Cumplimiento digital",
+        description:
+          "Te adaptamos al entorno digital cumpliendo con todas las normativas exigidas por los organismos públicos. Soluciones personalizadas para que tus procesos, sistemas y documentación estén alineados con los requisitos legales, minimizando riesgos y maximizando la eficiencia.",
       },
       {
         title: "Formación",
@@ -295,6 +293,12 @@ export const services = {
           title: "Cumplimiento normativo y seguridad",
           description:
             "Nos aseguramos de que todas las estrategias y deducciones aplicadas estén en línea con la normativa vigente, minimizando riesgos y garantizando que tu empresa esté preparada ante cualquier inspección o auditoría.",
+        },
+        {
+          // TODO(Guillermo): revisar con precisión fiscal antes de publicar — borrador conservador.
+          title: "Fiscalidad canaria (IGIC, REF, ZEC)",
+          description:
+            "Gestionamos tu IGIC trimestral y te orientamos en las particularidades del Régimen Económico y Fiscal de Canarias, incluida la Zona Especial Canaria (ZEC) cuando tu actividad pueda beneficiarse.",
         },
       ],
       benefits: [
@@ -408,9 +412,7 @@ export const services = {
     },
   ],
   cta: {
-    title: "¿Hablamos de tu situación?",
-    subtitle:
-      "Cuéntanos tu caso y te orientamos sin compromiso. La primera consulta es gratuita.",
+    title: "¿Aún no sabes qué necesita tu negocio?",
     label: "Solicitar consulta gratuita",
   },
   items: [
@@ -485,17 +487,16 @@ export const team = {
     },
   ],
   cta: {
-    title: "¿Quieres conocernos mejor?",
-    subtitle: "La primera consulta es gratuita y sin compromiso.",
-    label: "Solicitar consulta gratuita",
+    eyebrow: "Ahora que nos conoces",
+    title: "¿Empezamos a trabajar juntos?",
+    label: "Sí, hablemos",
   },
 } as const
 
 export const philosophy = {
   badge: "Cómo trabajamos",
   title: ["Tu asesoría no debería frenarte,", "debería darte claridad para decidir"],
-  subtitle:
-    "Cinco principios para que tu asesoría sume claridad, no fricción.",
+  subtitle: "Nuestra filosofía se compone de 5 principios, literalmente nuestra CLAVE de éxito",
   acronym: "CLAVE",
   values: [
     { letter: "C", title: "CERCANÍA", description: "Conocemos tu negocio como si fuera el nuestro. Trato directo y personal." },
@@ -522,10 +523,8 @@ export const philosophy = {
 } as const
 
 export const homeFinalCta = {
-  title: "Si tu negocio ya va en serio, tu asesoría también debería estar a la altura.",
-  subtitle:
-    "Cuéntanos tu caso. Te diremos rápido si podemos ayudarte.",
-  label: "Hablar con tenaasesores",
+  title: "Una asesoría a la altura de tu negocio.",
+  label: "Conversemos",
 } as const
 
 export const about = {
@@ -539,6 +538,12 @@ export const about = {
     { end: 6, prefix: "", suffix: "", label: "Profesionales en equipo" },
     { end: 0, prefix: "", suffix: "", label: "Permanencias" },
   ],
+  office: {
+    title: "Nuestra oficina en Los Realejos, Tenerife",
+    description:
+      "Trabajamos en remoto con clientes de toda España, pero tenemos una oficina física en Los Realejos para quien prefiere una reunión en persona.",
+    hoursLabel: "Lunes a viernes, 9:00 - 15:00",
+  },
 } as const
 
 /** Oculto en home/footer/chatbot hasta activar sección (`testimonialsEnabled = true`). */
@@ -684,26 +689,28 @@ export type { FaqItem, FaqSection } from "@/content/faq"
 
 export const footer = {
   description:
-    "Asesoramiento y consultoría empresarial online. Partners oficiales Odoo y Holded: contabilidad en tiempo real, fiscal y laboral para autónomos, pymes y empresas digitales.",
+    "Asesoramiento y consultoría empresarial online: contabilidad en tiempo real, fiscal y laboral para autónomos, pymes y empresas digitales.",
   services: [
     { label: "Gestión fiscal", href: "/servicios#fiscal" },
     { label: "Gestión contable", href: "/servicios#contable" },
     { label: "Gestión laboral", href: "/servicios#laboral" },
-    { label: "Constitución de empresas", href: "/servicios#constitucion" },
+    { label: "Constitución", href: "/servicios#constitucion" },
+  ],
+  plans: [
+    { label: "Soy autónomo", href: "/plan-autonomos" },
+    { label: "Soy empresa", href: "/plan-empresas" },
   ],
   company: [
     { label: "Servicios", href: "/servicios" },
     { label: "Nosotros", href: "/nosotros" },
-    { label: "Soy autónomo", href: "/plan-autonomos" },
-    { label: "Soy empresa", href: "/plan-empresas" },
     // { label: "Testimonios", href: "/#testimonios" }, // testimonialsEnabled
     { label: "Contacto", href: "/contacto" },
     { label: "FAQ", href: "/faq" },
   ],
   legal: [
     { label: "Aviso legal", href: "/aviso-legal" },
-    { label: "Política de privacidad", href: "/privacidad" },
-    { label: "Política de cookies", href: "/cookies" },
+    { label: "Privacidad", href: "/privacidad" },
+    { label: "Cookies", href: "/cookies" },
   ],
 } as const
 

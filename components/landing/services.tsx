@@ -1,13 +1,12 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { useEffect, useRef } from "react"
-import { ArrowRight } from "lucide-react"
 import { m } from "framer-motion"
 import { useHomeSectionReveal } from "@/components/gsap/use-home-section-reveal"
 import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
+import { TextLinkWithIcon } from "@/components/ui/text-link"
 import { brand, services } from "@/content/site"
 import { cn } from "@/lib/utils"
 
@@ -42,13 +41,9 @@ const bentoBackgroundStyle = {
 
 function DetailLink({ slug }: { slug: string }) {
   return (
-    <Link
-      href={`/servicios#${slug}`}
-      className="mt-3 inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-primary transition-[gap,color] duration-300 hover:gap-3 hover:text-on-dark"
-    >
+    <TextLinkWithIcon href={`/servicios#${slug}`} className="mt-3 shrink-0 text-sm font-semibold">
       Ver detalle
-      <ArrowRight className="h-4 w-4" />
-    </Link>
+    </TextLinkWithIcon>
   )
 }
 

@@ -12,7 +12,6 @@ export function PlansPage({ audience }: { audience: PlansAudience }) {
       <DarkPageHero
         eyebrow={plans.badge}
         title={plans.title}
-        titleLine2Tone="primary"
         lead={plans.subtitle}
         align="center"
         padding="spacious"

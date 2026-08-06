@@ -3,15 +3,23 @@
 import Lenis from "lenis"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { usePathname } from "next/navigation"
 import { useEffect, type ReactNode } from "react"
 import { registerScrollTrigger } from "@/lib/gsap/register-scroll-trigger"
 import { usePrefersReducedMotion } from "@/lib/gsap/use-prefers-reduced-motion"
-import { setLenisInstance } from "@/lib/scroll/lenis-instance"
+import { getLenisInstance, setLenisInstance } from "@/lib/scroll/lenis-instance"
 
 registerScrollTrigger()
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const reducedMotion = usePrefersReducedMotion()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (window.location.hash) return
+    getLenisInstance()?.scrollTo(0, { immediate: true })
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   useEffect(() => {
     if (reducedMotion) {

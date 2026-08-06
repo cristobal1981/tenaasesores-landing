@@ -76,7 +76,7 @@ export function HomeHeroBand() {
         <SectionShell className="flex flex-1 flex-col justify-center py-10 sm:py-12 md:py-14">
           <div
             ref={contentRef}
-            className="mx-auto w-full max-w-5xl px-4 text-center sm:px-6"
+            className="relative mx-auto w-full max-w-5xl px-4 text-center sm:px-6"
           >
             <p className="mb-8 text-[0.72rem] font-semibold tracking-[0.22em] text-primary uppercase">
               {hero.audienceLabel} · {hero.proofLabel}
@@ -126,31 +126,30 @@ export function HomeHeroBand() {
                       </m.span>
                     </AnimatePresence>
                   )}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -z-10 opacity-0"
-                  >
-                    {hero.title.rotatingWords.map((word, index) => (
-                      <span
-                        key={`measure-${word}`}
-                        ref={(node) => {
-                          wordMeasureRefs.current[index] = node
-                        }}
-                        className="absolute top-0 left-0 inline-flex whitespace-nowrap"
-                      >
-                        {word}
-                      </span>
-                    ))}
-                  </span>
                 </m.span>
               </span>
-              <span className="mt-5 block text-[clamp(1.2rem,2.6vw,2.05rem)] leading-[1.12] font-medium tracking-[-0.03em] text-muted-on-dark">
-                {hero.title.bridgeWord}
-              </span>
-              <span className="mt-2 block text-[clamp(1.2rem,2.6vw,2.05rem)] leading-[1.12] font-medium tracking-[-0.03em] text-on-dark">
-                {hero.title.secondLine}
-              </span>
             </h1>
+
+            {/* Width-measurement clones for the rotating word, kept out of the <h1> so
+                textContent-based extraction (SEO tools, crawlers) doesn't concatenate them
+                into the heading text. Needs the same font classes as the h1 so measured
+                widths match the actual rendered word size. */}
+            <span
+              aria-hidden
+              className="home-hero-title pointer-events-none absolute -z-10 font-semibold tracking-[-0.06em] opacity-0"
+            >
+              {hero.title.rotatingWords.map((word, index) => (
+                <span
+                  key={`measure-${word}`}
+                  ref={(node) => {
+                    wordMeasureRefs.current[index] = node
+                  }}
+                  className="absolute top-0 left-0 inline-flex whitespace-nowrap"
+                >
+                  {word}
+                </span>
+              ))}
+            </span>
 
             <p
               data-hero="subtitle"

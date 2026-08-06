@@ -69,7 +69,7 @@ function PlansNavDropdown({
       <button
         type="button"
         className={cn(
-          "inline-flex items-center gap-1 font-sans text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+          "inline-flex items-center gap-1 font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
           isParentActive || open ? "text-primary" : "text-muted-on-dark"
         )}
         aria-label="Abrir menú de planes"
@@ -105,7 +105,7 @@ function PlansNavDropdown({
 
 function navItemClass(isActive: boolean) {
   return cn(
-    "font-sans text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none",
+    "font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none",
     isActive ? "text-primary" : "text-muted-on-dark"
   )
 }
@@ -163,6 +163,15 @@ export function Header() {
     setIsMenuOpen(false)
   }
 
+  useEffect(() => {
+    if (!isMenuOpen) return
+    const original = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = original
+    }
+  }, [isMenuOpen])
+
   return (
     <header className="fixed top-0 right-0 left-0 z-50 border-b border-agua/30 bg-background">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -173,7 +182,7 @@ export function Header() {
             viewport={false}
             className="hidden max-w-none flex-none justify-self-center md:flex"
           >
-            <NavigationMenuList className="gap-6">
+            <NavigationMenuList className="gap-7">
               {navItems.map((item) => {
                 if (hasChildren(item)) {
                   return (
@@ -218,96 +227,94 @@ export function Header() {
 
         <div
           className={cn(
-            "grid overflow-hidden border-agua/30 transition-[grid-template-rows,border-top-width] duration-300 ease-out motion-reduce:transition-none md:hidden",
-            isMenuOpen ? "grid-rows-[1fr] border-t" : "grid-rows-[0fr] border-t-0"
+            "fixed inset-x-0 top-16 bottom-0 bg-background transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none md:hidden",
+            isMenuOpen
+              ? "pointer-events-auto translate-y-0 opacity-100"
+              : "pointer-events-none -translate-y-3 opacity-0"
           )}
           aria-hidden={!isMenuOpen}
         >
-          <div className="min-h-0">
-            <nav
-              className={cn(
-                "flex flex-col gap-4 py-4 transition-[opacity,transform] duration-250 ease-out motion-reduce:transition-none",
-                isMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
-              )}
-            >
-              {navItems.map((item) => {
-                if (hasChildren(item)) {
-                  const isParentActive = item.children.some((child) =>
-                    isNavActive(pathname, child.href)
-                  )
-                  return (
-                    <div key={item.label} className="space-y-2">
-                      <button
-                        type="button"
-                        className={cn(
-                          "inline-flex w-full items-center justify-between py-2 text-left",
-                          navItemClass(isParentActive || isMobilePlansOpen)
-                        )}
-                        onClick={() => setIsMobilePlansOpen((prev) => !prev)}
-                        tabIndex={isMenuOpen ? 0 : -1}
-                        aria-expanded={isMobilePlansOpen}
-                        aria-haspopup="true"
-                      >
-                        {item.label}
-                        <ChevronDown
-                          className={cn("h-4 w-4 transition-transform", isMobilePlansOpen && "rotate-180")}
-                        />
-                      </button>
-                      <div
-                        className={cn(
-                          "grid overflow-hidden transition-[grid-template-rows,opacity] duration-200",
-                          isMobilePlansOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                        )}
-                      >
-                        <div className="min-h-0 pl-3">
-                          <div className="flex flex-col gap-3 border-l border-agua/40 px-3 py-1">
-                            {item.children.map((child) => (
-                              <Link
-                                key={child.label}
-                                href={child.href}
-                                className={cn(
-                                  "block transition-colors hover:text-primary",
-                                  isNavActive(pathname, child.href) ? "text-primary" : "text-muted-on-dark"
-                                )}
-                                onClick={() => setIsMenuOpen(false)}
-                                tabIndex={isMenuOpen && isMobilePlansOpen ? 0 : -1}
-                              >
-                                <span className="block text-sm font-medium">{child.label}</span>
-                                <span className="mt-0.5 block text-xs leading-snug text-muted-on-dark/90">
-                                  {child.description}
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
+          <nav className="flex h-full flex-col gap-1 overflow-y-auto px-6 py-8">
+            {navItems.map((item) => {
+              if (hasChildren(item)) {
+                const isParentActive = item.children.some((child) =>
+                  isNavActive(pathname, child.href)
+                )
+                return (
+                  <div key={item.label} className="border-b border-agua/15 py-1">
+                    <button
+                      type="button"
+                      className={cn(
+                        navItemClass(isParentActive || isMobilePlansOpen),
+                        "inline-flex w-full items-center justify-between py-3.5 text-left text-xl"
+                      )}
+                      onClick={() => setIsMobilePlansOpen((prev) => !prev)}
+                      tabIndex={isMenuOpen ? 0 : -1}
+                      aria-expanded={isMobilePlansOpen}
+                      aria-haspopup="true"
+                    >
+                      {item.label}
+                      <ChevronDown
+                        className={cn("h-5 w-5 transition-transform", isMobilePlansOpen && "rotate-180")}
+                      />
+                    </button>
+                    <div
+                      className={cn(
+                        "grid overflow-hidden transition-[grid-template-rows,opacity] duration-200",
+                        isMobilePlansOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                      )}
+                    >
+                      <div className="min-h-0 pb-3 pl-3">
+                        <div className="flex flex-col gap-4 border-l border-agua/40 px-3 py-2">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.label}
+                              href={child.href}
+                              className={cn(
+                                "block transition-colors hover:text-primary",
+                                isNavActive(pathname, child.href) ? "text-primary" : "text-muted-on-dark"
+                              )}
+                              onClick={() => setIsMenuOpen(false)}
+                              tabIndex={isMenuOpen && isMobilePlansOpen ? 0 : -1}
+                            >
+                              <span className="block text-base font-medium">{child.label}</span>
+                              <span className="mt-0.5 block text-sm leading-snug text-muted-on-dark/90">
+                                {child.description}
+                              </span>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     </div>
-                  )
-                }
+                  </div>
+                )
+              }
 
-                if ("href" in item) {
-                  return (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className={cn("py-2", navItemClass(isNavActive(pathname, item.href)))}
-                      onClick={() => setIsMenuOpen(false)}
-                      tabIndex={isMenuOpen ? 0 : -1}
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                }
+              if ("href" in item) {
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={cn(
+                      navItemClass(isNavActive(pathname, item.href)),
+                      "border-b border-agua/15 py-3.5 text-xl"
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                    tabIndex={isMenuOpen ? 0 : -1}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              }
 
-                return null
-              })}
-              <MarketingButton asChild className="mt-2 w-full">
-                <Link href={contactHref} onClick={() => setIsMenuOpen(false)} tabIndex={isMenuOpen ? 0 : -1}>
-                  Consulta Gratis
-                </Link>
-              </MarketingButton>
-            </nav>
-          </div>
+              return null
+            })}
+            <MarketingButton asChild size="lg" className="mt-6 w-full">
+              <Link href={contactHref} onClick={() => setIsMenuOpen(false)} tabIndex={isMenuOpen ? 0 : -1}>
+                Consulta Gratis
+              </Link>
+            </MarketingButton>
+          </nav>
         </div>
       </div>
     </header>

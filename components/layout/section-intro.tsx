@@ -7,7 +7,6 @@ type SectionIntroProps = {
   subtitle?: ReactNode
   align?: "center" | "left"
   tone?: "dark" | "light"
-  titleLine2Tone?: "muted" | "primary"
   as?: "h1" | "h2"
   size?: "section" | "page" | "compact" | "large" | "support"
   className?: string
@@ -22,7 +21,6 @@ export function SectionIntro({
   subtitle,
   align = "center",
   tone = "dark",
-  titleLine2Tone = "muted",
   as: Heading = "h2",
   size = "section",
   className,
@@ -60,14 +58,6 @@ export function SectionIntro({
         ? "text-sm sm:text-base"
         : "text-base sm:text-lg"
 
-  const line2Class = cn(
-    titleLine2Tone === "primary"
-      ? "text-primary"
-      : isDark
-        ? "text-muted-on-dark"
-        : "text-on-light-muted",
-  )
-
   return (
     <div
       className={cn(
@@ -100,8 +90,9 @@ export function SectionIntro({
           {lineA}
           {lineB ? (
             <>
+              {" "}
               <br />
-              <span className={line2Class}>{lineB}</span>
+              {lineB}
             </>
           ) : null}
         </Heading>

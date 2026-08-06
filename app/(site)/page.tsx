@@ -31,11 +31,7 @@ export default function Home() {
       <Services />
       <Odoo />
       {/* <Testimonials /> — oculto hasta tener testimonios reales publicables */}
-      <CtaBrisaBand
-        title={homeFinalCta.title}
-        subtitle={homeFinalCta.subtitle}
-        label={homeFinalCta.label}
-      />
+      <CtaBrisaBand title={homeFinalCta.title} label={homeFinalCta.label} />
     </main>
   )
 }

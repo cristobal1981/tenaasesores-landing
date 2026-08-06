@@ -6,15 +6,18 @@ import { m, useReducedMotion } from "framer-motion"
 import { SectionShell } from "@/components/layout/section-shell"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { contactHref } from "@/content/site"
+import { cn } from "@/lib/utils"
 
 interface CtaBrisaBandProps {
+  eyebrow?: string
   title: string
-  subtitle: string
+  subtitle?: string
   label: string
   href?: string
 }
 
 export function CtaBrisaBand({
+  eyebrow = "Primera consulta gratuita",
   title,
   subtitle,
   label,
@@ -34,12 +37,14 @@ export function CtaBrisaBand({
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="mb-5 text-[0.72rem] font-semibold tracking-[0.22em] text-accent-on-light uppercase">
-            Primera consulta gratuita
+            {eyebrow}
           </p>
-          <h2 id={headingId} className="section-cta-brisa-title mb-5">
+          <h2 id={headingId} className={cn("section-cta-brisa-title", subtitle ? "mb-5" : "mb-10")}>
             {title}
           </h2>
-          <p className="section-cta-brisa-body mx-auto mb-10 max-w-[50ch]">{subtitle}</p>
+          {subtitle ? (
+            <p className="section-cta-brisa-body mx-auto mb-10 max-w-[50ch]">{subtitle}</p>
+          ) : null}
           <MarketingButton asChild size="lg" marketingVariant="brisa" className="px-10 text-base">
             <Link href={href}>
               {label}

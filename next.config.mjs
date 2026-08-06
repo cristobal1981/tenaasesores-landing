@@ -10,6 +10,27 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    // URLs indexadas de un WordPress previo (2015-2020) que hoy devuelven 404.
+    // Todas al home por decisión: no hay blog activo para mapearlas a contenido temático.
+    return [
+      {
+        source: "/conoces-el-termino-screen-scraping",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/la-tributacion-del-crowdfunding",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/portfolio/:path*",
+        destination: "/",
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     const isVercelPreview =
       process.env.VERCEL_ENV === "preview" || process.env.VERCEL_ENV === "development"

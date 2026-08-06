@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { FadeIn } from "@/components/animations"
 import { SectionShell } from "@/components/layout/section-shell"
+import { ChipScrollRow } from "@/components/ui/chip-scroll-row"
 import {
   cookieRegistry,
   legalEntity,
@@ -12,9 +13,11 @@ import {
   type LegalPageSlug,
 } from "@/content/legal"
 import { formatLegalText } from "@/lib/legal/format-legal-text"
+import { useSectionScrollSpy } from "@/lib/scroll/use-section-scroll-spy"
 import { cn } from "@/lib/utils"
 
-const SCROLL_SPY_OFFSET_PX = 120
+const legalPillClassName =
+  "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
 
 function formatLastUpdated(isoDate: string) {
   const date = new Date(isoDate)
@@ -32,52 +35,49 @@ export function LegalPageContent({ slug }: LegalPageContentProps) {
     () => page.sections.map((section) => section.id),
     [page.sections]
   )
-  const [activeSectionId, setActiveSectionId] = useState(() => sectionIds[0] ?? "")
+  const { activeId: activeSectionId, scrollToSection } = useSectionScrollSpy({ sectionIds })
   const lastUpdated = formatLastUpdated(legalEntity.lastUpdated)
-
-  const updateActiveSection = useCallback(() => {
-    if (sectionIds.length === 0) return
-
-    let currentId = sectionIds[0]
-
-    for (const id of sectionIds) {
-      const element = document.getElementById(id)
-      if (!element) continue
-
-      const { top } = element.getBoundingClientRect()
-      if (top <= SCROLL_SPY_OFFSET_PX) {
-        currentId = id
-      }
-    }
-
-    setActiveSectionId((previous) => (previous === currentId ? previous : currentId))
-  }, [sectionIds])
-
-  // Reset al cambiar de página legal: ajuste de estado durante el render, no en efecto.
-  const [prevSlug, setPrevSlug] = useState(slug)
-  if (prevSlug !== slug) {
-    setPrevSlug(slug)
-    setActiveSectionId(sectionIds[0] ?? "")
-  }
-
-  useEffect(() => {
-    // Cálculo inicial en rAF: la regla prohíbe setState síncrono en el cuerpo del efecto.
-    const raf = window.requestAnimationFrame(updateActiveSection)
-    window.addEventListener("scroll", updateActiveSection, { passive: true })
-    window.addEventListener("resize", updateActiveSection, { passive: true })
-
-    return () => {
-      window.cancelAnimationFrame(raf)
-      window.removeEventListener("scroll", updateActiveSection)
-      window.removeEventListener("resize", updateActiveSection)
-    }
-  }, [slug, updateActiveSection])
 
   return (
     <section className="border-t border-agua/20 bg-surface-light py-12 md:py-16">
+      <div className="sticky top-16 z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden md:top-20">
+        <SectionShell innerClassName="py-3">
+          <nav aria-label="Índice de la página legal">
+            <ChipScrollRow
+              className="gap-1.5"
+              edgeFrom="from-surface-light"
+              chevronClassName="text-muted-on-light"
+            >
+              {page.sections.map((section) => {
+                const isActive = activeSectionId === section.id
+                return (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    aria-current={isActive ? "location" : undefined}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      scrollToSection(section.id)
+                    }}
+                    className={cn(
+                      legalPillClassName,
+                      isActive
+                        ? "border-primary/40 bg-white text-accent-on-light shadow-sm"
+                        : "border-on-light/15 bg-white text-muted-on-light hover:border-primary/30 hover:text-on-light"
+                    )}
+                  >
+                    {section.title}
+                  </a>
+                )
+              })}
+            </ChipScrollRow>
+          </nav>
+        </SectionShell>
+      </div>
+
       <SectionShell>
         <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-14">
-          <FadeIn className="lg:sticky lg:top-28 lg:self-start">
+          <FadeIn className="hidden lg:sticky lg:top-28 lg:block lg:self-start">
             <nav aria-label="Índice de la página legal">
               <p className="mb-3 text-xs font-semibold tracking-wide text-accent-on-light uppercase">
                 En esta página
@@ -104,7 +104,10 @@ export function LegalPageContent({ slug }: LegalPageContentProps) {
                             ? "font-semibold text-accent-on-light"
                             : "text-muted-on-light hover:text-on-light"
                         )}
-                        onClick={() => setActiveSectionId(section.id)}
+                        onClick={(event) => {
+                          event.preventDefault()
+                          scrollToSection(section.id)
+                        }}
                       >
                         {section.title}
                       </a>

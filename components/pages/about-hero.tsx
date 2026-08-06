@@ -17,7 +17,7 @@ export function AboutHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-surface-dark pt-20 pb-16 md:pt-28 md:pb-20 lg:pt-32"
+      className="relative overflow-hidden bg-surface-dark pt-20 pb-16 md:pt-28 md:pb-20"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <FloatingElement
@@ -37,7 +37,6 @@ export function AboutHero() {
           title={about.title}
           subtitle={about.subtitle}
           tone="dark"
-          titleLine2Tone="primary"
           as="h1"
           size="page"
         />

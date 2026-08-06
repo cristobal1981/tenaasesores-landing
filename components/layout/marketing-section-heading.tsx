@@ -9,7 +9,6 @@ type MarketingSectionHeadingProps = {
   subtitle?: string
   align?: "center" | "left"
   tone?: "dark" | "light"
-  titleLine2Tone?: "muted" | "primary"
   as?: "h1" | "h2"
   size?: "section" | "page" | "compact"
   className?: string
@@ -24,7 +23,6 @@ export function MarketingSectionHeading({
   subtitle,
   align = "center",
   tone = "dark",
-  titleLine2Tone = "muted",
   as = "h2",
   size = "section",
   className,
@@ -50,7 +48,6 @@ export function MarketingSectionHeading({
         subtitle={subtitle}
         align={align}
         tone={tone}
-        titleLine2Tone={titleLine2Tone}
         as={as}
         size={size}
         subtitleClassName={cn(!subtitleProse && "max-w-none", subtitleClassName)}

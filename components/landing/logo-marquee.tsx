@@ -16,11 +16,6 @@ function LogoGroup({
   ariaHidden?: boolean
   ariaLabel?: string
 }) {
-  const slotStyle = {
-    width: logoMarquee.slotWidth,
-    height: logoMarquee.slotHeight,
-  } as const
-
   return (
     <ul
       ref={groupRef}
@@ -37,7 +32,7 @@ function LogoGroup({
 
         return (
         <li key={logo.name} className="logo-marquee-item">
-          <div className="relative flex shrink-0 items-center justify-center" style={slotStyle}>
+          <div className="relative flex h-9 w-[130px] shrink-0 items-center justify-center sm:h-[46px] sm:w-[170px] lg:h-[60px] lg:w-[220px]">
             {usesFluidSize ? (
               <Image
                 src={logo.src}
@@ -45,7 +40,7 @@ function LogoGroup({
                 fill
                 loading="lazy"
                 decoding="async"
-                sizes={`${logoMarquee.slotWidth}px`}
+                sizes="(min-width: 1024px) 220px, (min-width: 640px) 170px, 130px"
                 className="logo-marquee-image object-contain"
               />
             ) : (

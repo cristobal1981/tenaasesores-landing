@@ -23,6 +23,12 @@ export function organizationSchema() {
       addressRegion: "Santa Cruz de Tenerife",
       addressCountry: "ES",
     },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "15:00",
+    },
     sameAs: contact.socials.map((social) => social.href),
   }
 }

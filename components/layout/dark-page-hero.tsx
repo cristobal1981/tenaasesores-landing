@@ -14,7 +14,6 @@ const darkHeroGradients = {
 type DarkPageHeroProps = {
   eyebrow?: string
   title: string | readonly [string, string]
-  titleLine2Tone?: "primary" | "muted"
   lead?: ReactNode
   align?: "center" | "left"
   padding?: "default" | "spacious"
@@ -25,7 +24,6 @@ type DarkPageHeroProps = {
 export function DarkPageHero({
   eyebrow,
   title,
-  titleLine2Tone = "muted",
   lead,
   align = "left",
   padding = "default",
@@ -55,7 +53,6 @@ export function DarkPageHero({
             subtitle={lead}
             align={align}
             tone="dark"
-            titleLine2Tone={titleLine2Tone}
             as="h1"
             size="page"
             className="max-w-none"

@@ -5,8 +5,8 @@ export const webIssueReportPath = "/reportar-problema" as const
 export const webIssueReportEmail = site.technicalEmail
 
 export const webIssueFooter = {
-  prompt: "¿Has tenido algún problema navegando por nuestra web?",
-  linkLabel: "Cuéntanoslo aquí",
+  prompt: "¿Problemas navegando?",
+  linkLabel: "Cuéntanoslo",
 } as const
 
 export const webIssueReport = {

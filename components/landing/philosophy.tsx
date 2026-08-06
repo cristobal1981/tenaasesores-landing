@@ -8,13 +8,21 @@ import { SectionShell } from "@/components/layout/section-shell"
 import { philosophy } from "@/content/site"
 
 const cardBackgroundStyle = {
-  background: "color-mix(in oklch, var(--on-light) 4%, var(--surface-light))",
+  background:
+    "linear-gradient(180deg, color-mix(in oklch, var(--on-light) 7%, var(--surface-light)) 0%, var(--surface-light) 60%)",
 } as const
 
-const cardScrimStyle = {
-  background:
-    "linear-gradient(0deg, rgba(240,246,246,.98) 0%, rgba(240,246,246,.88) 34%, rgba(240,246,246,.35) 62%, transparent 84%)",
-} as const
+function SubtitleWithClave() {
+  const [before, after] = philosophy.subtitle.split("CLAVE")
+
+  return (
+    <>
+      {before}
+      <span className="font-semibold text-primary">CLAVE</span>
+      {after}
+    </>
+  )
+}
 
 function IsotipoMark({ className }: { className?: string }) {
   return (
@@ -40,16 +48,21 @@ function ClaveCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-      className="group @container relative isolate aspect-[2/1] overflow-hidden rounded-2xl sm:aspect-[4/3] lg:aspect-[6/7]"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl"
       style={cardBackgroundStyle}
     >
-      <div aria-hidden className="absolute inset-0 z-0 flex items-start justify-center overflow-hidden pt-[6cqw]">
-        <span className="home-clave-card-letter font-semibold text-agua opacity-50 transition-colors duration-[450ms] ease-out group-hover:text-primary">
+      <div className="@container flex h-28 shrink-0 items-center justify-center overflow-hidden sm:h-32 lg:h-36">
+        <span
+          className="home-clave-card-letter font-semibold text-agua opacity-50 transition-colors duration-[450ms] ease-out group-hover:text-primary"
+          style={{
+            maskImage: "linear-gradient(180deg, black 45%, transparent 92%)",
+            WebkitMaskImage: "linear-gradient(180deg, black 45%, transparent 92%)",
+          }}
+        >
           {value.letter}
         </span>
       </div>
-      <div aria-hidden className="absolute inset-0 z-[1]" style={cardScrimStyle} />
-      <div className="relative z-[2] flex h-full flex-col justify-end p-5 pb-6">
+      <div className="flex flex-1 flex-col px-5 pb-6">
         <h3 className="mb-1.5 text-sm font-bold tracking-wide text-on-light uppercase">
           <span className="text-agua transition-colors duration-[450ms] ease-out group-hover:text-primary">
             {firstLetter}
@@ -64,10 +77,7 @@ function ClaveCard({
 
 function DiaADiaRow() {
   return (
-    <div
-      className="mt-14 grid grid-cols-1 gap-6 border-t pt-6 sm:grid-cols-3 sm:gap-10 md:mt-16"
-      style={{ borderColor: "color-mix(in oklch, var(--agua) 22%, transparent)" }}
-    >
+    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-10 md:mt-10">
       {philosophy.manifestoPoints.map((point, index) => (
         <m.div
           key={point.title}
@@ -101,7 +111,7 @@ export function Philosophy() {
           className="mx-auto mb-14 md:mb-16"
           eyebrow={philosophy.badge}
           title={philosophy.title}
-          subtitle={philosophy.subtitle}
+          subtitle={<SubtitleWithClave />}
           align="center"
           tone="light"
           reveal
