@@ -288,10 +288,22 @@ export function HomeThreeField() {
       })
     }
 
-    void init()
+    // Se difiere a tiempo ocioso del navegador: es un fondo decorativo (aria-hidden)
+    // y su coste de WebGL/parsing SVG no debe competir por el hilo principal con el
+    // LCP ni con la interactividad temprana de la página.
+    let idleId: number | undefined
+    let timeoutId: number | undefined
+
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(() => void init(), { timeout: 2000 })
+    } else {
+      timeoutId = window.setTimeout(() => void init(), 200)
+    }
 
     return () => {
       disposed = true
+      if (idleId !== undefined) window.cancelIdleCallback?.(idleId)
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId)
       for (const cleanup of cleanupFns) cleanup()
     }
   }, [reducedMotion])

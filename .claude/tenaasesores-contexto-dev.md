@@ -42,16 +42,18 @@
 
 **Medición actualizada (Lighthouse, Guillermo, 6 ago 2026) — el problema es mucho más grave de lo que indicaba la medición del 5 ago**
 
-- [ ] **LCP móvil: 12,1 s** (antes 4,7 s — ha empeorado sustancialmente, o la medición anterior no capturaba el peor caso). Causas identificadas por el propio informe:
-  - **747 KiB de JavaScript sin usar**, repartido en varios chunks de Next.js.
-  - **Hilo principal ocupado 6,2 s ejecutando JS** antes de que la página pueda responder a interacción — esto retrasa directamente el pintado del LCP.
-  - **Pendiente: re-medir con Lighthouse** tras los 3 cambios ya aplicados (ver abajo) para cuantificar la mejora real.
+- [x] **LCP móvil: 12,1 s → 5,4 s (Lighthouse, build de Vercel preview, 6 ago 2026), tras los 3 cambios de abajo.** Importante matiz encontrado al leer el informe completo: Lighthouse reporta dos LCP distintos que no siempre coinciden — el que puntúa (5,4s, simulado con el modelo "Lantern") y el desglose real de la traza observada (`lcp-breakdown-insight`): **TTFB 60ms + render delay 839ms ≈ 900ms real**. El elemento LCP no es el `<h1>`, es el párrafo del subtítulo (`p[data-hero="subtitle"]`). La cifra simulada es conocida por ser inestable en páginas con mucho JS cliente — probablemente explica por qué salió mejor "sin razón clara" entre dos medidas.
+  - **Hallazgo real (no simulado) que seguía vivo:** el chunk de Three.js (`0y2j6tp13kmom.js`, confirmado byte a byte contra el build local) seguía siendo el script individual más caro — 1,6s de scripting de los 3,7s totales de "Script Evaluation" — con sus long tasks más pesadas (491ms + 104ms) cayendo muy tarde (5,3-5,9s), penalizando Total Blocking Time (520ms) e Interactive (5,8s). Diferir la *descarga* (ya hecho) no evita que su *ejecución* siga siendo pesada y caiga en mitad de la ventana de carga.
+  - **Decisión tomada:** mantener la animación WebGL del isotipo (no volver al `HeroAmbient` de main, que existe sin usar en el repo y es la alternativa cero-Three.js) y en su lugar diferir también la *ejecución*, no solo la carga.
+  - [x] **`init()` en `home-three-field.tsx` diferido con `requestIdleCallback`** (timeout 2000ms, fallback `setTimeout` 200ms en navegadores sin soporte, p. ej. Safari). Así el parseo de SVG y el setup de WebGL solo ocurren cuando el navegador tiene hueco libre, en vez de justo al montar. Verificado visualmente: el fondo sigue apareciendo igual, solo con el arranque retrasado. **Pendiente: re-medir con Lighthouse para cuantificar el efecto real en TBT/Interactive.**
+  - **747 KiB de JavaScript sin usar → 35 KiB** (un solo archivo flagged: el propio chunk de Three.js, parcialmente cubierto por la traza).
 
-**Cambios aplicados hoy (6 ago 2026) para atacar el LCP — pendientes de re-medir:**
+**Cambios aplicados el 6 ago 2026 para atacar el LCP:**
 
 - [x] **`HomeThreeField` (fondo Three.js/WebGL del hero) diferido con `next/dynamic({ ssr:false })`.** Era el principal sospechoso: se importaba de forma síncrona en `home-hero-band.tsx`, así que todo el peso de Three.js iba en el mismo bundle que debía cargar y ejecutarse antes de que la home respondiera, para un fondo puramente decorativo (`aria-hidden`). Verificado en producción: Three.js (~564 KB) ahora es un chunk separado y asíncrono, no bloquea el bundle principal. Verificado visualmente en navegador, sin regresión.
 - [x] **`import * as THREE from "three"` cambiado a imports nombrados** en `home-three-field.tsx` (solo las ~20 clases realmente usadas). Correcto como práctica, pero medido en el build: el ahorro de peso es mínimo porque Three.js tree-shakea mal internamente. El punto anterior es el que realmente importa.
 - [x] **Lenis (smooth scroll) eliminado por completo.** Guillermo decidió quitarlo tras ver que el coste real no era solo Lenis (~18 KB) sino que `SmoothScrollProvider` cargaba GSAP+ScrollTrigger+Lenis en **todas** las páginas, incluidas las legales que no usan ningún efecto de scroll. Se quitó `lenis` de `package.json`, se limpió `smooth-scroll-provider.tsx` (ya no crea instancia de Lenis, mantiene el refresh de `ScrollTrigger` que sí hace falta) y se borraron `lib/scroll/lenis-instance.ts` y `lib/scroll/scroll-to-element.ts` (resultaron ser código muerto, nada los importaba). GSAP+ScrollTrigger se mantienen intactos: siguen haciendo trabajo real (parallax de fondo en logo marquee/Odoo/filosofía/servicios, contadores animados). Verificado en navegador: scroll nativo, parallax y contadores funcionan igual.
+- [x] **Ejecución de `HomeThreeField` diferida con `requestIdleCallback`** (ver arriba).
 
 - [ ] Eliminar solicitudes que bloquean el renderizado (~570 ms) — sin abordar.
 - [ ] Eliminar JavaScript "legacy"/ES5 innecesario (~14 KiB) — sin abordar.
