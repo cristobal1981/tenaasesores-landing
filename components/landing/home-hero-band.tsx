@@ -1,21 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { AnimatePresence, m, useReducedMotion } from "framer-motion"
 import { useHeroGsap } from "@/components/gsap/use-hero-gsap"
+import { HeroAmbient } from "@/components/landing/hero-ambient"
 import { SectionShell } from "@/components/layout/section-shell"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { contactHref, hero } from "@/content/site"
-
-// Fondo decorativo (Three.js) diferido a un chunk aparte: no aporta contenido
-// (aria-hidden) y su peso no debe competir por el hilo principal con el LCP del hero.
-const HomeThreeField = dynamic(
-  () => import("@/components/landing/home-three-field").then((mod) => mod.HomeThreeField),
-  { ssr: false },
-)
 
 const ROTATING_WORD_WIDTH_BUFFER = 4
 
@@ -69,7 +62,7 @@ export function HomeHeroBand() {
 
   return (
     <section className="relative flex flex-1 flex-col overflow-hidden bg-home-hero-surface">
-      <HomeThreeField />
+      <HeroAmbient />
       <div
         className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,rgba(1,222,162,0.12)_0%,rgba(4,29,35,0)_50%)]"
         aria-hidden
