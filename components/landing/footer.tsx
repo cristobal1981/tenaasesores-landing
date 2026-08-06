@@ -88,7 +88,7 @@ export function Footer() {
         {/* Síguenos + contacto — ancho completo, entre los dos separadores */}
         <div className="mt-6 border-t border-agua/30 pt-5">
           <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-2">
-            <h4 className="font-sans text-sm font-semibold text-muted-on-dark/70">Síguenos:</h4>
+            <p className="font-sans text-sm font-semibold text-muted-on-dark/70">Síguenos:</p>
             <div className="flex flex-wrap items-center gap-4">
               {contact.socials.map((social) => (
                 <TextLink key={social.label} href={social.href} className="text-sm text-muted-on-dark">

@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Plan para empresas y pymes — asesoría online | tenaasesores",
   description:
-    "Plan a medida para empresas y pymes: fiscal, contable y laboral adaptado a tu negocio. Planes desde 150 €/mes.",
+    "Plan a medida para empresas y pymes: fiscal, contable y laboral según tu estructura y equipo. Desde 150 €/mes, con propuesta clara antes de contratar.",
   path: "/plan-empresas",
 })
 

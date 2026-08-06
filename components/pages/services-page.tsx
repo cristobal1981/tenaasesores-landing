@@ -90,7 +90,7 @@ export function ServicesPage() {
           >
             {valueDifferential.items.map((item) => (
               <StaggerItem key={item.title}>
-                <h3 className="mb-2 text-base font-semibold text-on-light">{item.title}</h3>
+                <h2 className="mb-2 text-base font-semibold text-on-light">{item.title}</h2>
                 <p className="text-sm leading-relaxed text-muted-on-light">{item.description}</p>
               </StaggerItem>
             ))}

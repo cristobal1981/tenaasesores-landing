@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Plan para autónomos — desde 55 €/mes | tenaasesores",
   description:
-    "Plan mensual para autónomos: fiscal y contabilidad al día. Plan Base desde 55 €/mes o personalizado según tu operativa.",
+    "Plan mensual para autónomos: fiscal y contabilidad al día. Plan Base desde 55 €/mes con soporte por email, o personalizado según tu operativa.",
   path: "/plan-autonomos",
 })
 

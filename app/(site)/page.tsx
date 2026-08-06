@@ -15,7 +15,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Asesoría fiscal y contable online | tenaasesores",
   description:
-    "Asesoría online para autónomos y pymes: fiscal, contable y laboral con Odoo, trato directo y primera consulta gratuita.",
+    "Asesoría online para autónomos y pymes: fiscal, contable y laboral con Odoo y Holded, respuesta máxima en 24h, trato directo y primera consulta gratuita.",
   path: "/",
 })
 

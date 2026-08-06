@@ -1,6 +1,6 @@
 import { faqSections } from "@/content/faq"
 import { legalEntity } from "@/content/legal"
-import { contact, site } from "@/content/site"
+import { contact, services, site } from "@/content/site"
 
 export function organizationSchema() {
   return {
@@ -50,6 +50,24 @@ export function faqPageSchema() {
     "@type": "FAQPage",
     mainEntity,
   }
+}
+
+export function servicesSchema() {
+  return services.mainServices.map((service) => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.intro,
+    provider: {
+      "@type": "ProfessionalService",
+      name: site.name,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "España",
+    },
+    url: `${site.url}/servicios#${service.slug}`,
+  }))
 }
 
 export function breadcrumbSchema(items: { name: string; path: string }[]) {

@@ -1,14 +1,21 @@
 "use client"
 
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { AnimatePresence, m, useReducedMotion } from "framer-motion"
 import { useHeroGsap } from "@/components/gsap/use-hero-gsap"
-import { HomeThreeField } from "@/components/landing/home-three-field"
 import { SectionShell } from "@/components/layout/section-shell"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { contactHref, hero } from "@/content/site"
+
+// Fondo decorativo (Three.js) diferido a un chunk aparte: no aporta contenido
+// (aria-hidden) y su peso no debe competir por el hilo principal con el LCP del hero.
+const HomeThreeField = dynamic(
+  () => import("@/components/landing/home-three-field").then((mod) => mod.HomeThreeField),
+  { ssr: false },
+)
 
 const ROTATING_WORD_WIDTH_BUFFER = 4
 

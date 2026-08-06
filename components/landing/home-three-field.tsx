@@ -1,8 +1,29 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import * as THREE from "three"
-import { Timer } from "three"
+import {
+  AdditiveBlending,
+  Box3,
+  type BufferAttribute,
+  BufferGeometry,
+  Color,
+  DoubleSide,
+  Group,
+  LineBasicMaterial,
+  LineLoop,
+  type Material,
+  Mesh,
+  MeshBasicMaterial,
+  OrthographicCamera,
+  type Path,
+  Scene,
+  ShaderMaterial,
+  ShapeGeometry,
+  Timer,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
+} from "three"
 import { SVGLoader } from "three/addons/loaders/SVGLoader.js"
 import { usePrefersReducedMotion } from "@/lib/gsap/use-prefers-reduced-motion"
 
@@ -34,16 +55,16 @@ const SWEEP_FRAGMENT = /* glsl */ `
   }
 `
 
-function svgPointToWorld(point: THREE.Vector2): THREE.Vector3 {
-  return new THREE.Vector3(
+function svgPointToWorld(point: Vector2): Vector3 {
+  return new Vector3(
     (point.x - SVG_CENTER) / SVG_HALF,
     -((point.y - SVG_CENTER) / SVG_HALF),
     0,
   )
 }
 
-function transformSvgGeometry(geometry: THREE.BufferGeometry) {
-  const position = geometry.getAttribute("position") as THREE.BufferAttribute
+function transformSvgGeometry(geometry: BufferGeometry) {
+  const position = geometry.getAttribute("position") as BufferAttribute
   for (let i = 0; i < position.count; i++) {
     const x = position.getX(i)
     const y = position.getY(i)
@@ -54,26 +75,26 @@ function transformSvgGeometry(geometry: THREE.BufferGeometry) {
   geometry.computeBoundingBox()
 }
 
-function pathToEdgePoints(path: THREE.Path): THREE.Vector3[] {
+function pathToEdgePoints(path: Path): Vector3[] {
   return path.getPoints(CURVE_SEGMENTS).map(svgPointToWorld)
 }
 
 function fitGroupToView(
-  group: THREE.Group,
-  camera: THREE.OrthographicCamera,
+  group: Group,
+  camera: OrthographicCamera,
   zoom: number,
 ) {
   group.position.set(0, 0, 0)
   group.scale.setScalar(1)
   group.updateMatrixWorld(true)
 
-  const box = new THREE.Box3().setFromObject(group)
+  const box = new Box3().setFromObject(group)
   if (box.isEmpty()) return
 
-  const center = box.getCenter(new THREE.Vector3())
+  const center = box.getCenter(new Vector3())
   group.position.sub(center)
 
-  const size = box.getSize(new THREE.Vector3())
+  const size = box.getSize(new Vector3())
   const maxDim = Math.max(size.x, size.y, 0.001)
   const viewHeight = maxDim / zoom
   const aspect = (camera.right - camera.left) / (camera.top - camera.bottom)
@@ -121,12 +142,12 @@ export function HomeThreeField() {
       const svgData = loader.parse(svgText)
       if (!svgData.paths.length || disposed || !mountRef.current) return
 
-      const scene = new THREE.Scene()
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 20)
+      const scene = new Scene()
+      const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 20)
       camera.position.set(0, 0, 5)
       camera.lookAt(0, 0, 0)
 
-      const renderer = new THREE.WebGLRenderer({
+      const renderer = new WebGLRenderer({
         alpha: true,
         antialias: true,
         powerPreference: "high-performance",
@@ -143,38 +164,38 @@ export function HomeThreeField() {
       canvas.style.pointerEvents = "none"
       host.appendChild(canvas)
 
-      const isotipoGroup = new THREE.Group()
+      const isotipoGroup = new Group()
 
-      const fillMaterial = new THREE.MeshBasicMaterial({
+      const fillMaterial = new MeshBasicMaterial({
         color: BRAND_AGUA,
         transparent: true,
         opacity: 0.07,
         depthWrite: false,
-        side: THREE.DoubleSide,
+        side: DoubleSide,
       })
 
-      const edgeMaterial = new THREE.LineBasicMaterial({
+      const edgeMaterial = new LineBasicMaterial({
         color: BRAND_PRIMARY,
         transparent: true,
         opacity: 0.44,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        blending: AdditiveBlending,
       })
 
-      const sweepMaterial = new THREE.ShaderMaterial({
+      const sweepMaterial = new ShaderMaterial({
         transparent: true,
         depthWrite: false,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
+        side: DoubleSide,
+        blending: AdditiveBlending,
         uniforms: {
           uTime: { value: 0 },
-          uPrimary: { value: new THREE.Color(BRAND_PRIMARY) },
+          uPrimary: { value: new Color(BRAND_PRIMARY) },
         },
         vertexShader: SWEEP_VERTEX,
         fragmentShader: SWEEP_FRAGMENT,
       })
 
-      const disposables: Array<THREE.BufferGeometry | THREE.Material> = [
+      const disposables: Array<BufferGeometry | Material> = [
         fillMaterial,
         edgeMaterial,
         sweepMaterial,
@@ -184,14 +205,14 @@ export function HomeThreeField() {
         const shapes = svgPath.toShapes()
 
         for (const shape of shapes) {
-          const geometry = new THREE.ShapeGeometry(shape, CURVE_SEGMENTS)
+          const geometry = new ShapeGeometry(shape, CURVE_SEGMENTS)
           transformSvgGeometry(geometry)
           if (geometry.getAttribute("position").count === 0) continue
 
-          isotipoGroup.add(new THREE.Mesh(geometry, fillMaterial))
+          isotipoGroup.add(new Mesh(geometry, fillMaterial))
 
           const sweepGeometry = geometry.clone()
-          const sweepMesh = new THREE.Mesh(sweepGeometry, sweepMaterial)
+          const sweepMesh = new Mesh(sweepGeometry, sweepMaterial)
           sweepMesh.position.z = 0.01
           isotipoGroup.add(sweepMesh)
           disposables.push(geometry, sweepGeometry)
@@ -201,8 +222,8 @@ export function HomeThreeField() {
           const edgePoints = pathToEdgePoints(subPath)
           if (edgePoints.length < 3) continue
 
-          const edgeGeometry = new THREE.BufferGeometry().setFromPoints(edgePoints)
-          const edgeLine = new THREE.LineLoop(edgeGeometry, edgeMaterial)
+          const edgeGeometry = new BufferGeometry().setFromPoints(edgePoints)
+          const edgeLine = new LineLoop(edgeGeometry, edgeMaterial)
           edgeLine.position.z = 0.02
           isotipoGroup.add(edgeLine)
           disposables.push(edgeGeometry)

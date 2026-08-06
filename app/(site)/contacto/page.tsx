@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Contacto | Consulta gratuita | tenaasesores",
   description:
-    "Solicita tu consulta gratuita con tenaasesores. Respuesta en menos de 24 horas laborables, sin compromiso.",
+    "Solicita tu consulta gratuita con tenaasesores. Cuéntanos tu situación fiscal, contable o laboral: te contactamos en menos de 24h laborables, sin compromiso.",
   path: "/contacto",
 })
 
