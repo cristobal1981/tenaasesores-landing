@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
+import { m } from "framer-motion"
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { ServiceIconBadge } from "@/components/landing/service-icon-badge"
@@ -11,16 +12,11 @@ import { ChipScrollRow } from "@/components/ui/chip-scroll-row"
 import { services } from "@/content/site"
 import { cn } from "@/lib/utils"
 
-const tabBorderBySlug: Record<string, string> = {
-  fiscal: "border-service-fiscal",
-  contable: "border-service-contable",
-  laboral: "border-service-laboral",
-  constitucion: "border-service-constitucion",
-}
-
 export function ServicesPage() {
   const gestionesRef = useRef<HTMLDivElement>(null)
   const [activeSlug, setActiveSlug] = useState<string>(services.mainServices[0]?.slug ?? "")
+  const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 })
 
   const { valueDifferential, mainServices, cta } = services
 
@@ -70,6 +66,20 @@ export function ServicesPage() {
     return () => observer.disconnect()
   }, [mainServices])
 
+  useEffect(() => {
+    const updateIndicator = () => {
+      const el = navItemRefs.current[activeSlug]
+      if (!el) return
+      const width = el.offsetWidth * 0.7
+      setIndicator({ left: el.offsetLeft + (el.offsetWidth - width) / 2, width })
+    }
+
+    updateIndicator()
+    void document.fonts?.ready.then(updateIndicator)
+    window.addEventListener("resize", updateIndicator)
+    return () => window.removeEventListener("resize", updateIndicator)
+  }, [activeSlug])
+
   return (
     <main className="min-h-screen bg-background">
       {/* Valor diferencial */}
@@ -105,25 +115,33 @@ export function ServicesPage() {
             aria-label="Secciones de servicios"
             className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8"
           >
-            <ChipScrollRow className="gap-2" edgeFrom="from-surface-dark">
+            <ChipScrollRow className="relative h-14 items-center gap-6" edgeFrom="from-surface-dark">
               {navLinks.map((link) => {
                 const isActive = activeSlug === link.slug
                 return (
                   <a
                     key={link.href}
+                    ref={(node) => {
+                      navItemRefs.current[link.slug] = node
+                    }}
                     href={link.href}
                     onClick={(e) => { e.preventDefault(); scrollToService(link.href) }}
                     className={cn(
-                      "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors sm:px-3.5 sm:text-sm",
-                      isActive
-                        ? "border-primary bg-transparent text-primary"
-                        : cn(tabBorderBySlug[link.slug], "text-muted-on-dark hover:text-on-dark"),
+                      "shrink-0 whitespace-nowrap py-1.5 text-xs font-medium transition-colors sm:text-sm",
+                      isActive ? "text-primary" : "text-muted-on-dark hover:text-on-dark",
                     )}
                   >
                     {link.label}
                   </a>
                 )
               })}
+              <m.span
+                aria-hidden
+                className="pointer-events-none absolute bottom-0 h-[3px] rounded-full bg-primary"
+                initial={false}
+                animate={{ left: indicator.left, width: indicator.width }}
+                transition={{ type: "spring", stiffness: 380, damping: 32 }}
+              />
             </ChipScrollRow>
           </nav>
         </div>

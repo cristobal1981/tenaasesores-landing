@@ -10,69 +10,116 @@ import { cn } from "@/lib/utils"
 
 const benefitIcons = [Eye, ShieldCheck, Zap] as const
 
+// Colores reales de marca de cada partner — no los nuestros — para que cada
+// card se identifique por quién es, igual que las cards de servicios se
+// identifican por su propio color.
+const ODOO_BRAND = "#714b67"
+
+const partnerSurfaceStyle = {
+  backgroundColor: "color-mix(in oklch, var(--on-dark) 4%, var(--surface-dark))",
+} as const
+
+function partnerGlowStyle(tint: string) {
+  return {
+    backgroundImage: `radial-gradient(circle at 88% 8%, color-mix(in srgb, ${tint} 28%, transparent), transparent 60%)`,
+  } as const
+}
+
+// Tamaño generoso y centrado: al rotar la capa, las esquinas siguen
+// cubriendo la card entera sin importar su proporción (Odoo y Holded tienen
+// anchos muy distintos), a diferencia de un "scale" ajustado a mano.
+const partnerPatternStyle = {
+  backgroundImage: "url(/brand/isotipo-desbordado.svg)",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "220% 220%",
+  backgroundPosition: "50% 50%",
+} as const
+
 export function PartnersDossier() {
   return (
     <FadeIn>
-      <div
-        className="relative overflow-hidden rounded-2xl border border-agua/20"
-        style={{
-          background:
-            "linear-gradient(135deg, color-mix(in oklch, var(--on-dark) 5%, var(--surface-dark)) 0%, color-mix(in oklch, var(--agua) 16%, var(--surface-dark)) 55%, var(--surface-dark) 100%)",
-        }}
-      >
-        {/* Certificaciones — dos columnas separadas por una línea, no dos widgets distintos */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
-          <div className="flex flex-col border-b border-agua/15 p-8 sm:p-10 lg:border-r lg:border-b-0 lg:p-12">
-            <Image
-              src={odoo.partners.odoo.batch.src}
-              alt={odoo.partners.odoo.batch.alt}
-              width={odoo.partners.odoo.batch.width}
-              height={odoo.partners.odoo.batch.height}
-              className="mb-5 h-20 w-auto object-contain object-left sm:h-24"
-              style={{ width: "auto" }}
-              priority
-            />
-            <p className="mt-auto max-w-[48ch] text-base leading-relaxed text-muted-on-dark">
-              {odoo.partners.odoo.text}{" "}
-              <TextLinkWithIcon href={odoo.partners.odoo.verifyLink.href}>
-                {odoo.partners.odoo.verifyLink.label}
-              </TextLinkWithIcon>
-            </p>
-          </div>
-
-          <div className="flex flex-col p-8 sm:p-10 lg:p-12">
-            <Image
-              src={odoo.partners.holded.batch.src}
-              alt={odoo.partners.holded.batch.alt}
-              width={odoo.partners.holded.batch.width}
-              height={odoo.partners.holded.batch.height}
-              className="mb-5 h-11 w-auto object-contain object-left sm:h-12"
-              style={{ width: "auto" }}
-            />
-            <p className="mt-auto max-w-[38ch] text-sm leading-relaxed text-muted-on-dark">
-              {odoo.partners.holded.text}{" "}
-              <TextLinkWithIcon href={odoo.partners.holded.verifyLink.href}>
-                {odoo.partners.holded.verifyLink.label}
-              </TextLinkWithIcon>
-            </p>
-          </div>
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-5">
+        <div
+          className="relative flex flex-col overflow-hidden rounded-2xl p-8 sm:p-10 lg:col-span-3 lg:p-12"
+          style={partnerSurfaceStyle}
+        >
+          <div aria-hidden className="pointer-events-none absolute inset-0" style={partnerGlowStyle(ODOO_BRAND)} />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rotate-[35deg] opacity-40"
+            style={partnerPatternStyle}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface-dark from-0% via-surface-dark/75 via-35% to-transparent to-85%"
+          />
+          <Image
+            src={odoo.partners.odoo.batch.src}
+            alt={odoo.partners.odoo.batch.alt}
+            width={odoo.partners.odoo.batch.width}
+            height={odoo.partners.odoo.batch.height}
+            className="relative z-10 mb-6 h-20 w-auto object-contain object-left sm:h-24"
+            style={{ width: "auto" }}
+            priority
+          />
+          <p className="relative z-10 mt-auto max-w-[48ch] text-base leading-relaxed text-muted-on-dark">
+            {odoo.partners.odoo.text}{" "}
+            <TextLinkWithIcon href={odoo.partners.odoo.verifyLink.href}>
+              {odoo.partners.odoo.verifyLink.label}
+            </TextLinkWithIcon>
+          </p>
         </div>
 
-        {/* Razones — fila tipográfica, sin tarjetas ni iconos, separada por una sola línea */}
-        <div className="relative grid grid-cols-1 gap-8 border-t border-agua/15 p-8 sm:grid-cols-3 sm:gap-10 sm:p-10 lg:p-12">
-          {odoo.benefits.map((benefit, index) => {
-            const Icon = benefitIcons[index]
-            return (
-              <div key={benefit.title}>
-                <h3 className="mb-1.5 flex items-center gap-2 text-base font-semibold text-on-dark">
-                  <Icon className="size-4 shrink-0 text-primary" aria-hidden />
-                  {benefit.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-muted-on-dark">{benefit.description}</p>
-              </div>
-            )
-          })}
+        <div
+          className="relative flex flex-col overflow-hidden rounded-2xl p-8 sm:p-10 lg:col-span-2 lg:p-12"
+          style={partnerSurfaceStyle}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={partnerGlowStyle("var(--turquesa)")}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rotate-[35deg] opacity-40"
+            style={partnerPatternStyle}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface-dark from-0% via-surface-dark/75 via-35% to-transparent to-85%"
+          />
+          <Image
+            src={odoo.partners.holded.batch.src}
+            alt={odoo.partners.holded.batch.alt}
+            width={odoo.partners.holded.batch.width}
+            height={odoo.partners.holded.batch.height}
+            className="relative z-10 mb-6 h-11 w-auto object-contain object-left sm:h-12"
+            style={{ width: "auto" }}
+          />
+          <p className="relative z-10 mt-auto max-w-[38ch] text-sm leading-relaxed text-muted-on-dark">
+            {odoo.partners.holded.text}{" "}
+            <TextLinkWithIcon href={odoo.partners.holded.verifyLink.href}>
+              {odoo.partners.holded.verifyLink.label}
+            </TextLinkWithIcon>
+          </p>
         </div>
+      </div>
+
+      {/* Razones — fila tipográfica suelta, sin caja ni iconos sobre fondo: se
+          separa del bloque de partners por aire, no por una línea. */}
+      <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-10">
+        {odoo.benefits.map((benefit, index) => {
+          const Icon = benefitIcons[index]
+          return (
+            <div key={benefit.title}>
+              <h3 className="mb-1.5 flex items-center gap-2 text-base font-semibold text-on-dark">
+                <Icon className="size-4 shrink-0 text-primary" aria-hidden />
+                {benefit.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-muted-on-dark">{benefit.description}</p>
+            </div>
+          )
+        })}
       </div>
     </FadeIn>
   )
