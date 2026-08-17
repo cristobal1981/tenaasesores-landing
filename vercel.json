@@ -42,7 +42,7 @@
     },
     {
       "source": "/onboarding",
-      "destination": "/solicitud-alta-autonomo",
+      "destination": "/",
       "permanent": true
     },
     {
