@@ -16,6 +16,7 @@ export function PlansPage({ audience }: { audience: PlansAudience }) {
         align="center"
         padding="spacious"
         gradient="strong"
+        className="border-b-0"
       />
 
       <PlansPageClient audience={audience} />

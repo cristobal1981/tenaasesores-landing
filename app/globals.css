@@ -233,48 +233,54 @@
     font-size: clamp(1.875rem, 4vw + 0.5rem, 3.75rem);
   }
 
-  .home-hero-title {
-    font-size: clamp(2.75rem, 7.5vw, 6.15rem);
-    line-height: 0.94;
-    text-wrap: balance;
-  }
+}
 
-  .home-clave-card-letter {
-    font-family: var(--font-host-grotesk), system-ui, sans-serif;
-    font-size: clamp(3rem, min(62cqw, 90cqh), 11rem);
-    line-height: 0.72;
-    letter-spacing: -0.04em;
-  }
+/* Convertidas a @utility (API nativa de Tailwind v4): dentro de @layer utilities
+   el bundler de Turbopack las estaba descartando del CSS compilado. */
+@utility home-hero-title {
+  font-size: clamp(2.75rem, 7.5vw, 6.15rem);
+  line-height: 0.94;
+  text-wrap: balance;
+}
 
-  .section-eyebrow {
-    font-family: var(--font-host-grotesk), system-ui, sans-serif;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.24em;
-    line-height: 1.5;
-    text-transform: uppercase;
-  }
+@utility home-clave-card-letter {
+  font-family: var(--font-host-grotesk), system-ui, sans-serif;
+  font-size: clamp(3rem, min(62cqw, 90cqh), 11rem);
+  line-height: 0.72;
+  letter-spacing: -0.04em;
+}
 
-  .section-eyebrow-on-dark {
-    color: var(--primary);
-  }
+@utility section-eyebrow {
+  font-family: var(--font-host-grotesk), system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
 
-  .section-eyebrow-on-light {
-    color: var(--accent-on-light);
-  }
+@utility section-eyebrow-on-dark {
+  color: var(--primary);
+}
 
-  .section-title {
-    font-family: var(--font-host-grotesk), system-ui, sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    text-wrap: balance;
-  }
+@utility section-eyebrow-on-light {
+  color: var(--accent-on-light);
+}
 
-  .section-subtitle {
-    font-family: var(--font-body);
-    font-weight: 400;
-    line-height: 1.65;
-  }
+@utility section-title {
+  font-family: var(--font-host-grotesk), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+@utility section-subtitle {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+@layer utilities {
 
   .bg-hero-gradient {
     @apply bg-gradient-to-br from-background via-card to-agua;
@@ -389,18 +395,6 @@
 
   .section-divider-bottom {
     border-bottom: 1px solid transparent;
-    border-image: linear-gradient(
-        90deg,
-        transparent,
-        color-mix(in oklch, var(--agua) 35%, transparent) 20%,
-        color-mix(in oklch, var(--agua) 35%, transparent) 80%,
-        transparent
-      )
-      1;
-  }
-
-  .section-divider-top {
-    border-top: 1px solid transparent;
     border-image: linear-gradient(
         90deg,
         transparent,
@@ -534,12 +528,13 @@
   }
 
   /* Quick-reply chips — single-row horizontal scroll, no visible scrollbar. */
-  .chip-scroll {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
+}
 
-  .chip-scroll::-webkit-scrollbar {
+@utility chip-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
     display: none;
   }
 }

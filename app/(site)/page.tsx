@@ -22,7 +22,7 @@ export const metadata: Metadata = pageMetadata({
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <section className="section-divider-bottom flex min-h-[calc(100svh-var(--site-header-height))] flex-col">
+      <section className="section-divider-bottom flex flex-col">
         <HomeHeroBand />
         <HomeStats />
       </section>

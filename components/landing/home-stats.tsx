@@ -27,7 +27,7 @@ export function HomeStats() {
           {homeStats.items.map((stat) => (
             <li key={stat.label} className="text-center">
               <p
-                className={`mb-1 font-sans text-[clamp(1.5rem,3vw,2rem)] leading-none font-bold tracking-tight tabular-nums ${stat.colorClass}`}
+                className={`mb-1 font-sans text-[clamp(1.75rem,3.6vw,2.5rem)] leading-none font-bold tracking-tight tabular-nums ${stat.colorClass}`}
                 data-stat-counter
                 data-stat-end={stat.end}
                 data-stat-prefix={stat.prefix}

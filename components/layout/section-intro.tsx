@@ -45,9 +45,7 @@ export function SectionIntro({
         ? "text-[clamp(1.35rem,2.4vw,1.75rem)] leading-[1.2]"
         : size === "compact"
           ? "text-2xl leading-[1.12] sm:text-3xl lg:text-4xl"
-          : size === "page"
-            ? "text-3xl leading-[1.15] sm:text-4xl lg:text-5xl"
-            : "text-[clamp(2rem,5vw,3.75rem)] leading-[1.06]"
+          : "text-[clamp(2rem,5vw,3.75rem)] leading-[1.06]"
 
   const titleMarginClass = subtitle || children ? "mb-4 md:mb-5" : "mb-0"
 

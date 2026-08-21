@@ -73,7 +73,7 @@ export function HomeHeroBand() {
       />
 
       <div className="relative z-[3] flex flex-1 flex-col justify-center">
-        <SectionShell className="flex flex-1 flex-col justify-center py-10 sm:py-12 md:py-14">
+        <SectionShell className="flex flex-1 flex-col justify-center py-16 sm:py-20 md:py-28">
           <div
             ref={contentRef}
             className="relative mx-auto w-full max-w-5xl px-4 text-center sm:px-6"

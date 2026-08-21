@@ -27,8 +27,8 @@ export function CtaBrisaBand({
   const reducedMotion = useReducedMotion()
 
   return (
-    <section className="section-cta-brisa min-h-[70vh]" aria-labelledby={headingId}>
-      <SectionShell className="flex min-h-[70vh] flex-col justify-center py-20 md:py-28">
+    <section className="section-cta-brisa" aria-labelledby={headingId}>
+      <SectionShell className="flex flex-col justify-center py-16 md:py-20">
         <m.div
           className="mx-auto max-w-4xl text-center"
           initial={reducedMotion ? false : { opacity: 0, y: 40, scale: 0.98 }}
