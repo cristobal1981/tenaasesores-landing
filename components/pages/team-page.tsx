@@ -56,6 +56,7 @@ export function TeamPage() {
                         src={member.photo}
                         alt={`Foto de ${member.name}`}
                         fill
+                        priority={index < 3}
                         className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                         sizes="128px"
                       />
