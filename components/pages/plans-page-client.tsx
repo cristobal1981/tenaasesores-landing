@@ -114,7 +114,7 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
 
   return (
     <>
-    <section className="py-16 md:py-20">
+    <section className="pt-8 pb-16 md:pt-10 md:pb-20">
       <SectionShell>
         <StaggerContainer
           className={cn(

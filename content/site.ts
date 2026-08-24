@@ -447,7 +447,7 @@ export const team = {
   badge: "Nuestro equipo",
   title: ["Personas reales,", "trato directo."],
   subtitle:
-    "Seis profesionales online. Sin call center ni intermediarios: conoces quién lleva tu expediente.",
+    "Seis profesionales especializados en fiscal, contable y laboral. Pon cara a quien lleva tu expediente cada mes.",
   members: [
     {
       name: "Cristóbal",
@@ -531,7 +531,26 @@ export const about = {
   badge: "Sobre tenaasesores",
   title: ["Equipo ágil y", "muy comprometido."],
   subtitle:
-    "No somos una gran corporación, y eso es precisamente nuestra ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center. Llevamos años acompañando a pymes, autónomos y empresas digitales con sede en Tenerife y asesoramiento online en fiscal, contable y laboral. Como partners oficiales de Odoo y Holded, combinamos tecnología en tiempo real con supervisión humana y tarifas claras desde el primer día.",
+    "No somos una gran corporación, y esa es la ventaja: cada cliente tiene acceso directo a profesionales con experiencia, no a un call center.",
+  pillars: [
+    {
+      icon: "tag",
+      title: "Tarifas claras desde el día uno",
+      description: "Sin letra pequeña ni sorpresas en la factura.",
+    },
+    {
+      icon: "building",
+      title: "Sede en Tenerife, alcance nacional",
+      description:
+        "Asesoramos en fiscal, contable y laboral a pymes, autónomos y empresas digitales de toda España, en remoto.",
+    },
+    {
+      icon: "badge-check",
+      title: "Partners oficiales Odoo y Holded",
+      description:
+        "Tecnología en tiempo real con supervisión humana en cada cierre, no automatización a ciegas.",
+    },
+  ],
   stats: [
     { end: 150, prefix: "+", suffix: "", label: "Clientes activos" },
     { end: 24, prefix: "", suffix: "h", label: "Respuesta garantizada" },
