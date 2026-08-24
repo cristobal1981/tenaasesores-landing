@@ -32,14 +32,8 @@ export function HomeStats() {
                 data-stat-end={stat.end}
                 data-stat-prefix={stat.prefix}
                 data-stat-suffix={stat.suffix}
-                {...("colorFrom" in stat && stat.colorFrom
-                  ? {
-                      "data-stat-color-from": stat.colorFrom,
-                      "data-stat-color-to": stat.colorTo,
-                    }
-                  : {})}
               >
-                {formatStatValue(0, stat.prefix, stat.suffix)}
+                {formatStatValue(stat.end, stat.prefix, stat.suffix)}
               </p>
               <p className="text-xs font-medium text-muted-on-dark md:text-sm">{stat.label}</p>
             </li>

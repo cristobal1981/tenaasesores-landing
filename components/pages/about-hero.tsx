@@ -56,7 +56,7 @@ export function AboutHero() {
                     data-stat-prefix={stat.prefix}
                     data-stat-suffix={stat.suffix}
                   >
-                    {formatStatValue(0, stat.prefix, stat.suffix)}
+                    {formatStatValue(stat.end, stat.prefix, stat.suffix)}
                   </dd>
                   <dt className="mt-2 max-w-[16ch] text-sm leading-snug text-muted-on-dark">
                     {stat.label}

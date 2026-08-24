@@ -14,7 +14,6 @@ export function PlansPage({ audience }: { audience: PlansAudience }) {
         title={plans.title}
         lead={plans.subtitle}
         align="center"
-        padding="spacious"
         gradient="strong"
         className="border-b-0"
       />

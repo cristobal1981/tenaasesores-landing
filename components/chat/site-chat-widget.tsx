@@ -415,7 +415,7 @@ export function SiteChatWidget() {
               "absolute bottom-0 left-1/2 block size-11 max-w-none -translate-x-1/2 object-contain object-bottom transition-opacity duration-150 sm:size-12",
               isOpen ? "opacity-0" : "opacity-100",
             )}
-            aria-hidden={isOpen}
+            aria-hidden={isOpen || undefined}
           />
         </Button>
       </motion.div>
