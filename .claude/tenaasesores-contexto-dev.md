@@ -64,3 +64,13 @@
 
 - [ ] **Árbol de accesibilidad mal formado en el botón flotante (widget de chat "Sappo").** Sin abordar. `div.fixed > div.absolute > button.inline-flex > img.absolute` con `alt=""` y `aria-hidden="false"` inconsistentes.
 - [ ] Revisar el resto de accesibilidad (94/100) con la pestaña completa del informe.
+
+## UI — pendientes
+
+- [ ] **Demasiada separación entre el título y las cards en `/plan-autonomos` y `/plan-empresas`.** El header (`DarkPageHero`, `padding="spacious"`) deja mucho hueco antes de que arranque `PlansPageClient`. Reducir el espaciado — revisar `padding` de `DarkPageHero` en `components/pages/plans-page.tsx` y el `py-*` superior de la sección de cards.
+
+## Dev server — consumo de RAM/CPU (21 ago 2026)
+
+- [x] **`next-server` (Turbopack) se disparaba a 600%+ CPU y crecía sin límite en RAM (varios GB) hasta morir por OOM-killer.** Causa: caché de `.next/` corrupta/hinchada (333 MB) acumulada por sesiones previas del dev server que quedaron colgadas o se cerraron mal, provocando un bucle de recompilación en los hilos del pool de Turbopack ya desde el arranque, sin necesidad de tráfico. Confirmado con `journalctl -k` (un `next-server` anterior ya había sido matado por el OOM-killer del kernel el mismo día). Solución aplicada: matar los procesos huérfanos, `rm -rf .next` y reiniciar — con caché limpia el CPU decae con normalidad tras el arranque en frío y la RAM se estabiliza (~940 MB).
+  - **Si vuelve a pasar:** parar siempre el dev server con `Ctrl+C` limpio (no cerrar la terminal a lo bruto, para que Turbopack cierre bien la caché); si el consumo se dispara, primer paso es `rm -rf .next` y reiniciar.
+- [ ] **`tsconfig.tsbuildinfo` está trackeado en git** (debería estar en `.gitignore` — es un artefacto de build de TypeScript que se regenera constantemente). Pendiente: `git rm --cached tsconfig.tsbuildinfo` + añadirlo a `.gitignore`. No hecho aún porque no está confirmado que sea la causa del problema de arriba (parece más bien higiene de repo), a la espera de confirmación de Guillermo.
