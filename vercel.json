@@ -1,0 +1,49 @@
+{
+  "redirects": [
+    {
+      "source": "/appointment",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/planes",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/shop/cart",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/our-services",
+      "destination": "/servicios",
+      "permanent": true
+    },
+    {
+      "source": "/contactus",
+      "destination": "/contacto",
+      "permanent": true
+    },
+    {
+      "source": "/onboarding",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacidad",
+      "permanent": true
+    },
+    {
+      "source": "/about-us",
+      "destination": "/nosotros",
+      "permanent": true
+    }
+  ]
+}

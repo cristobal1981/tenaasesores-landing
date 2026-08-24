@@ -35,6 +35,26 @@ const nextConfig = {
         destination: "/",
         permanent: true,
       },
+      {
+        source: "/blog/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/website/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/plan",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/crm-comunicacion-autonomo",
+        destination: "/servicios",
+        permanent: true,
+      },
     ]
   },
   async headers() {
