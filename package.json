@@ -32,8 +32,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19",
     "react-dom": "^19",
-    "tailwind-merge": "^3.3.1",
-    "three": "^0.185.1"
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@cspell/dict-en-gb": "^5.0.29",
@@ -43,7 +42,6 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.185.1",
     "cspell": "^9.8.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
