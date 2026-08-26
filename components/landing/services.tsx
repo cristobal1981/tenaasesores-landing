@@ -139,7 +139,10 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className={cn("relative overflow-hidden rounded-2xl", bentoLayout[index])}
+              className={cn(
+                "relative min-h-56 overflow-hidden rounded-2xl lg:min-h-0",
+                bentoLayout[index]
+              )}
               style={cardSurfaceStyle}
             >
               <div

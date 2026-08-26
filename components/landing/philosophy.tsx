@@ -6,6 +6,7 @@ import { useHomeSectionReveal } from "@/components/gsap/use-home-section-reveal"
 import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
 import { philosophy } from "@/content/site"
+import { cn } from "@/lib/utils"
 
 const cardBackgroundStyle = {
   background:
@@ -77,22 +78,28 @@ function ClaveCard({
 
 function DiaADiaRow() {
   return (
-    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-10 md:mt-10">
-      {philosophy.manifestoPoints.map((point, index) => (
-        <m.div
-          key={point.title}
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="mb-1.5 flex items-center gap-2 text-lg font-semibold text-on-light">
-            <IsotipoMark className="h-4 w-4 shrink-0 text-agua" />
-            {point.title}
-          </p>
-          <p className="text-sm leading-relaxed text-muted-on-light">{point.detail}</p>
-        </m.div>
-      ))}
+    <div className="mx-auto mt-8 grid grid-cols-1 gap-8 sm:max-w-3xl sm:grid-cols-2 md:mt-10 xl:max-w-none xl:grid-cols-3 xl:gap-10">
+      {philosophy.manifestoPoints.map((point, index) => {
+        const isLast = index === philosophy.manifestoPoints.length - 1
+        return (
+          <m.div
+            key={point.title}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className={cn(
+              isLast && "sm:col-span-2 sm:mx-auto sm:max-w-sm xl:col-span-1 xl:mx-0 xl:max-w-none"
+            )}
+          >
+            <p className="mb-1.5 flex items-center gap-2 text-lg font-semibold text-on-light">
+              <IsotipoMark className="h-4 w-4 shrink-0 text-agua" />
+              {point.title}
+            </p>
+            <p className="text-sm leading-relaxed text-muted-on-light">{point.detail}</p>
+          </m.div>
+        )
+      })}
     </div>
   )
 }

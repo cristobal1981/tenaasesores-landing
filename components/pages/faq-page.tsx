@@ -26,7 +26,7 @@ export function FaqPage() {
         align="left"
       />
 
-      <div className="sticky top-16 z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden md:top-20">
+      <div className="sticky top-[var(--site-header-height)] z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden">
         <SectionShell innerClassName="py-3">
           <nav aria-label="Secciones de preguntas frecuentes">
             <ChipScrollRow

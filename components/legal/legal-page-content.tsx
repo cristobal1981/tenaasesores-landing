@@ -40,7 +40,7 @@ export function LegalPageContent({ slug }: LegalPageContentProps) {
 
   return (
     <section className="border-t border-agua/20 bg-surface-light py-12 md:py-16">
-      <div className="sticky top-16 z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden md:top-20">
+      <div className="sticky top-[var(--site-header-height)] z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden">
         <SectionShell innerClassName="py-3">
           <nav aria-label="Índice de la página legal">
             <ChipScrollRow
