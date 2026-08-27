@@ -64,6 +64,7 @@ export function pageMetadata({
 export const indexablePaths = [
   "",
   "/servicios",
+  "/implementacion-odoo",
   "/plan-autonomos",
   "/plan-empresas",
   "/nosotros",

@@ -103,6 +103,33 @@ export const navItems = [
     },
   },
   {
+    label: "Odoo",
+    href: "/implementacion-odoo",
+    panel: {
+      items: [
+        {
+          label: "Implementación de Odoo",
+          href: "/implementacion-odoo",
+          description:
+            "El proceso completo: auditoría, migración, facturación y acompañamiento continuo.",
+        },
+        {
+          label: "Cómo lo implementamos, fase a fase",
+          href: "/implementacion-odoo#fases",
+          description:
+            "Seguimiento visual de cada fase, de la auditoría inicial al acompañamiento continuo.",
+        },
+        {
+          label: "Por qué así",
+          href: "/implementacion-odoo#beneficios",
+          description:
+            "Lo que ganas con esta forma de trabajar: rentabilidad real, acceso Enterprise y supervisión profesional.",
+        },
+      ],
+      faqHref: "/faq#odoo",
+    },
+  },
+  {
     label: "Planes",
     panel: {
       items: [
@@ -795,6 +822,7 @@ export const footer = {
   ],
   company: [
     { label: "Servicios", href: "/servicios" },
+    { label: "Implementación de Odoo", href: "/implementacion-odoo" },
     { label: "Nosotros", href: "/nosotros" },
     // { label: "Testimonios", href: "/#testimonios" }, // testimonialsEnabled
     { label: "Contacto", href: "/contacto" },

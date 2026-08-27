@@ -39,10 +39,19 @@ export function Odoo() {
           <OdooSteps className="mx-auto max-w-4xl" />
         </div>
 
-        <div data-home-reveal className="text-center">
+        <div
+          data-home-reveal
+          className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+        >
           <MarketingButton asChild size="lg">
             <Link href="/contacto">
               {odoo.cta}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </MarketingButton>
+          <MarketingButton asChild size="lg" marketingVariant="secondary">
+            <Link href="/implementacion-odoo">
+              Ver cómo lo implementamos
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </MarketingButton>

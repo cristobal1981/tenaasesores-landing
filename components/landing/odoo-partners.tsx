@@ -35,7 +35,11 @@ const partnerPatternStyle = {
   backgroundPosition: "50% 50%",
 } as const
 
-export function PartnersDossier() {
+type PartnersDossierProps = {
+  showBenefits?: boolean
+}
+
+export function PartnersDossier({ showBenefits = true }: PartnersDossierProps) {
   return (
     <FadeIn>
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-5">
@@ -107,20 +111,24 @@ export function PartnersDossier() {
 
       {/* Razones — fila tipográfica suelta, sin caja ni iconos sobre fondo: se
           separa del bloque de partners por aire, no por una línea. */}
-      <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-10">
-        {odoo.benefits.map((benefit, index) => {
-          const Icon = benefitIcons[index]
-          return (
-            <div key={benefit.title}>
-              <h3 className="mb-1.5 flex items-center gap-2 text-base font-semibold text-on-dark">
-                <Icon className="size-4 shrink-0 text-primary" aria-hidden />
-                {benefit.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-muted-on-dark">{benefit.description}</p>
-            </div>
-          )
-        })}
-      </div>
+      {showBenefits ? (
+        <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-10">
+          {odoo.benefits.map((benefit, index) => {
+            const Icon = benefitIcons[index]
+            return (
+              <div key={benefit.title}>
+                <h3 className="mb-1.5 flex items-center gap-2 text-base font-semibold text-on-dark">
+                  <Icon className="size-4 shrink-0 text-primary" aria-hidden />
+                  {benefit.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-muted-on-dark">
+                  {benefit.description}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      ) : null}
     </FadeIn>
   )
 }
