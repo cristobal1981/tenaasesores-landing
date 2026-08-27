@@ -24,27 +24,128 @@ export const site = {
   },
 } as const
 
+const serviceItems = [
+  {
+    slug: "fiscal",
+    title: "Gestión fiscal",
+    description:
+      "Estrategias fiscales personalizadas, deducciones y cumplimiento normativo para impulsar la rentabilidad de tu empresa.",
+  },
+  {
+    slug: "contable",
+    title: "Gestión contable",
+    description:
+      "Registro, informes financieros y supervisión contable con acceso en Odoo/Holded y control profesional.",
+  },
+  {
+    slug: "laboral",
+    title: "Gestión laboral",
+    description:
+      "Nóminas, contratos, altas y bajas, y representación ante la Seguridad Social y la Inspección de Trabajo.",
+  },
+  {
+    slug: "constitucion",
+    title: "Constitución de empresas/Autónomos",
+    description:
+      "Alta de tu negocio con la forma jurídica adecuada y acompañamiento en los primeros meses.",
+  },
+] as const
+
 export const navItems = [
-  { label: "Servicios", href: "/servicios" },
+  {
+    label: "Inicio",
+    href: "/",
+    panel: {
+      items: [
+        {
+          label: "Inicio",
+          href: "/",
+          description: "Vuelve a la portada y descubre nuestra propuesta completa.",
+        },
+        {
+          label: "Cómo trabajamos",
+          href: "/#como-trabajamos",
+          description:
+            "Nuestra filosofía en 5 principios: cercanía, llaneza, agilidad, valor y experiencia.",
+        },
+        {
+          label: "Qué resolvemos",
+          href: "/#servicios",
+          description:
+            "Un mismo equipo coordina áreas clave para que tengas menos fricción y más claridad.",
+        },
+        {
+          label: "Odoo y Holded · Partners oficiales",
+          href: "/#odoo",
+          description: "Tecnología cuando aporta control, velocidad y menos trabajo manual.",
+        },
+      ],
+      faqHref: "/faq#empezar",
+    },
+  },
+  {
+    label: "Servicios",
+    href: "/servicios",
+    panel: {
+      items: [
+        {
+          label: "Nuestro valor diferencial",
+          href: "/servicios#valor-diferencial",
+          description: "Portal de cliente, cumplimiento digital y formación para tu equipo.",
+        },
+        ...serviceItems.map((service) => ({
+          label: service.title,
+          href: `/servicios#${service.slug}`,
+          description: service.description,
+        })),
+      ],
+      faqHref: "/faq#servicios",
+    },
+  },
   {
     label: "Planes",
-    children: [
-      {
-        label: "Soy autónomo",
-        href: "/plan-autonomos",
-        description:
-          "Control fiscal y contable con soporte cercano y precio transparente.",
-      },
-      {
-        label: "Soy empresa",
-        href: "/plan-empresas",
-        description:
-          "Seguimiento continuo, prioridad de respuesta y visión de crecimiento.",
-      },
-    ],
+    panel: {
+      items: [
+        {
+          label: "Soy autónomo",
+          href: "/plan-autonomos",
+          description:
+            "Control fiscal y contable con soporte cercano y precio transparente.",
+        },
+        {
+          label: "Soy empresa",
+          href: "/plan-empresas",
+          description:
+            "Seguimiento continuo, prioridad de respuesta y visión de crecimiento.",
+        },
+      ],
+      faqHref: "/faq#planes",
+    },
   },
-  { label: "Nosotros", href: "/nosotros" },
-  { label: "FAQ", href: "/faq" },
+  {
+    label: "Nosotros",
+    href: "/nosotros",
+    panel: {
+      items: [
+        {
+          label: "Sobre Tenaasesores",
+          href: "/nosotros#sobre-tenaasesores",
+          description: "Equipo ágil con acceso directo a profesionales, sin call center.",
+        },
+        {
+          label: "Nuestro equipo",
+          href: "/nosotros#equipo",
+          description: "Seis profesionales especializados en fiscal, contable y laboral.",
+        },
+        {
+          label: "Nuestra oficina",
+          href: "/nosotros#oficina",
+          description: "Sede en Los Realejos, Tenerife, con alcance nacional en remoto.",
+        },
+      ],
+      faqHref: "/faq#equipo",
+    },
+  },
 ] as const
 
 export const contactHref = "/contacto" as const
@@ -415,32 +516,7 @@ export const services = {
     title: "¿Aún no sabes qué necesita tu negocio?",
     label: "Solicitar consulta gratuita",
   },
-  items: [
-    {
-      slug: "fiscal",
-      title: "Gestión fiscal",
-      description:
-        "Estrategias fiscales personalizadas, deducciones y cumplimiento normativo para impulsar la rentabilidad de tu empresa.",
-    },
-    {
-      slug: "contable",
-      title: "Gestión contable",
-      description:
-        "Registro, informes financieros y supervisión contable con acceso en Odoo/Holded y control profesional.",
-    },
-    {
-      slug: "laboral",
-      title: "Gestión laboral",
-      description:
-        "Nóminas, contratos, altas y bajas, y representación ante la Seguridad Social y la Inspección de Trabajo.",
-    },
-    {
-      slug: "constitucion",
-      title: "Constitución de empresas/Autónomos",
-      description:
-        "Alta de tu negocio con la forma jurídica adecuada y acompañamiento en los primeros meses.",
-    },
-  ],
+  items: serviceItems,
 } as const
 
 export const team = {

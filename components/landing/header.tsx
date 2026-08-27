@@ -1,106 +1,36 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronDown, Menu, X } from "lucide-react"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
+  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { BrandLogo } from "@/components/layout/brand-logo"
 import { contactHref, navItems } from "@/content/site"
 import { cn } from "@/lib/utils"
 
+type NavItem = (typeof navItems)[number]
+type PanelChild = { label: string; href: string; description: string }
+type Panel = { items: ReadonlyArray<PanelChild>; faqHref: string }
+
 function isNavActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-function hasChildren(item: (typeof navItems)[number]): item is (typeof navItems)[number] & {
-  children: ReadonlyArray<{ label: string; href: string; description: string }>
-} {
-  return "children" in item
+function hasPanel(item: NavItem): item is NavItem & { panel: Panel } {
+  return "panel" in item
 }
 
-function PlansNavDropdown({
-  item,
-  pathname,
-}: {
-  item: (typeof navItems)[number] & {
-    children: ReadonlyArray<{ label: string; href: string; description: string }>
-  }
-  pathname: string
-}) {
-  const [open, setOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const isParentActive = item.children.some((child) => isNavActive(pathname, child.href))
-
-  useEffect(() => {
-    if (!open) return
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (containerRef.current?.contains(event.target as Node)) return
-      setOpen(false)
-    }
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false)
-    }
-
-    document.addEventListener("mousedown", handlePointerDown)
-    document.addEventListener("keydown", handleEscape)
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown)
-      document.removeEventListener("keydown", handleEscape)
-    }
-  }, [open])
-
-  // Cierre al navegar: ajuste de estado durante el render, no en efecto.
-  const [prevPathname, setPrevPathname] = useState(pathname)
-  if (prevPathname !== pathname) {
-    setPrevPathname(pathname)
-    setOpen(false)
-  }
-
-  return (
-    <div ref={containerRef} className="relative">
-      <button
-        type="button"
-        className={cn(
-          "inline-flex items-center gap-1 font-sans text-base font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
-          isParentActive || open ? "text-primary" : "text-muted-on-dark"
-        )}
-        aria-label="Abrir menú de planes"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        {item.label}
-        <ChevronDown
-          className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")}
-          aria-hidden
-        />
-      </button>
-      {open ? (
-        <div className="absolute top-full left-1/2 z-50 mt-1.5 w-72 -translate-x-1/2 rounded-xl border border-agua/30 bg-background p-2 shadow-lg shadow-black/20">
-          <ul className="flex flex-col gap-0.5">
-            {item.children.map((child) => (
-              <PlansNavListItem
-                key={child.label}
-                label={child.label}
-                description={child.description}
-                href={child.href}
-                isActive={isNavActive(pathname, child.href)}
-                onNavigate={() => setOpen(false)}
-              />
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </div>
-  )
+function isPanelItemActive(item: NavItem & { panel: Panel }, pathname: string) {
+  if ("href" in item) return isNavActive(pathname, item.href)
+  return item.panel.items.some((child) => isNavActive(pathname, child.href))
 }
 
 function navItemClass(isActive: boolean) {
@@ -110,7 +40,17 @@ function navItemClass(isActive: boolean) {
   )
 }
 
-function PlansNavListItem({
+function megaMenuTriggerClass(isActive: boolean) {
+  return cn(
+    navItemClass(isActive),
+    "h-auto w-auto rounded-none bg-transparent p-0 hover:bg-transparent focus:bg-transparent focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent data-[state=open]:focus:bg-transparent",
+    isActive
+      ? "hover:text-primary focus:text-primary focus-visible:text-primary data-[state=open]:text-primary data-[state=open]:focus:text-primary"
+      : "hover:text-on-dark focus:text-on-dark focus-visible:text-on-dark data-[state=open]:text-on-dark data-[state=open]:focus:text-on-dark"
+  )
+}
+
+function MegaMenuGridItem({
   label,
   description,
   href,
@@ -150,17 +90,63 @@ function PlansNavListItem({
   )
 }
 
+function MegaMenuFaqLink({ href, onNavigate }: { href: string; onNavigate?: () => void }) {
+  return (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      className="inline-block w-fit rounded px-3 py-1 text-xs font-medium text-muted-on-dark/80 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+    >
+      Preguntas frecuentes
+    </Link>
+  )
+}
+
+function MegaMenuGridPanel({
+  items,
+  faqHref,
+  pathname,
+  onNavigate,
+}: {
+  items: ReadonlyArray<PanelChild>
+  faqHref: string
+  pathname: string
+  onNavigate?: () => void
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <ul className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+        {items.map((child) => (
+          <MegaMenuGridItem
+            key={child.label}
+            label={child.label}
+            description={child.description}
+            href={child.href}
+            isActive={isNavActive(pathname, child.href)}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </ul>
+      <div className="border-t border-agua/10 pt-2">
+        <MegaMenuFaqLink href={faqHref} onNavigate={onNavigate} />
+      </div>
+    </div>
+  )
+}
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isMobilePlansOpen, setIsMobilePlansOpen] = useState(false)
+  const [openMobilePanel, setOpenMobilePanel] = useState<string | null>(null)
+  const [megaMenuValue, setMegaMenuValue] = useState("")
   const pathname = usePathname()
 
   // Cierre al navegar: ajuste de estado durante el render, no en efecto.
   const [prevPathname, setPrevPathname] = useState(pathname)
   if (prevPathname !== pathname) {
     setPrevPathname(pathname)
-    setIsMobilePlansOpen(false)
+    setOpenMobilePanel(null)
     setIsMenuOpen(false)
+    setMegaMenuValue("")
   }
 
   useEffect(() => {
@@ -179,15 +165,37 @@ export function Header() {
           <BrandLogo className="justify-self-start" priority />
 
           <NavigationMenu
-            viewport={false}
+            key={pathname}
+            fullWidth
+            delayDuration={0}
+            value={megaMenuValue}
+            onValueChange={setMegaMenuValue}
             className="hidden max-w-none flex-none justify-self-center md:flex"
           >
             <NavigationMenuList className="gap-7">
               {navItems.map((item) => {
-                if (hasChildren(item)) {
+                if (hasPanel(item)) {
+                  const isActive = isPanelItemActive(item, pathname)
+                  const isOpen = megaMenuValue === item.label
                   return (
-                    <NavigationMenuItem key={item.label} className="!bg-transparent">
-                      <PlansNavDropdown item={item} pathname={pathname} />
+                    <NavigationMenuItem key={item.label} value={item.label}>
+                      <NavigationMenuTrigger
+                        className={megaMenuTriggerClass(isActive)}
+                        onClick={(event) => {
+                          if (isOpen) event.preventDefault()
+                        }}
+                      >
+                        {item.label}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent fullWidth>
+                        <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+                          <MegaMenuGridPanel
+                            items={item.panel.items}
+                            faqHref={item.panel.faqHref}
+                            pathname={pathname}
+                          />
+                        </div>
+                      </NavigationMenuContent>
                     </NavigationMenuItem>
                   )
                 }
@@ -236,8 +244,9 @@ export function Header() {
         >
           <nav className="flex h-full flex-col gap-1 overflow-y-auto px-6 py-8">
             {navItems.map((item) => {
-              if (hasChildren(item)) {
-                const isParentActive = item.children.some((child) =>
+              if (hasPanel(item)) {
+                const isOpen = openMobilePanel === item.label
+                const isParentActive = item.panel.items.some((child) =>
                   isNavActive(pathname, child.href)
                 )
                 return (
@@ -245,28 +254,28 @@ export function Header() {
                     <button
                       type="button"
                       className={cn(
-                        navItemClass(isParentActive || isMobilePlansOpen),
+                        navItemClass(isParentActive || isOpen),
                         "inline-flex w-full items-center justify-between py-3.5 text-left text-xl"
                       )}
-                      onClick={() => setIsMobilePlansOpen((prev) => !prev)}
+                      onClick={() => setOpenMobilePanel(isOpen ? null : item.label)}
                       tabIndex={isMenuOpen ? 0 : -1}
-                      aria-expanded={isMobilePlansOpen}
+                      aria-expanded={isOpen}
                       aria-haspopup="true"
                     >
                       {item.label}
                       <ChevronDown
-                        className={cn("h-5 w-5 transition-transform", isMobilePlansOpen && "rotate-180")}
+                        className={cn("h-5 w-5 transition-transform", isOpen && "rotate-180")}
                       />
                     </button>
                     <div
                       className={cn(
                         "grid overflow-hidden transition-[grid-template-rows,opacity] duration-200",
-                        isMobilePlansOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                       )}
                     >
                       <div className="min-h-0 pb-3 pl-3">
                         <div className="flex flex-col gap-4 border-l border-agua/40 px-3 py-2">
-                          {item.children.map((child) => (
+                          {item.panel.items.map((child) => (
                             <Link
                               key={child.label}
                               href={child.href}
@@ -275,7 +284,7 @@ export function Header() {
                                 isNavActive(pathname, child.href) ? "text-primary" : "text-muted-on-dark"
                               )}
                               onClick={() => setIsMenuOpen(false)}
-                              tabIndex={isMenuOpen && isMobilePlansOpen ? 0 : -1}
+                              tabIndex={isMenuOpen && isOpen ? 0 : -1}
                             >
                               <span className="block text-base font-medium">{child.label}</span>
                               <span className="mt-0.5 block text-sm leading-snug text-muted-on-dark/90">
@@ -283,6 +292,17 @@ export function Header() {
                               </span>
                             </Link>
                           ))}
+                          <Link
+                            href={item.panel.faqHref}
+                            className={cn(
+                              "block text-sm transition-colors hover:text-primary",
+                              pathname === "/faq" ? "text-primary" : "text-muted-on-dark/80"
+                            )}
+                            onClick={() => setIsMenuOpen(false)}
+                            tabIndex={isMenuOpen && isOpen ? 0 : -1}
+                          >
+                            Preguntas frecuentes
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -290,24 +310,23 @@ export function Header() {
                 )
               }
 
-              if ("href" in item) {
-                return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className={cn(
-                      navItemClass(isNavActive(pathname, item.href)),
-                      "border-b border-agua/15 py-3.5 text-xl"
-                    )}
-                    onClick={() => setIsMenuOpen(false)}
-                    tabIndex={isMenuOpen ? 0 : -1}
-                  >
-                    {item.label}
-                  </Link>
-                )
-              }
+              const href = "href" in item ? item.href : undefined
+              if (!href) return null
 
-              return null
+              return (
+                <Link
+                  key={item.label}
+                  href={href}
+                  className={cn(
+                    navItemClass(isNavActive(pathname, href)),
+                    "border-b border-agua/15 py-3.5 text-xl"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
+                  tabIndex={isMenuOpen ? 0 : -1}
+                >
+                  {item.label}
+                </Link>
+              )
             })}
             <MarketingButton asChild size="lg" className="mt-6 w-full">
               <Link href={contactHref} onClick={() => setIsMenuOpen(false)} tabIndex={isMenuOpen ? 0 : -1}>

@@ -6,7 +6,7 @@ const withBundleAnalyzer = withBundleAnalyzerInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ["192.168.1.116", "192.168.88.18"],
+  allowedDevOrigins: ["192.168.1.116", "192.168.88.18", "192.168.1.53"],
   images: {
     unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [

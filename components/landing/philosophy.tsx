@@ -111,6 +111,7 @@ export function Philosophy() {
   return (
     <section
       ref={sectionRef}
+      id="como-trabajamos"
       className="section-divider relative overflow-hidden bg-surface-light py-20 md:py-28"
     >
       <SectionShell>

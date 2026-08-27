@@ -13,7 +13,7 @@ export function AboutOffice() {
   const mapSearchHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(legalEntity.address)}`
 
   return (
-    <section className="relative overflow-hidden border-t border-agua/30 bg-background py-16 md:py-24">
+    <section id="oficina" className="relative overflow-hidden border-t border-agua/30 bg-background py-16 md:py-24">
       <FloatingElement
         className="absolute top-0 left-[-10%] h-72 w-72 rounded-full bg-agua/20 blur-[110px]"
         duration={13}

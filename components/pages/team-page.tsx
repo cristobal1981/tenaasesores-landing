@@ -17,7 +17,7 @@ export function TeamPage() {
     <main className="min-h-screen">
       <AboutHero />
 
-      <section className="border-t border-agua/30 bg-background py-16 md:py-24">
+      <section id="equipo" className="border-t border-agua/30 bg-background py-16 md:py-24">
         <SectionShell>
           <MarketingSectionHeading
             badge={team.badge}
