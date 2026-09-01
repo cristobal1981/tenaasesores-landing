@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronDown, Menu, X } from "lucide-react"
@@ -14,23 +14,47 @@ import {
 } from "@/components/ui/navigation-menu"
 import { BrandLogo } from "@/components/layout/brand-logo"
 import { contactHref, navItems } from "@/content/site"
+import { useActiveSectionHash } from "@/lib/scroll/use-active-section-hash"
 import { cn } from "@/lib/utils"
 
 type NavItem = (typeof navItems)[number]
 type PanelChild = { label: string; href: string; description: string }
 type Panel = { items: ReadonlyArray<PanelChild>; faqHref: string }
 
-function isNavActive(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`)
+/** Separa un href tipo "/servicios#fiscal" en su ruta ("/servicios") y su ancla ("fiscal"). */
+function splitHref(href: string) {
+  const hashIndex = href.indexOf("#")
+  if (hashIndex === -1) return { path: href, hash: "" }
+  return { path: href.slice(0, hashIndex) || "/", hash: href.slice(hashIndex + 1) }
+}
+
+function isNavActive(pathname: string, href: string, activeHash = "") {
+  const { path, hash } = splitHref(href)
+  if (hash) return pathname === path && hash === activeHash
+  return pathname === path || pathname.startsWith(`${path}/`)
+}
+
+/** Para items de grid del panel: si el item no tiene hash (enlaza a la propia página,
+ * p. ej. "Inicio" → "/" o "Implementación de Odoo" → "/implementacion-odoo"), solo debe
+ * marcarse activo mientras no se haya cruzado ninguna sección trackeada — si no, se queda
+ * activo para siempre en cuanto estás en la página, ignorando el scroll. */
+function isPanelChildActive(pathname: string, href: string, activeHash: string) {
+  const { path, hash } = splitHref(href)
+  if (path !== pathname) return false
+  return hash ? hash === activeHash : activeHash === ""
 }
 
 function hasPanel(item: NavItem): item is NavItem & { panel: Panel } {
   return "panel" in item
 }
 
-function isPanelItemActive(item: NavItem & { panel: Panel }, pathname: string) {
-  if ("href" in item) return isNavActive(pathname, item.href)
-  return item.panel.items.some((child) => isNavActive(pathname, child.href))
+function isPanelItemActive(
+  item: NavItem & { panel: Panel },
+  pathname: string,
+  activeHash: string
+) {
+  if ("href" in item) return isNavActive(pathname, item.href, activeHash)
+  return item.panel.items.some((child) => isPanelChildActive(pathname, child.href, activeHash))
 }
 
 function navItemClass(isActive: boolean) {
@@ -106,11 +130,13 @@ function MegaMenuGridPanel({
   items,
   faqHref,
   pathname,
+  activeHash,
   onNavigate,
 }: {
   items: ReadonlyArray<PanelChild>
   faqHref: string
   pathname: string
+  activeHash: string
   onNavigate?: () => void
 }) {
   return (
@@ -122,7 +148,7 @@ function MegaMenuGridPanel({
             label={child.label}
             description={child.description}
             href={child.href}
-            isActive={isNavActive(pathname, child.href)}
+            isActive={isPanelChildActive(pathname, child.href, activeHash)}
             onNavigate={onNavigate}
           />
         ))}
@@ -139,6 +165,19 @@ export function Header() {
   const [openMobilePanel, setOpenMobilePanel] = useState<string | null>(null)
   const [megaMenuValue, setMegaMenuValue] = useState("")
   const pathname = usePathname()
+
+  const sectionIds = useMemo(() => {
+    const ids: string[] = []
+    for (const item of navItems) {
+      if (!hasPanel(item)) continue
+      for (const child of item.panel.items) {
+        const { path, hash } = splitHref(child.href)
+        if (hash && path === pathname) ids.push(hash)
+      }
+    }
+    return ids
+  }, [pathname])
+  const activeHash = useActiveSectionHash(sectionIds)
 
   // Cierre al navegar: ajuste de estado durante el render, no en efecto.
   const [prevPathname, setPrevPathname] = useState(pathname)
@@ -175,7 +214,7 @@ export function Header() {
             <NavigationMenuList className="gap-7">
               {navItems.map((item) => {
                 if (hasPanel(item)) {
-                  const isActive = isPanelItemActive(item, pathname)
+                  const isActive = isPanelItemActive(item, pathname, activeHash)
                   const isOpen = megaMenuValue === item.label
                   return (
                     <NavigationMenuItem key={item.label} value={item.label}>
@@ -193,6 +232,7 @@ export function Header() {
                             items={item.panel.items}
                             faqHref={item.panel.faqHref}
                             pathname={pathname}
+                            activeHash={activeHash}
                           />
                         </div>
                       </NavigationMenuContent>
@@ -201,7 +241,7 @@ export function Header() {
                 }
 
                 if ("href" in item) {
-                  const isActive = isNavActive(pathname, item.href)
+                  const isActive = isNavActive(pathname, item.href, activeHash)
                   return (
                     <NavigationMenuItem key={item.label}>
                       <Link href={item.href} className={navItemClass(isActive)}>
@@ -247,7 +287,7 @@ export function Header() {
               if (hasPanel(item)) {
                 const isOpen = openMobilePanel === item.label
                 const isParentActive = item.panel.items.some((child) =>
-                  isNavActive(pathname, child.href)
+                  isPanelChildActive(pathname, child.href, activeHash)
                 )
                 return (
                   <div key={item.label} className="border-b border-agua/15 py-1">
@@ -281,7 +321,7 @@ export function Header() {
                               href={child.href}
                               className={cn(
                                 "block transition-colors hover:text-primary",
-                                isNavActive(pathname, child.href) ? "text-primary" : "text-muted-on-dark"
+                                isPanelChildActive(pathname, child.href, activeHash) ? "text-primary" : "text-muted-on-dark"
                               )}
                               onClick={() => setIsMenuOpen(false)}
                               tabIndex={isMenuOpen && isOpen ? 0 : -1}
@@ -318,7 +358,7 @@ export function Header() {
                   key={item.label}
                   href={href}
                   className={cn(
-                    navItemClass(isNavActive(pathname, href)),
+                    navItemClass(isNavActive(pathname, href, activeHash)),
                     "border-b border-agua/15 py-3.5 text-xl"
                   )}
                   onClick={() => setIsMenuOpen(false)}
