@@ -109,7 +109,7 @@ export function Footer() {
                 className="inline-flex items-center gap-2 text-sm text-muted-on-dark"
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />
-                Los Realejos, Tenerife
+                {legalEntity.address}
               </TextLink>
             </div>
             <p className="text-xs whitespace-nowrap text-muted-on-dark/80">

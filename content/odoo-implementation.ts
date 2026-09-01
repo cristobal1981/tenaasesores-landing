@@ -33,9 +33,9 @@ export type OdooPhase = {
 }
 
 export const odooImplementationMeta = {
-  title: "Implementación de Odoo: auditoría, migración y formación | tenaasesores",
+  title: "Implementación de Odoo: auditoría y migración | tenaasesores",
   description:
-    "Cómo implementamos Odoo en tu negocio: auditoría inicial, estructura contable y fiscal, migración bancaria, facturación con OCR, formación del equipo y acompañamiento continuo. Partners oficiales de Odoo.",
+    "Implementamos Odoo en tu negocio: auditoría, estructura fiscal, migración bancaria, formación del equipo y acompañamiento. Partners oficiales de Odoo.",
 } as const
 
 export const odooImplementationHero = {

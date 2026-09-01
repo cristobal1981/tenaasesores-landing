@@ -179,6 +179,7 @@ export function Contact() {
         subtitle={contact.subtitle}
         tone="light"
         size="page"
+        as="h1"
         className="mb-14 max-w-3xl"
       />
 

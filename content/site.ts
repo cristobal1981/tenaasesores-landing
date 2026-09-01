@@ -423,10 +423,9 @@ export const services = {
             "Nos aseguramos de que todas las estrategias y deducciones aplicadas estén en línea con la normativa vigente, minimizando riesgos y garantizando que tu empresa esté preparada ante cualquier inspección o auditoría.",
         },
         {
-          // TODO(Guillermo): revisar con precisión fiscal antes de publicar — borrador conservador.
           title: "Fiscalidad canaria (IGIC, REF, ZEC)",
           description:
-            "Gestionamos tu IGIC trimestral y te orientamos en las particularidades del Régimen Económico y Fiscal de Canarias, incluida la Zona Especial Canaria (ZEC) cuando tu actividad pueda beneficiarse.",
+            "Gestionamos tus modelos de IGIC y te orientamos en las particularidades del Régimen Económico y Fiscal de Canarias, incluida la Zona Especial Canaria (ZEC) cuando tu actividad pueda beneficiarse.",
         },
       ],
       benefits: [

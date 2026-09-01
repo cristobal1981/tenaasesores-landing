@@ -2,7 +2,7 @@
 
 > Auditoría SEO + rendimiento de la web pública. Solo incluye problemas detectados y la tarea concreta para resolverlos.
 >
-> Actualizado 6 ago 2026 tras audit con la skill `seo-audit` + medición Lighthouse del usuario. Se revisó el estado real de cada punto contra el código actual antes de marcarlo.
+> Actualizado 1 sep 2026 tras audit completo de todo el sitio (no solo `/servicios`) con la skill `seo-audit`. Incluye verificación uno por uno de los pendientes anteriores contra el código actual, más las páginas nuevas desde el 24 ago (mega menu, `/implementacion-odoo`). Metodología: SSR local (`next dev`) de las 14 rutas del sitio, inspección de `<title>`/meta description/canonical/headings/schema en el HTML servido, y lectura de código para los componentes compartidos (header, footer, chat widget).
 
 ## SEO y contenido
 
@@ -11,9 +11,20 @@
 - [ ] **Sin sección de blog/contenido.** Sigue pendiente. Es la vía de tráfico orgánico de cola larga más realista para una asesoría (modelo 130, alta autónomo, IGIC trimestral...), pero **decisión explícita: no se aborda por ahora** (6 ago 2026).
 - [x] ~~**NAP solo en `/contacto`, no en el footer global.**~~ **Descartado.** No aporta a SEO nacional (24 ago 2026).
 - [x] ~~**Cero SEO local pese a tener dirección física.**~~ **Descartado, no es un bug.** Guillermo confirmó que el objetivo es posicionamiento **nacional**, no local — Tenerife es una señal de confianza (oficina física real), no el foco de targeting. Así está implementado a propósito en `organizationSchema()` (`areaServed: España`). No añadir "Tenerife"/"Los Realejos" a title/H1 de home o servicios.
-- [ ] **Ausencia de terminología fiscal canaria** (IGIC, REF, ZEC) — ya incorporada en `content/site.ts` (sección "Fiscalidad canaria (IGIC, REF, ZEC)" dentro de `services.mainServices`), pero tiene un `TODO(Guillermo)` pidiendo revisión de precisión fiscal antes de publicar y ya está en producción. Guillermo se encarga de la revisión más adelante.
-- [ ] **NAP solo en `/contacto`, no en el footer global.** Sigue pendiente — el footer tiene teléfono y ubicación (`components/landing/footer.tsx`) pero no la dirección postal completa. Valorar añadirla y marcado adicional si en algún momento se reconsiderara SEO local (hoy no aplica, ver punto anterior).
-- [ ] **Posible hueco de cumplimiento LSSI.** Sigue pendiente — revisar con quien lleve el cumplimiento legal del despacho si faltan datos de colegio profesional/nº de colegiado.
+- [x] **Ausencia de terminología fiscal canaria** (IGIC, REF, ZEC) — incorporada en `content/site.ts` (sección "Fiscalidad canaria (IGIC, REF, ZEC)" dentro de `services.mainServices`). Resuelto 1 sep 2026: Guillermo revisó la precisión fiscal y quitó el `TODO`, cambiando "Gestionamos tu IGIC trimestral" por "Gestionamos tus modelos de IGIC" (más preciso, sin comprometerse a una periodicidad concreta). Re-auditado en local (`/servicios`): keyword IGIC se mantiene, jerarquía de headings sigue H1→H2→H3 sin saltos (el H3 sigue siendo "Fiscalidad canaria (IGIC, REF, ZEC)"), sin restos de TODO en el HTML servido, title/meta description/canonical/`Service` schema de `/servicios` intactos. Pendiente de desplegar (cambio aún no commiteado).
+- [x] **NAP solo en `/contacto`, no en el footer global.** Resuelto 1 sep 2026 — el footer (`components/landing/footer.tsx:112`) ya usa `legalEntity.address` (dirección completa: "Calle El Toscal, nº 29, 1º pta 7, Los Realejos, Santa Cruz de Tenerife") en vez del texto corto "Los Realejos, Tenerife". Dato ya público en `/aviso-legal` y `/privacidad`, sin exposición nueva. Verificado en HTML servido.
+- [x] ~~**Posible hueco de cumplimiento LSSI (colegio profesional/nº de colegiado).**~~ **Descartado** — no aplica, Tenaasesores no tiene abogados en plantilla. Guillermo confirma (1 sep 2026).
+  - **Hallazgo real detrás de esto:** `content/legal.ts` conserva restos de cuando sí había abogados — `legalEntity.businessName: "Tena Asesores y Abogados, S.L.P"` (nombre social aún no renombrado) y en `aviso-legal` texto sobre "servicios de consultoría **legal**" y "**Ley 5/2012**, de mediación en asuntos civiles y mercantiles". No tocado: es nombre social/registro mercantil real, cambiarlo requiere trámite legal, no es un fix de código. Pendiente de que Guillermo decida si renombra la sociedad o ajusta el texto del aviso legal para reflejar la actividad actual.
+
+### Nuevos hallazgos on-page (1 sep 2026) — audit completo del sitio
+
+- [x] **`/contacto` no tiene H1.** Resuelto 1 sep 2026: añadido `as="h1"` en `components/landing/contact.tsx:178` (`MarketingSectionHeading` por defecto renderiza `as="h2"`). Verificado en HTML servido: `<h1>Hablemos de tu negocio.</h1>` presente.
+- [x] **`/implementacion-odoo`: title y description demasiado largos.** Resuelto 1 sep 2026 en `content/odoo-implementation.ts:36-38` (`odooImplementationMeta`). Title 71→60 car.: "Implementación de Odoo: auditoría y migración | tenaasesores". Description 204→150 car., manteniendo "Partners oficiales de Odoo" dentro del límite visible: "Implementamos Odoo en tu negocio: auditoría, estructura fiscal, migración bancaria, formación del equipo y acompañamiento. Partners oficiales de Odoo." Verificado en HTML servido.
+- [x] **Contadores de cifras en 0.** Resuelto — verificado en el HTML servido de home y `/nosotros`: los contadores ahora sirven el valor final estático en el SSR (`+150`, `+15`, `98%`, `24h`, `6`) y solo animan desde 0 vía GSAP en cliente. El único contador con `end: 0` es "Permanencias" (0 permanencias de contrato) — es un dato real, no un bug.
+- [x] **Árbol de accesibilidad del botón flotante del chat "Sappo".** Revisado el código actual (`components/chat/site-chat-widget.tsx`): el botón FAB tiene `aria-label` y `aria-expanded`, y el `<Image>` decorativo dentro lleva `alt=""` (ya excluido del árbol de accesibilidad por sí solo, independientemente de `aria-hidden`). Estructuralmente ya no se aprecia el problema descrito el 6 ago. No verificado con un lector de pantalla real ni con el árbol de accesibilidad de Chrome DevTools — si el hallazgo original venía de ahí, confirmarlo en navegador antes de darlo por cerrado del todo.
+- [x] **Demasiada separación en `/plan-autonomos` y `/plan-empresas`.** Resuelto — `components/pages/plans-page.tsx:12` ya no pasa `padding="spacious"` a `DarkPageHero`, usa el `padding="default"` (`py-16 md:py-20` en vez de `py-20 md:py-28`). Coincide con el commit `54da83d` ("Rediseña el hero de Nosotros y ajusta espaciado de planes").
+- [x] **`tsconfig.tsbuildinfo` trackeado en git.** Resuelto — ya no aparece en `git ls-files` y está en `.gitignore:37` (`*.tsbuildinfo`).
+- [x] **Cobertura técnica del sitio completo.** Las 14 rutas responden 200, el sitemap (`app/sitemap.ts`, vía `indexablePaths` en `lib/seo/metadata.ts`) incluye las 11 páginas indexables incluida `/implementacion-odoo` con prioridad 0.9, y `robots.ts` bloquea correctamente `/proximamente`, `/400`, `/reportar-problema` y `/solicitud-alta-autonomo`. Sin páginas huérfanas: todas las rutas indexables tienen al menos un enlace interno desde home. Todas las imágenes (`next/image`) llevan `alt`. `/implementacion-odoo` tiene `breadcrumbSchema`; podría sumar también un `Service` schema propio como tiene `/servicios`, pero es mejora menor, no bloqueante.
 
 ### Nuevos hallazgos SEO on-page (6 ago 2026) — todos resueltos hoy
 
@@ -25,7 +36,7 @@
 
 ## Contadores / UI
 
-- [ ] **Contadores de cifras en 0.** Sigue pendiente — no se ha tocado en esta sesión. En home y `/nosotros`, todos los contadores (clientes, años, satisfacción, profesionales en equipo) se renderizan como "+0"/"0%" antes de animar. Verificar en navegador real y sin JS; asegurar valores estáticos de fallback en el HTML servido.
+- [x] ~~**Contadores de cifras en 0.**~~ Resuelto — ver detalle en "Nuevos hallazgos on-page (1 sep 2026)" arriba.
 
 ## Rendimiento
 
@@ -67,15 +78,15 @@ Hallazgo clave: `HomeThreeField` (el fondo WebGL de Three.js, ~564 KB) llevaba t
 
 ## Accesibilidad / Navegación agéntica (1/2)
 
-- [ ] **Árbol de accesibilidad mal formado en el botón flotante (widget de chat "Sappo").** Sin abordar. `div.fixed > div.absolute > button.inline-flex > img.absolute` con `alt=""` y `aria-hidden="false"` inconsistentes.
-- [ ] Revisar el resto de accesibilidad (94/100) con la pestaña completa del informe.
+- [x] ~~**Árbol de accesibilidad mal formado en el botón flotante (widget de chat "Sappo").**~~ Ya no se aprecia en el código — ver detalle en "Nuevos hallazgos on-page (1 sep 2026)" arriba. Pendiente de confirmación visual en navegador/lector de pantalla.
+- [ ] Revisar el resto de accesibilidad (94/100) con la pestaña completa del informe. No re-medido esta sesión (requiere Lighthouse manual).
 
 ## UI — pendientes
 
-- [ ] **Demasiada separación entre el título y las cards en `/plan-autonomos` y `/plan-empresas`.** El header (`DarkPageHero`, `padding="spacious"`) deja mucho hueco antes de que arranque `PlansPageClient`. Reducir el espaciado — revisar `padding` de `DarkPageHero` en `components/pages/plans-page.tsx` y el `py-*` superior de la sección de cards.
+- [x] ~~**Demasiada separación entre el título y las cards en `/plan-autonomos` y `/plan-empresas`.**~~ Resuelto — ver detalle en "Nuevos hallazgos on-page (1 sep 2026)" arriba.
 
 ## Dev server — consumo de RAM/CPU (21 ago 2026)
 
 - [x] **`next-server` (Turbopack) se disparaba a 600%+ CPU y crecía sin límite en RAM (varios GB) hasta morir por OOM-killer.** Causa: caché de `.next/` corrupta/hinchada (333 MB) acumulada por sesiones previas del dev server que quedaron colgadas o se cerraron mal, provocando un bucle de recompilación en los hilos del pool de Turbopack ya desde el arranque, sin necesidad de tráfico. Confirmado con `journalctl -k` (un `next-server` anterior ya había sido matado por el OOM-killer del kernel el mismo día). Solución aplicada: matar los procesos huérfanos, `rm -rf .next` y reiniciar — con caché limpia el CPU decae con normalidad tras el arranque en frío y la RAM se estabiliza (~940 MB).
   - **Si vuelve a pasar:** parar siempre el dev server con `Ctrl+C` limpio (no cerrar la terminal a lo bruto, para que Turbopack cierre bien la caché); si el consumo se dispara, primer paso es `rm -rf .next` y reiniciar.
-- [ ] **`tsconfig.tsbuildinfo` está trackeado en git** (debería estar en `.gitignore` — es un artefacto de build de TypeScript que se regenera constantemente). Pendiente: `git rm --cached tsconfig.tsbuildinfo` + añadirlo a `.gitignore`. No hecho aún porque no está confirmado que sea la causa del problema de arriba (parece más bien higiene de repo), a la espera de confirmación de Guillermo.
+- [x] ~~**`tsconfig.tsbuildinfo` está trackeado en git.**~~ Resuelto — ver detalle en "Nuevos hallazgos on-page (1 sep 2026)" arriba.
