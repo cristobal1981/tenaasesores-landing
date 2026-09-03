@@ -2,11 +2,20 @@ import { contactForm } from "@/content/contact-form"
 import { planCustomizeForm } from "@/content/plan-customize-form"
 import { LeadDeliveryError } from "@/lib/leads/lead-delivery-error"
 
-type LeadFormKind = "contact" | "plan_customize"
+type LeadFormKind = "contact" | "plan_customize" | "confirmar_presupuesto"
 
 function deliveryFallbacks(kind: LeadFormKind) {
-  const messages =
-    kind === "contact" ? contactForm.messages : planCustomizeForm.messages
+  if (kind === "confirmar_presupuesto") {
+    const messages = planCustomizeForm.confirmarPresupuesto.messages
+    return {
+      // "duplicado" no aplica a esta acción; usamos el genérico como fallback.
+      duplicateLead: messages.genericError,
+      webhookForbidden: messages.webhookForbidden,
+      generic: messages.genericError,
+    }
+  }
+
+  const messages = kind === "contact" ? contactForm.messages : planCustomizeForm.messages
   return {
     duplicateLead: messages.duplicateLead,
     webhookForbidden: messages.webhookForbidden,

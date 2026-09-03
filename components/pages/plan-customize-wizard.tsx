@@ -25,6 +25,7 @@ import { FieldLabel } from "@/components/forms/field-label"
 import { FormStatusMessage } from "@/components/forms/form-status-message"
 import { FormSubmissionSuccess } from "@/components/forms/form-submission-success"
 import { HoneypotField } from "@/components/forms/honeypot-field"
+import { PlanCustomizePresupuestoPanel } from "@/components/pages/plan-customize-presupuesto-panel"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -32,7 +33,8 @@ import {
   formSubmitStubDelayMs,
   isFormSubmitStubEnabled,
 } from "@/lib/forms/form-submit-stub"
-import { resolveFormApiErrorMessage, type FormApiPayload } from "@/lib/forms/form-api-response"
+import { resolveFormApiErrorMessage } from "@/lib/forms/form-api-response"
+import type { PlanCustomizeApiPayload } from "@/lib/plan-customize/api-response"
 import {
   canSubmitPlanCustomizeFromClient,
   recordPlanCustomizeClientSubmission,
@@ -40,6 +42,7 @@ import {
 import { getPlanCustomizeStepValidationError } from "@/lib/plan-customize/validate-inquiry"
 import { formStepEase } from "@/lib/forms/motion-tokens"
 import { cn } from "@/lib/utils"
+import type { PresupuestoFlash } from "@/src/modules/leads/domain/presupuesto-flash"
 
 const TOTAL_STEPS = 3
 
@@ -245,6 +248,10 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
   const [formReady, setFormReady] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [presupuestoFlash, setPresupuestoFlash] = useState<{
+    leadId: number
+    data: PresupuestoFlash
+  } | null>(null)
   const [stepError, setStepError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -356,10 +363,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     setStep((prev) => Math.max(prev - 1, 1))
   }
 
-  const revealSuccess = useCallback((detail?: string) => {
-    setSuccessMessage(detail ?? planCustomizeForm.success.body)
-    resetWizard()
-    formStartedAtRef.current = Date.now()
+  const scrollToSection = useCallback(() => {
     const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     window.setTimeout(() => {
       document.getElementById(planCustomizeForm.sectionId)?.scrollIntoView({
@@ -367,7 +371,21 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
         block: "start",
       })
     }, motionReduced ? 0 : 40)
-  }, [resetWizard])
+  }, [])
+
+  const revealSuccess = useCallback((detail?: string) => {
+    setSuccessMessage(detail ?? planCustomizeForm.success.body)
+    resetWizard()
+    formStartedAtRef.current = Date.now()
+    scrollToSection()
+  }, [resetWizard, scrollToSection])
+
+  const revealPresupuesto = useCallback((leadId: number, data: PresupuestoFlash) => {
+    setPresupuestoFlash({ leadId, data })
+    resetWizard()
+    formStartedAtRef.current = Date.now()
+    scrollToSection()
+  }, [resetWizard, scrollToSection])
 
   const handleFormKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key !== "Enter") return
@@ -385,7 +403,21 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       await new Promise((resolve) => window.setTimeout(resolve, formSubmitStubDelayMs))
       const submitDelay = reducedMotion ? 0 : submitDelayMs
       window.setTimeout(() => {
-        revealSuccess(planCustomizeForm.success.body)
+        if (audience === "autonomos") {
+          revealPresupuesto(1, {
+            tipo: "ALTA",
+            residencia: "Canarias",
+            lineas: [
+              { nombre: "Suscripción mensual asesor autónomo", precio: 55 },
+              { nombre: "Alta RETA Seguridad Social", precio: 50 },
+              { nombre: "Alta económica AEAT", precio: 50 },
+              { nombre: "Alta económica ATC", precio: 30 },
+            ],
+            totalMensual: 185,
+          })
+        } else {
+          revealSuccess(planCustomizeForm.success.body)
+        }
         setIsSubmitting(false)
       }, submitDelay)
       return
@@ -434,7 +466,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
         }),
       })
 
-      const payload = (await response.json()) as FormApiPayload
+      const payload = (await response.json()) as PlanCustomizeApiPayload
 
       const apiError = resolveFormApiErrorMessage(response, payload, {
         rateLimit: planCustomizeForm.messages.rateLimit,
@@ -452,7 +484,11 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       recordPlanCustomizeClientSubmission()
       const submitDelay = reducedMotion ? 0 : submitDelayMs
       window.setTimeout(() => {
-        revealSuccess(payload.message)
+        if (payload.presupuesto && typeof payload.leadId === "number") {
+          revealPresupuesto(payload.leadId, payload.presupuesto)
+        } else {
+          revealSuccess(payload.message)
+        }
       }, submitDelay)
     } catch {
       setStepError(planCustomizeForm.messages.genericError)
@@ -769,7 +805,18 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
 
       <LazyMotion features={domAnimation} strict>
         <AnimatePresence mode="wait" initial={false}>
-          {successMessage ? (
+          {presupuestoFlash ? (
+            <PlanCustomizePresupuestoPanel
+              key="plan-customize-presupuesto"
+              className={planFormWidthClass}
+              leadId={presupuestoFlash.leadId}
+              presupuesto={presupuestoFlash.data}
+              onResolved={(estado) => {
+                setPresupuestoFlash(null)
+                revealSuccess(planCustomizeForm.confirmarPresupuesto.thankYou[estado].body)
+              }}
+            />
+          ) : successMessage ? (
             <FormSubmissionSuccess
               key="plan-customize-success"
               className={planFormWidthClass}

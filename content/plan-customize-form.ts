@@ -144,6 +144,73 @@ export const planCustomizeForm = {
     stepsDoneLabel: "Los 3 pasos están enviados",
   },
   privacyNote: "Al enviar aceptas la política de privacidad",
+  confirmarPresupuesto: {
+    title: "Tu presupuesto flash",
+    intro:
+      "Esto es una estimación al instante a partir de lo que nos has contado — nada se confirma todavía.",
+    monthlyLineLabel: "Cuota mensual",
+    oneTimeLineLabel: "Pago único",
+    totalLabel: "Total mensual estimado",
+    actions: {
+      accept: "Aceptar presupuesto",
+      reject: "Rechazar",
+      notInterested: "No me interesa",
+      back: "Volver",
+      confirm: "Confirmar",
+      sending: "Enviando…",
+    },
+    motivos: {
+      rechazar: {
+        label: "¿Por qué lo rechazas?",
+        options: [
+          { value: "caro", label: "Es muy caro" },
+          { value: "servicios", label: "Los servicios no concuerdan" },
+          { value: "otro", label: "Otro" },
+        ],
+        otroPlaceholder: "Cuéntanos brevemente el motivo…",
+      },
+      no_interesa: {
+        label: "¿Por qué no te interesa?",
+        options: [
+          { value: "curioseando", label: "Estaba curioseando" },
+          { value: "no_momento", label: "No es el momento" },
+          { value: "otro", label: "Otro" },
+        ],
+        otroPlaceholder: "Cuéntanos brevemente el motivo…",
+      },
+    },
+    validation: {
+      motivoRequired: "Selecciona un motivo.",
+      motivoOtroRequired: "Cuéntanos brevemente el motivo.",
+    },
+    thankYou: {
+      aceptar: {
+        body: "¡Genial! Hemos registrado tu aceptación. En breve recibirás la confirmación por email con los siguientes pasos.",
+      },
+      rechazar: {
+        body: "Gracias por contarnos el motivo. Hemos registrado tu respuesta — si cambias de opinión, contáctanos cuando quieras.",
+      },
+      no_interesa: {
+        body: "Entendido, gracias por tu tiempo. Hemos registrado tu respuesta.",
+      },
+    },
+    messages: {
+      validation: "No hemos podido procesar tu respuesta. Inténtalo de nuevo.",
+      rateLimit:
+        "Has intentado confirmar varias veces seguidas. Espera un momento antes de volver a intentarlo.",
+      webhookForbidden:
+        "No hemos podido registrar tu respuesta ahora mismo. Inténtalo en unos minutos o contáctanos por teléfono.",
+      genericError:
+        "No se ha podido enviar tu respuesta. Inténtalo más tarde o contáctanos por teléfono.",
+    },
+    limits: {
+      motivoMax: 300,
+    },
+    rateLimit: {
+      maxPerIpPerHour: 10,
+      maxPerLeadPerHour: 4,
+    },
+  },
 } as const
 
 export function empresasHasEmployeesLabel(isNewConstitution: string): string {
