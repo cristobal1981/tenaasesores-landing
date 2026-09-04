@@ -2,6 +2,7 @@ export const contactForm = {
   fields: {
     honeypotLabel: "Deja este campo vacío",
     phoneLabel: "Teléfono",
+    privacyLabel: "Acepto la política de privacidad",
   },
   limits: {
     nameMax: 100,
@@ -24,8 +25,12 @@ export const contactForm = {
   },
   messages: {
     validation: "Revisa los campos marcados e inténtalo de nuevo.",
+    nameRequired: "Indica tu nombre.",
     phoneRequired: "Indica un teléfono de contacto.",
     phoneInvalid: "Revisa el teléfono. Usa un formato válido, por ejemplo +34 600 000 000.",
+    emailInvalid: "Indica un email válido.",
+    messageTooShort: "Cuéntanos un poco más sobre tu situación.",
+    privacyRequired: "Debes aceptar la política de privacidad.",
     rateLimit:
       "Has enviado varias consultas recientemente. Espera un momento antes de volver a intentarlo.",
     honeypot: "No se ha podido enviar la consulta. Si eres una persona, inténtalo de nuevo.",

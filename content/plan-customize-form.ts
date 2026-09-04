@@ -40,7 +40,7 @@ export const planCustomizeForm = {
     revenueHint: "Importe aproximado en euros al año.",
     autonomos: {
       registeredLabel: "¿Estás dado de alta como autónomo?",
-      hireEmployeesLabel: "¿Vas a contratar empleados?",
+      hireEmployeesLabel: "¿Tienes empleados o vas a contratarlos?",
     },
     empresas: {
       newConstitutionLabel: "¿Es una nueva constitución?",
@@ -91,6 +91,7 @@ export const planCustomizeForm = {
     phonePlaceholder: "+34 600 000 000",
     notesLabel: "Algo más que debamos saber",
     notesPlaceholder: "Plazos, herramientas que usas, dudas concretas…",
+    privacyLabel: "Acepto la política de privacidad",
   },
   messagePrefix: {
     autonomos: "[Plan personalizado · autónomos]",
@@ -98,7 +99,7 @@ export const planCustomizeForm = {
   },
   validation: {
     registeredAutonomo: "Indica si estás dado de alta como autónomo.",
-    hireEmployees: "Indica si vas a contratar empleados.",
+    hireEmployees: "Indica si tienes empleados o vas a contratarlos.",
     newConstitution: "Indica si es una nueva constitución.",
     hasEmployees: "Indica si la empresa tiene empleados.",
     hasEmployeesFuture: "Indica si la empresa tendrá empleados.",
@@ -110,6 +111,7 @@ export const planCustomizeForm = {
     taxRegion: "Indica si tu residencia fiscal es en península o en Canarias.",
     name: "Indica tu nombre.",
     email: "Indica un email válido.",
+    privacy: "Debes aceptar la política de privacidad.",
   },
   limits: {
     activityMin: 10,
@@ -143,7 +145,6 @@ export const planCustomizeForm = {
     body: "Hemos recibido tu información. Te contactaremos lo antes posible — en menos de 24 horas laborables — con tu propuesta personalizada.",
     stepsDoneLabel: "Los 3 pasos están enviados",
   },
-  privacyNote: "Al enviar aceptas la política de privacidad",
   confirmarPresupuesto: {
     title: "Tu presupuesto flash",
     intro:

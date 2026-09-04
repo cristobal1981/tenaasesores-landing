@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { LazyMotion, AnimatePresence, domAnimation, m, useReducedMotion } from "framer-motion"
 import { HoneypotField } from "@/components/forms/honeypot-field"
+import { FieldErrorText } from "@/components/forms/field-error-text"
 import { ContactChannelCard } from "@/components/landing/contact-channel-card"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { Input } from "@/components/ui/input"
@@ -28,13 +29,22 @@ import {
   isFormSubmitStubEnabled,
 } from "@/lib/forms/form-submit-stub"
 import { resolveFormApiErrorMessage, type FormApiPayload } from "@/lib/forms/form-api-response"
-import { isLikelyValidPhone } from "@/lib/contact/validate-inquiry"
+import { isLikelyValidPhone, isValidEmail } from "@/lib/contact/validate-inquiry"
 import { formExitMs, formStepEase } from "@/lib/forms/motion-tokens"
+import { cn } from "@/lib/utils"
 
 const socialIcons = {
   LinkedIn: LinkedinIcon,
   Instagram: InstagramIcon,
 } as const
+
+const CONTACT_FIELD_DOM_ID: Record<string, string> = {
+  name: "name",
+  phone: "phone",
+  email: "email",
+  message: "message",
+  privacyAccepted: "privacidad",
+}
 
 export function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -45,11 +55,13 @@ export function Contact() {
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
+  const [privacyAccepted, setPrivacyAccepted] = useState(false)
   const [company, setCompany] = useState("")
   const [formReady, setFormReady] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const successFocusRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -79,6 +91,36 @@ export function Contact() {
 
   const formSubmitStub = isFormSubmitStubEnabled()
 
+  const getContactFieldErrors = useCallback((): Record<string, string> => {
+    const errors: Record<string, string> = {}
+    if (!name.trim()) errors.name = contactForm.messages.nameRequired
+    if (phone.trim() && !isLikelyValidPhone(phone)) errors.phone = contactForm.messages.phoneInvalid
+    if (!isValidEmail(email)) errors.email = contactForm.messages.emailInvalid
+    if (message.trim().length < contactForm.limits.messageMin) {
+      errors.message = contactForm.messages.messageTooShort
+    }
+    if (!privacyAccepted) errors.privacyAccepted = contactForm.messages.privacyRequired
+    return errors
+  }, [name, phone, email, message, privacyAccepted])
+
+  const focusContactField = useCallback((field: string) => {
+    const id = CONTACT_FIELD_DOM_ID[field]
+    const node = id ? document.getElementById(id) : null
+    if (!node) return
+    const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    node.scrollIntoView({ behavior: motionReduced ? "auto" : "smooth", block: "center" })
+    node.focus({ preventScroll: true })
+  }, [])
+
+  const clearFieldError = useCallback((field: string) => {
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+  }, [])
+
   const canSubmit =
     formSubmitStub ||
     (formReady &&
@@ -87,6 +129,7 @@ export function Contact() {
       phoneValid &&
       email.trim().length > 0 &&
       message.trim().length >= contactForm.limits.messageMin &&
+      privacyAccepted &&
       company.length === 0)
 
   const handleSubmit = useCallback(
@@ -110,12 +153,10 @@ export function Contact() {
       }
 
       if (!canSubmit) {
-        setErrorMessage(contactForm.messages.validation)
-        return
-      }
-
-      if (phone.trim() && !isLikelyValidPhone(phone)) {
-        setErrorMessage(contactForm.messages.phoneInvalid)
+        const errors = getContactFieldErrors()
+        setFieldErrors(errors)
+        const firstField = Object.keys(errors)[0]
+        if (firstField) focusContactField(firstField)
         return
       }
 
@@ -135,6 +176,7 @@ export function Contact() {
             phone,
             email,
             message,
+            privacyAccepted,
             company,
             formStartedAt: formStartedAtRef.current,
           }),
@@ -161,6 +203,8 @@ export function Contact() {
         setPhone("")
         setEmail("")
         setMessage("")
+        setPrivacyAccepted(false)
+        setFieldErrors({})
         formStartedAtRef.current = Date.now()
       } catch {
         setErrorMessage(contactForm.messages.genericError)
@@ -168,7 +212,18 @@ export function Contact() {
         setIsSubmitting(false)
       }
     },
-    [canSubmit, company, email, formSubmitStub, message, name, phone]
+    [
+      canSubmit,
+      company,
+      email,
+      formSubmitStub,
+      message,
+      name,
+      phone,
+      privacyAccepted,
+      getContactFieldErrors,
+      focusContactField,
+    ]
   )
 
   return (
@@ -239,11 +294,17 @@ export function Contact() {
                           placeholder="Tu nombre completo"
                           className="input-on-dark"
                           value={name}
-                          onChange={(event) => setName(event.target.value)}
+                          onChange={(event) => {
+                            setName(event.target.value)
+                            clearFieldError("name")
+                          }}
                           maxLength={contactForm.limits.nameMax}
                           required
                           disabled={isSubmitting}
+                          aria-invalid={Boolean(fieldErrors.name)}
+                          aria-describedby="name-error"
                         />
+                        <FieldErrorText id="name-error">{fieldErrors.name}</FieldErrorText>
                       </div>
                       <div className="space-y-2">
                         <FieldLabel htmlFor="phone">
@@ -255,11 +316,17 @@ export function Contact() {
                           placeholder="+34 600 000 000"
                           className="input-on-dark"
                           value={phone}
-                          onChange={(event) => setPhone(event.target.value)}
+                          onChange={(event) => {
+                            setPhone(event.target.value)
+                            clearFieldError("phone")
+                          }}
                           maxLength={contactForm.limits.phoneMax}
                           autoComplete="tel"
                           disabled={isSubmitting}
+                          aria-invalid={Boolean(fieldErrors.phone)}
+                          aria-describedby="phone-error"
                         />
+                        <FieldErrorText id="phone-error">{fieldErrors.phone}</FieldErrorText>
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -273,11 +340,17 @@ export function Contact() {
                         placeholder="tu@email.com"
                         className="input-on-dark"
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) => {
+                          setEmail(event.target.value)
+                          clearFieldError("email")
+                        }}
                         maxLength={contactForm.limits.emailMax}
                         required
                         disabled={isSubmitting}
+                        aria-invalid={Boolean(fieldErrors.email)}
+                        aria-describedby="email-error"
                       />
+                      <FieldErrorText id="email-error">{fieldErrors.email}</FieldErrorText>
                     </div>
                     <div className="space-y-2">
                       <FieldLabel htmlFor="message" required>
@@ -290,7 +363,10 @@ export function Contact() {
                         rows={4}
                         className="input-on-dark resize-none overflow-hidden"
                         value={message}
-                        onChange={(event) => setMessage(event.target.value)}
+                        onChange={(event) => {
+                          setMessage(event.target.value)
+                          clearFieldError("message")
+                        }}
                         minLength={contactForm.limits.messageMin}
                         maxLength={contactForm.limits.messageMax}
                         required
@@ -300,7 +376,42 @@ export function Contact() {
                           target.style.height = "auto"
                           target.style.height = `${target.scrollHeight}px`
                         }}
+                        aria-invalid={Boolean(fieldErrors.message)}
+                        aria-describedby="message-error"
                       />
+                      <FieldErrorText id="message-error">{fieldErrors.message}</FieldErrorText>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <input
+                          id="privacidad"
+                          type="checkbox"
+                          checked={privacyAccepted}
+                          onChange={(event) => {
+                            setPrivacyAccepted(event.target.checked)
+                            clearFieldError("privacyAccepted")
+                          }}
+                          disabled={isSubmitting}
+                          className={cn(
+                            "size-4 shrink-0 rounded border-agua/35 accent-primary",
+                            fieldErrors.privacyAccepted && "border-red-400/60 ring-[3px] ring-red-400/40"
+                          )}
+                          aria-invalid={Boolean(fieldErrors.privacyAccepted)}
+                          aria-describedby="privacidad-error"
+                        />
+                        <label htmlFor="privacidad" className="text-sm leading-snug text-muted-on-dark">
+                          {contactForm.fields.privacyLabel}{" "}
+                          <Link
+                            href="/privacidad"
+                            className="text-primary underline-offset-4 hover:underline"
+                          >
+                            (política de privacidad)
+                          </Link>
+                        </label>
+                      </div>
+                      <FieldErrorText id="privacidad-error">
+                        {fieldErrors.privacyAccepted}
+                      </FieldErrorText>
                     </div>
                     {errorMessage ? (
                       <FormStatusMessage variant="error">{errorMessage}</FormStatusMessage>
@@ -314,16 +425,6 @@ export function Contact() {
                       {isSubmitting ? contactForm.messages.sending : "Enviar consulta"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </MarketingButton>
-                    <p className="text-center text-xs text-muted-on-dark">
-                      Al enviar aceptas la{" "}
-                      <Link
-                        href="/privacidad"
-                        className="text-primary underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                      >
-                        política de privacidad
-                      </Link>
-                      .
-                    </p>
                   </m.form>
                   )}
                   </AnimatePresence>

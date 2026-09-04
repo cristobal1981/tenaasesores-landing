@@ -22,6 +22,7 @@ export type PlanCustomizeInquiryPayload = {
   email?: string
   phone?: string
   notes?: string
+  privacyAccepted?: boolean
   company?: string
   formStartedAt?: number
 }
@@ -79,55 +80,71 @@ function allowedServiceValues(audience: PlanCustomizeAudience): Set<string> {
   )
 }
 
+export type PlanCustomizeStepValues = {
+  isRegisteredAutonomo: string
+  willHireEmployees: string
+  isNewConstitution: string
+  hasEmployees: string
+  employeeCount: string
+  annualRevenue: string
+  services: string[]
+  activity: string
+  taxRegion: string
+  name: string
+  email: string
+  phone: string
+  privacyAccepted: boolean
+}
+
+export type PlanCustomizeFieldKey = keyof PlanCustomizeStepValues
+
+export type PlanCustomizeStepValidationError = {
+  field: PlanCustomizeFieldKey
+  message: string
+}
+
 export function getPlanCustomizeStepValidationError(
   currentStep: number,
   audience: PlanCustomizeAudience,
-  values: {
-    isRegisteredAutonomo: string
-    willHireEmployees: string
-    isNewConstitution: string
-    hasEmployees: string
-    employeeCount: string
-    annualRevenue: string
-    services: string[]
-    activity: string
-    taxRegion: string
-    name: string
-    email: string
-    phone: string
-  }
-): string | null {
+  values: PlanCustomizeStepValues
+): PlanCustomizeStepValidationError | null {
   if (currentStep === 1) {
     if (audience === "autonomos") {
       if (!parseYesNo(values.isRegisteredAutonomo)) {
-        return planCustomizeForm.validation.registeredAutonomo
+        return { field: "isRegisteredAutonomo", message: planCustomizeForm.validation.registeredAutonomo }
       }
       if (!parseYesNo(values.willHireEmployees)) {
-        return planCustomizeForm.validation.hireEmployees
+        return { field: "willHireEmployees", message: planCustomizeForm.validation.hireEmployees }
       }
     } else {
       if (!parseYesNo(values.isNewConstitution)) {
-        return planCustomizeForm.validation.newConstitution
+        return { field: "isNewConstitution", message: planCustomizeForm.validation.newConstitution }
       }
       if (!parseYesNo(values.hasEmployees)) {
-        return empresasHasEmployeesValidationMessage(values.isNewConstitution)
+        return {
+          field: "hasEmployees",
+          message: empresasHasEmployeesValidationMessage(values.isNewConstitution),
+        }
       }
       if (values.hasEmployees === "yes") {
         const count = Number.parseInt(values.employeeCount, 10)
         if (!Number.isFinite(count) || count < 1) {
-          return empresasEmployeeCountValidationMessage(values.isNewConstitution)
+          return {
+            field: "employeeCount",
+            message: empresasEmployeeCountValidationMessage(values.isNewConstitution),
+          }
         }
       }
     }
     if (!isValidAnnualRevenueInput(values.annualRevenue)) {
-      return planCustomizeForm.validation.revenue
+      return { field: "annualRevenue", message: planCustomizeForm.validation.revenue }
     }
     return null
   }
 
   if (currentStep === 2) {
     if (values.services.length === 0) {
-      return planCustomizeForm.validation.services
+      return { field: "services", message: planCustomizeForm.validation.services }
     }
     return null
   }
@@ -138,19 +155,22 @@ export function getPlanCustomizeStepValidationError(
       activityTrimmed.length < planCustomizeForm.limits.activityMin ||
       activityTrimmed.length > planCustomizeForm.limits.activityMax
     ) {
-      return planCustomizeForm.validation.activity
+      return { field: "activity", message: planCustomizeForm.validation.activity }
     }
     if (!parseTaxRegion(values.taxRegion)) {
-      return planCustomizeForm.validation.taxRegion
+      return { field: "taxRegion", message: planCustomizeForm.validation.taxRegion }
     }
     if (!values.name.trim()) {
-      return planCustomizeForm.validation.name
+      return { field: "name", message: planCustomizeForm.validation.name }
     }
     if (!values.email.trim() || !EMAIL_RE.test(values.email.trim())) {
-      return planCustomizeForm.validation.email
+      return { field: "email", message: planCustomizeForm.validation.email }
     }
     if (values.phone.trim().length > 0 && !isLikelyValidPhone(values.phone)) {
-      return contactForm.messages.phoneInvalid
+      return { field: "phone", message: contactForm.messages.phoneInvalid }
+    }
+    if (!values.privacyAccepted) {
+      return { field: "privacyAccepted", message: planCustomizeForm.validation.privacy }
     }
   }
 
@@ -197,6 +217,7 @@ export function validatePlanCustomizeInquiry(
     name: typeof input.name === "string" ? input.name : "",
     email: typeof input.email === "string" ? input.email : "",
     phone: typeof input.phone === "string" ? input.phone : "",
+    privacyAccepted: input.privacyAccepted === true,
   }
 
   for (let step = 1; step <= 3; step += 1) {
