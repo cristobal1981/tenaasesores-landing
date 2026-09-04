@@ -56,6 +56,11 @@ export function formatPlanCustomizeLeadDescription(
     lines.push(
       `- ${planCustomizeForm.step1.autonomos.hireEmployeesLabel} ${yesNoLabel(inquiry.willHireEmployees)}`
     )
+    if (inquiry.willHireEmployees === "yes" && inquiry.employeeCount != null) {
+      lines.push(
+        `- ${planCustomizeForm.step1.autonomos.employeeCountLabel} ${inquiry.employeeCount}`
+      )
+    }
   } else {
     lines.push(
       `- ${planCustomizeForm.step1.empresas.newConstitutionLabel} ${yesNoLabel(inquiry.isNewConstitution)}`

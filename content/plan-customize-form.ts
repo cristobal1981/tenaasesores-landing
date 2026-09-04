@@ -41,6 +41,8 @@ export const planCustomizeForm = {
     autonomos: {
       registeredLabel: "¿Estás dado de alta como autónomo?",
       hireEmployeesLabel: "¿Tienes empleados o vas a contratarlos?",
+      employeeCountLabel: "¿Cuántos empleados tienes o vas a contratar?",
+      employeeCountPlaceholder: "Ej. 2",
     },
     empresas: {
       newConstitutionLabel: "¿Es una nueva constitución?",
@@ -100,6 +102,7 @@ export const planCustomizeForm = {
   validation: {
     registeredAutonomo: "Indica si estás dado de alta como autónomo.",
     hireEmployees: "Indica si tienes empleados o vas a contratarlos.",
+    employeeCountAutonomo: "Indica cuántos empleados tienes o vas a contratar.",
     newConstitution: "Indica si es una nueva constitución.",
     hasEmployees: "Indica si la empresa tiene empleados.",
     hasEmployeesFuture: "Indica si la empresa tendrá empleados.",

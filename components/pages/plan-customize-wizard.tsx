@@ -617,12 +617,38 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                 value={willHireEmployees}
                 onChange={(value) => {
                   setWillHireEmployees(value)
+                  if (value !== "yes") setEmployeeCount("")
                   clearFieldError("willHireEmployees")
                 }}
                 options={planCustomizeYesNo}
                 error={fieldErrors.willHireEmployees}
                 required
               />
+              {willHireEmployees === "yes" ? (
+                <div>
+                  <FieldLabel htmlFor={`${panelId}-employee-count`} required>
+                    {planCustomizeForm.step1.autonomos.employeeCountLabel}
+                  </FieldLabel>
+                  <Input
+                    id={`${panelId}-employee-count`}
+                    type="number"
+                    min={1}
+                    inputMode="numeric"
+                    value={employeeCount}
+                    onChange={(event) => {
+                      setEmployeeCount(event.target.value)
+                      clearFieldError("employeeCount")
+                    }}
+                    placeholder={planCustomizeForm.step1.autonomos.employeeCountPlaceholder}
+                    className="input-on-dark min-h-11 max-w-xs text-base md:text-sm"
+                    aria-invalid={Boolean(fieldErrors.employeeCount)}
+                    aria-describedby={`${panelId}-employee-count-error`}
+                  />
+                  <FieldErrorText id={`${panelId}-employee-count-error`}>
+                    {fieldErrors.employeeCount}
+                  </FieldErrorText>
+                </div>
+              ) : null}
             </>
           ) : (
             <>
