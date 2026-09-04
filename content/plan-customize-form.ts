@@ -40,7 +40,7 @@ export const planCustomizeForm = {
     revenueHint: "Importe aproximado en euros al año.",
     autonomos: {
       registeredLabel: "¿Estás dado de alta como autónomo?",
-      hireEmployeesLabel: "¿Vas a contratar empleados?",
+      hireEmployeesLabel: "¿Tienes empleados o vas a contratarlos?",
     },
     empresas: {
       newConstitutionLabel: "¿Es una nueva constitución?",
@@ -91,6 +91,7 @@ export const planCustomizeForm = {
     phonePlaceholder: "+34 600 000 000",
     notesLabel: "Algo más que debamos saber",
     notesPlaceholder: "Plazos, herramientas que usas, dudas concretas…",
+    privacyLabel: "Acepto la política de privacidad",
   },
   messagePrefix: {
     autonomos: "[Plan personalizado · autónomos]",
@@ -98,7 +99,7 @@ export const planCustomizeForm = {
   },
   validation: {
     registeredAutonomo: "Indica si estás dado de alta como autónomo.",
-    hireEmployees: "Indica si vas a contratar empleados.",
+    hireEmployees: "Indica si tienes empleados o vas a contratarlos.",
     newConstitution: "Indica si es una nueva constitución.",
     hasEmployees: "Indica si la empresa tiene empleados.",
     hasEmployeesFuture: "Indica si la empresa tendrá empleados.",
@@ -110,6 +111,7 @@ export const planCustomizeForm = {
     taxRegion: "Indica si tu residencia fiscal es en península o en Canarias.",
     name: "Indica tu nombre.",
     email: "Indica un email válido.",
+    privacy: "Debes aceptar la política de privacidad.",
   },
   limits: {
     activityMin: 10,
@@ -143,7 +145,73 @@ export const planCustomizeForm = {
     body: "Hemos recibido tu información. Te contactaremos lo antes posible — en menos de 24 horas laborables — con tu propuesta personalizada.",
     stepsDoneLabel: "Los 3 pasos están enviados",
   },
-  privacyNote: "Al enviar aceptas la política de privacidad",
+  confirmarPresupuesto: {
+    title: "Tu presupuesto flash",
+    intro:
+      "Esto es una estimación al instante a partir de lo que nos has contado — nada se confirma todavía.",
+    monthlyLineLabel: "Cuota mensual",
+    oneTimeLineLabel: "Pago único",
+    totalLabel: "Total mensual estimado",
+    actions: {
+      accept: "Aceptar presupuesto",
+      reject: "Rechazar",
+      notInterested: "No me interesa",
+      back: "Volver",
+      confirm: "Confirmar",
+      sending: "Enviando…",
+    },
+    motivos: {
+      rechazar: {
+        label: "¿Por qué lo rechazas?",
+        options: [
+          { value: "caro", label: "Es muy caro" },
+          { value: "servicios", label: "Los servicios no concuerdan" },
+          { value: "otro", label: "Otro" },
+        ],
+        otroPlaceholder: "Cuéntanos brevemente el motivo…",
+      },
+      no_interesa: {
+        label: "¿Por qué no te interesa?",
+        options: [
+          { value: "curioseando", label: "Estaba curioseando" },
+          { value: "no_momento", label: "No es el momento" },
+          { value: "otro", label: "Otro" },
+        ],
+        otroPlaceholder: "Cuéntanos brevemente el motivo…",
+      },
+    },
+    validation: {
+      motivoRequired: "Selecciona un motivo.",
+      motivoOtroRequired: "Cuéntanos brevemente el motivo.",
+    },
+    thankYou: {
+      aceptar: {
+        body: "¡Genial! Hemos registrado tu aceptación. En breve recibirás la confirmación por email con los siguientes pasos.",
+      },
+      rechazar: {
+        body: "Gracias por contarnos el motivo. Hemos registrado tu respuesta — si cambias de opinión, contáctanos cuando quieras.",
+      },
+      no_interesa: {
+        body: "Entendido, gracias por tu tiempo. Hemos registrado tu respuesta.",
+      },
+    },
+    messages: {
+      validation: "No hemos podido procesar tu respuesta. Inténtalo de nuevo.",
+      rateLimit:
+        "Has intentado confirmar varias veces seguidas. Espera un momento antes de volver a intentarlo.",
+      webhookForbidden:
+        "No hemos podido registrar tu respuesta ahora mismo. Inténtalo en unos minutos o contáctanos por teléfono.",
+      genericError:
+        "No se ha podido enviar tu respuesta. Inténtalo más tarde o contáctanos por teléfono.",
+    },
+    limits: {
+      motivoMax: 300,
+    },
+    rateLimit: {
+      maxPerIpPerHour: 10,
+      maxPerLeadPerHour: 4,
+    },
+  },
 } as const
 
 export function empresasHasEmployeesLabel(isNewConstitution: string): string {

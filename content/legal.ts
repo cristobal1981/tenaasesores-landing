@@ -10,6 +10,10 @@ export const legalEntity = {
   nif: "B76647148",
   address:
     "Calle El Toscal, nº 29, 1º pta 7, Los Realejos, Santa Cruz de Tenerife",
+  /** Enlace directo a la ficha de Google Maps (no a una búsqueda genérica por dirección). */
+  mapsHref: "https://maps.app.goo.gl/XHKatN86BjYyxAbx7",
+  /** CID de la ficha de Google Business, usado para el mapa embebido. */
+  mapsCid: "12358023459029106258",
   registry:
     "Registro Mercantil de Santa Cruz de Tenerife, Tomo 3345, Libro 0, Folio 102, Hoja TF-54112, Inscripción 1ª",
   email: site.email,

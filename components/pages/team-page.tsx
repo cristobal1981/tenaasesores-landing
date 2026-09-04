@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { StaggerContainer, StaggerItem } from "@/components/animations"
 import { AboutHero } from "@/components/pages/about-hero"
+import { AboutOffice } from "@/components/pages/about-office"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -16,7 +17,7 @@ export function TeamPage() {
     <main className="min-h-screen">
       <AboutHero />
 
-      <section className="border-t border-agua/30 bg-background py-16 md:py-24">
+      <section id="equipo" className="border-t border-agua/30 bg-background py-16 md:py-24">
         <SectionShell>
           <MarketingSectionHeading
             badge={team.badge}
@@ -55,6 +56,7 @@ export function TeamPage() {
                         src={member.photo}
                         alt={`Foto de ${member.name}`}
                         fill
+                        priority={index < 3}
                         className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                         sizes="128px"
                       />
@@ -81,9 +83,11 @@ export function TeamPage() {
         </SectionShell>
       </section>
 
+      <AboutOffice />
+
       <CtaBrisaBand
+        eyebrow={team.cta.eyebrow}
         title={team.cta.title}
-        subtitle={team.cta.subtitle}
         label={team.cta.label}
       />
     </main>

@@ -69,6 +69,13 @@
   --sidebar-accent-foreground: var(--on-dark);
   --sidebar-border: #0d4a58;
   --sidebar-ring: #01dea2;
+  --site-header-height: 4rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --site-header-height: 3.5rem;
+  }
 }
 
 .dark {
@@ -226,6 +233,55 @@
     font-size: clamp(1.875rem, 4vw + 0.5rem, 3.75rem);
   }
 
+}
+
+/* Convertidas a @utility (API nativa de Tailwind v4): dentro de @layer utilities
+   el bundler de Turbopack las estaba descartando del CSS compilado. */
+@utility home-hero-title {
+  font-size: clamp(2.75rem, 7.5vw, 6.15rem);
+  line-height: 0.94;
+  text-wrap: balance;
+}
+
+@utility home-clave-card-letter {
+  font-family: var(--font-host-grotesk), system-ui, sans-serif;
+  font-size: clamp(3rem, min(62cqw, 90cqh), 11rem);
+  line-height: 0.72;
+  letter-spacing: -0.04em;
+}
+
+@utility section-eyebrow {
+  font-family: var(--font-host-grotesk), system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+@utility section-eyebrow-on-dark {
+  color: var(--primary);
+}
+
+@utility section-eyebrow-on-light {
+  color: var(--accent-on-light);
+}
+
+@utility section-title {
+  font-family: var(--font-host-grotesk), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+@utility section-subtitle {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+@layer utilities {
+
   .bg-hero-gradient {
     @apply bg-gradient-to-br from-background via-card to-agua;
   }
@@ -234,29 +290,15 @@
   }
   .bg-home-hero-surface {
     background: radial-gradient(
-      ellipse 90% 70% at 50% 42%,
-      #072f38 0%,
-      #06252c 55%,
-      #051f27 100%
+      ellipse 92% 74% at 50% 38%,
+      #0a3944 0%,
+      #062a33 42%,
+      #051f27 72%,
+      #041a20 100%
     );
   }
   .bg-section-dark {
     @apply bg-gradient-to-b from-background to-agua/40;
-  }
-  .badge-on-dark {
-    @apply inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-3 py-1.5;
-  }
-  .badge-on-dark-lg {
-    @apply inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-2;
-  }
-  .badge-label-on-dark {
-    @apply font-sans text-xs font-medium tracking-wide text-on-dark uppercase;
-  }
-  .badge-on-light {
-    @apply inline-flex items-center gap-2 rounded-full border border-on-light/15 bg-on-light/5 px-3 py-1.5;
-  }
-  .badge-label-on-light {
-    @apply font-sans text-xs font-medium tracking-wide text-on-light uppercase;
   }
   .input-on-dark {
     @apply border-agua/30 bg-on-dark/10 text-on-dark placeholder:text-muted-on-dark focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none;
@@ -325,13 +367,15 @@
   }
   /* Banda CTA ancha — Verde Brisa + Agua (manual Syntia) */
   .section-cta-brisa {
-    @apply w-full bg-brisa py-16 md:py-20;
+    background:
+      linear-gradient(180deg, rgba(214, 242, 232, 0.98), rgba(214, 242, 232, 0.94));
+    @apply w-full py-16 md:py-20;
   }
   .section-cta-brisa-title {
-    @apply text-2xl font-bold text-on-light sm:text-3xl;
+    @apply text-3xl leading-[1.04] font-semibold text-on-light sm:text-4xl md:text-[3.25rem];
   }
   .section-cta-brisa-body {
-    @apply text-lg text-muted-on-light;
+    @apply text-base leading-relaxed text-muted-on-light sm:text-[1.05rem];
   }
   .section-cta-brisa-btn {
     @apply font-semibold bg-secondary text-brisa hover:bg-secondary/90;
@@ -407,8 +451,22 @@
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 3.5rem;
-    padding-right: 3.5rem;
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .logo-marquee-group {
+      gap: 2.25rem;
+      padding-right: 2.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .logo-marquee-group {
+      gap: 3.5rem;
+      padding-right: 3.5rem;
+    }
   }
 
   .logo-marquee-item {
@@ -467,6 +525,17 @@
   .chat-scrollbar::-webkit-scrollbar-thumb:active {
     background: #02b88a;
     background-clip: padding-box;
+  }
+
+  /* Quick-reply chips — single-row horizontal scroll, no visible scrollbar. */
+}
+
+@utility chip-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -527,6 +596,23 @@
   animation: sappo-fab-attention 2.5s ease-in-out infinite;
 }
 
+@keyframes chat-typing-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.animate-chat-typing-dot {
+  animation: chat-typing-dot 1.1s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -536,6 +622,10 @@
   }
 
   .animate-sappo-fab {
+    animation: none;
+  }
+
+  .animate-ping {
     animation: none;
   }
 

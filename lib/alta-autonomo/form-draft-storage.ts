@@ -1,9 +1,12 @@
 const STORAGE_PREFIX = "alta-autonomo-draft:"
 
 export type AltaAutonomoFormDraft = {
+  step: number
   nombre: string
   apellidos: string
   nif: string
+  naf: string
+  fechaNacimiento: string
   telefono: string
   email: string
   certificadoDigital: "" | "si" | "no"
@@ -18,6 +21,16 @@ export type AltaAutonomoFormDraft = {
   provincia: string
   codigoPostal: string
   pais: string
+  direccionFiscalIgualDomicilio: boolean
+  direccionFiscal: string
+  ciudadFiscal: string
+  provinciaFiscal: string
+  codigoPostalFiscal: string
+  direccionNotificacionIgualFiscal: boolean
+  direccionNotificacion: string
+  ciudadNotificacion: string
+  provinciaNotificacion: string
+  codigoPostalNotificacion: string
   actividad: string
   ingresosAnuales: string
   iban: string
@@ -38,9 +51,15 @@ function parseDraft(raw: unknown): AltaAutonomoFormDraft | null {
   const data = raw as Record<string, unknown>
 
   return {
+    step:
+      typeof data.step === "number" && Number.isInteger(data.step) && data.step >= 1 && data.step <= 4
+        ? data.step
+        : 1,
     nombre: typeof data.nombre === "string" ? data.nombre : "",
     apellidos: typeof data.apellidos === "string" ? data.apellidos : "",
     nif: typeof data.nif === "string" ? data.nif : "",
+    naf: typeof data.naf === "string" ? data.naf : "",
+    fechaNacimiento: typeof data.fechaNacimiento === "string" ? data.fechaNacimiento : "",
     telefono: typeof data.telefono === "string" ? data.telefono : "+34 ",
     email: typeof data.email === "string" ? data.email : "",
     certificadoDigital: isYesNo(data.certificadoDigital) ? data.certificadoDigital : "",
@@ -56,6 +75,19 @@ function parseDraft(raw: unknown): AltaAutonomoFormDraft | null {
     provincia: typeof data.provincia === "string" ? data.provincia : "",
     codigoPostal: typeof data.codigoPostal === "string" ? data.codigoPostal : "",
     pais: typeof data.pais === "string" ? data.pais : "",
+    direccionFiscalIgualDomicilio: data.direccionFiscalIgualDomicilio !== false,
+    direccionFiscal: typeof data.direccionFiscal === "string" ? data.direccionFiscal : "",
+    ciudadFiscal: typeof data.ciudadFiscal === "string" ? data.ciudadFiscal : "",
+    provinciaFiscal: typeof data.provinciaFiscal === "string" ? data.provinciaFiscal : "",
+    codigoPostalFiscal: typeof data.codigoPostalFiscal === "string" ? data.codigoPostalFiscal : "",
+    direccionNotificacionIgualFiscal: data.direccionNotificacionIgualFiscal !== false,
+    direccionNotificacion:
+      typeof data.direccionNotificacion === "string" ? data.direccionNotificacion : "",
+    ciudadNotificacion: typeof data.ciudadNotificacion === "string" ? data.ciudadNotificacion : "",
+    provinciaNotificacion:
+      typeof data.provinciaNotificacion === "string" ? data.provinciaNotificacion : "",
+    codigoPostalNotificacion:
+      typeof data.codigoPostalNotificacion === "string" ? data.codigoPostalNotificacion : "",
     actividad: typeof data.actividad === "string" ? data.actividad : "",
     ingresosAnuales: typeof data.ingresosAnuales === "string" ? data.ingresosAnuales : "",
     iban: typeof data.iban === "string" ? data.iban : "",

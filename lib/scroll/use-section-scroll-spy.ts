@@ -4,11 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 const SCROLL_SPY_OFFSET_PX = 120
 
-type UseFaqSectionSpyOptions = {
+type UseSectionScrollSpyOptions = {
   sectionIds: readonly string[]
 }
 
-export function useFaqSectionSpy({ sectionIds }: UseFaqSectionSpyOptions) {
+export function useSectionScrollSpy({ sectionIds }: UseSectionScrollSpyOptions) {
   const [activeId, setActiveId] = useState(sectionIds[0] ?? "")
   const initialHashHandled = useRef(false)
 

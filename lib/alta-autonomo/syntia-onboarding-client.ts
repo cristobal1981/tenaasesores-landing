@@ -129,13 +129,6 @@ export async function validateAltaAutonomoOnboardingToken(
 
   if (!response.ok || response.status === 204 || !payload?.ok || !hasCatalog) {
     const error = mapUpstreamError(response.status, payload?.error)
-    console.error("[alta-autonomo] validate upstream rejected", {
-      baseUrl,
-      status: response.status,
-      error,
-      hasPayload: Boolean(payload),
-      hasCatalog,
-    })
     return {
       ok: false,
       status: response.status,

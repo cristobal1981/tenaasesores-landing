@@ -72,12 +72,18 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  let submission: Awaited<ReturnType<typeof submitPlanCustomizeCrmLead>>
   try {
-    await submitPlanCustomizeCrmLead(createOdooLeadGateway(), validation.data)
+    submission = await submitPlanCustomizeCrmLead(createOdooLeadGateway(), validation.data)
   } catch (error) {
     const deliveryError = toLeadDeliveryError(error, "plan_customize")
     return json(leadDeliveryJsonResponse(deliveryError), deliveryError.status)
   }
 
-  return json({ ok: true, message: planCustomizeForm.success.body })
+  return json({
+    ok: true,
+    message: planCustomizeForm.success.body,
+    leadId: submission.leadId,
+    presupuesto: submission.presupuesto,
+  })
 }

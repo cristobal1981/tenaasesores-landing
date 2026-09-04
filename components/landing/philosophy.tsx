@@ -1,152 +1,140 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
-import { useReducedMotion } from "framer-motion"
-import { ClaveValueCard } from "@/components/landing/clave-value-card"
-import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
+import { useRef } from "react"
+import { m } from "framer-motion"
+import { useHomeSectionReveal } from "@/components/gsap/use-home-section-reveal"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
 import { philosophy } from "@/content/site"
 import { cn } from "@/lib/utils"
 
-function splitTitleAtClaveLetter(title: string, letter: string) {
-  const index = title.toLocaleUpperCase("es").indexOf(letter.toLocaleUpperCase("es"))
-  if (index === -1) {
-    return { before: "", highlight: title.charAt(0), after: title.slice(1) }
-  }
-  return {
-    before: title.slice(0, index),
-    highlight: title.charAt(index),
-    after: title.slice(index + 1),
-  }
+const cardBackgroundStyle = {
+  background:
+    "linear-gradient(180deg, color-mix(in oklch, var(--on-light) 7%, var(--surface-light)) 0%, var(--surface-light) 60%)",
+} as const
+
+function SubtitleWithClave() {
+  const [before, after] = philosophy.subtitle.split("CLAVE")
+
+  return (
+    <>
+      {before}
+      <span className="font-semibold text-primary">CLAVE</span>
+      {after}
+    </>
+  )
+}
+
+function IsotipoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 485.65 485.67" fill="currentColor" aria-hidden className={className}>
+      <path d="M241.81,1L1,241.83c-.64.64-1,1.51-1,2.42v116.58c0,1.89,1.53,3.42,3.42,3.42h116.56c.9,0,1.74-.34,2.39-.97,9.94-9.8,92.54-91.29,115.07-114.67,2.09-2.17.54-5.79-2.48-5.79h-107.72c-3.05,0-4.58-3.69-2.42-5.85l114.57-114.57c.64-.64,1.51-1,2.42-1h121c.91,0,1.78-.36,2.42-1L479.8,5.85c2.16-2.16.63-5.85-2.42-5.85h-233.15c-.91,0-1.78.36-2.42,1Z" />
+      <path d="M243.84,484.67l240.8-240.83c.64-.64,1-1.51,1-2.42v-116.58c0-1.89-1.53-3.42-3.42-3.42h-116.56c-.9,0-1.74.34-2.39.97-9.94,9.8-92.54,91.29-115.07,114.67-2.09,2.17-.54,5.79,2.48,5.79h107.72c3.05,0,4.58,3.69,2.42,5.85l-114.57,114.57c-.64.64-1.51,1-2.42,1h-121c-.91,0-1.78.36-2.42,1L5.85,479.83c-2.16,2.16-.63,5.85,2.42,5.85h233.15c.91,0,1.78-.36,2.42-1Z" />
+    </svg>
+  )
+}
+
+function ClaveCard({
+  value,
+  index,
+}: {
+  value: (typeof philosophy.values)[number]
+  index: number
+}) {
+  const [firstLetter, ...restLetters] = value.title
+
+  return (
+    <m.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl"
+      style={cardBackgroundStyle}
+    >
+      <div className="@container flex h-28 shrink-0 items-center justify-center overflow-hidden sm:h-32 lg:h-36">
+        <span
+          className="home-clave-card-letter font-semibold text-agua opacity-50 transition-colors duration-[450ms] ease-out group-hover:text-primary"
+          style={{
+            maskImage: "linear-gradient(180deg, black 45%, transparent 92%)",
+            WebkitMaskImage: "linear-gradient(180deg, black 45%, transparent 92%)",
+          }}
+        >
+          {value.letter}
+        </span>
+      </div>
+      <div className="flex flex-1 flex-col px-5 pb-6">
+        <h3 className="mb-1.5 text-sm font-bold tracking-wide text-on-light uppercase">
+          <span className="text-agua transition-colors duration-[450ms] ease-out group-hover:text-primary">
+            {firstLetter}
+          </span>
+          {restLetters.join("")}
+        </h3>
+        <p className="text-[0.8rem] leading-relaxed text-muted-on-light">{value.description}</p>
+      </div>
+    </m.article>
+  )
+}
+
+function DiaADiaRow() {
+  return (
+    <div className="mx-auto mt-8 grid grid-cols-1 gap-8 sm:max-w-3xl sm:grid-cols-2 md:mt-10 xl:max-w-none xl:grid-cols-3 xl:gap-10">
+      {philosophy.manifestoPoints.map((point, index) => {
+        const isLast = index === philosophy.manifestoPoints.length - 1
+        return (
+          <m.div
+            key={point.title}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className={cn(
+              isLast && "sm:col-span-2 sm:mx-auto sm:max-w-sm xl:col-span-1 xl:mx-0 xl:max-w-none"
+            )}
+          >
+            <p className="mb-1.5 flex items-center gap-2 text-lg font-semibold text-on-light">
+              <IsotipoMark className="h-4 w-4 shrink-0 text-agua" />
+              {point.title}
+            </p>
+            <p className="text-sm leading-relaxed text-muted-on-light">{point.detail}</p>
+          </m.div>
+        )
+      })}
+    </div>
+  )
 }
 
 export function Philosophy() {
-  const reducedMotion = useReducedMotion()
-  const [hoverLetter, setHoverLetter] = useState<string | null>(null)
-
-  const titlePartsByLetter = useMemo(
-    () =>
-      Object.fromEntries(
-        philosophy.values.map((value) => [
-          value.letter,
-          splitTitleAtClaveLetter(value.title, value.letter),
-        ])
-      ),
-    []
-  )
-
-  const activeIndex = philosophy.values.findIndex((value) => value.letter === hoverLetter)
-  const resolvedActiveIndex = activeIndex === -1 ? 0 : activeIndex
-  const hasActive = hoverLetter !== null
-
-  const activate = useCallback((letter: string) => {
-    setHoverLetter(letter)
-  }, [])
-
-  const clearHover = useCallback(() => {
-    setHoverLetter(null)
-  }, [])
-
-  const toggle = useCallback((letter: string) => {
-    setHoverLetter((current) => (current === letter ? null : letter))
-  }, [])
+  const sectionRef = useRef<HTMLElement>(null)
+  useHomeSectionReveal({ sectionRef })
 
   return (
-    <section className="relative overflow-hidden bg-surface-light py-20 md:py-28">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        aria-hidden
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2301635c' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
-
-      <SectionShell className="relative">
-        <MarketingSectionHeading
-          badge={philosophy.badge}
+    <section
+      ref={sectionRef}
+      id="como-trabajamos"
+      className="section-divider relative overflow-hidden bg-surface-light py-20 md:py-28"
+    >
+      <SectionShell>
+        <SectionIntro
+          className="mx-auto mb-14 md:mb-16"
+          eyebrow={philosophy.badge}
           title={philosophy.title}
-          subtitle={philosophy.subtitle}
+          subtitle={<SubtitleWithClave />}
+          align="center"
           tone="light"
-          className="mb-12 max-w-3xl md:mb-16"
+          reveal
         />
 
-        <div className="relative" onMouseLeave={clearHover}>
-          <div className="mb-10 md:mb-12">
-            <ol
-              className="mx-auto flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
-              aria-label={`Letras de la filosofía ${philosophy.acronym}`}
-            >
-              {philosophy.values.map((value, index) => {
-                const isActive = hoverLetter === value.letter
-                const isDimmed = hasActive && !isActive
-
-                return (
-                  <li key={value.letter} className="flex items-center gap-1.5 sm:gap-2">
-                    <button
-                      type="button"
-                      aria-label={value.title}
-                      aria-pressed={isActive}
-                      onMouseEnter={() => activate(value.letter)}
-                      onFocus={() => activate(value.letter)}
-                      onClick={() => toggle(value.letter)}
-                      className={cn(
-                        "relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg border text-lg font-bold transition-[border-color,background-color,color,opacity,transform] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-agua/50 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-light sm:h-12 sm:w-12",
-                        isActive
-                          ? "border-agua bg-agua text-on-dark"
-                          : "border-agua/25 bg-surface-light text-accent-on-light",
-                        isDimmed && "opacity-60",
-                        !reducedMotion && isActive && "motion-safe:scale-105",
-                        reducedMotion && isActive && "ring-2 ring-agua ring-offset-2 ring-offset-surface-light"
-                      )}
-                    >
-                      {value.letter}
-                    </button>
-                    {index < philosophy.values.length - 1 ? (
-                      <span
-                        className={cn(
-                          "hidden h-0.5 w-5 rounded-full transition-[background-color,opacity] duration-500 ease-out sm:block md:w-7",
-                          hasActive && resolvedActiveIndex > index ? "bg-agua/70" : "bg-agua/20",
-                          hasActive && resolvedActiveIndex <= index && "opacity-50"
-                        )}
-                        aria-hidden
-                      />
-                    ) : null}
-                  </li>
-                )
-              })}
-            </ol>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-5">
-            {philosophy.values.map((value, index) => {
-              const isActive = hoverLetter === value.letter
-              const isLast = index === philosophy.values.length - 1
-
-              return (
-                <div
-                  key={value.letter}
-                  className={cn(
-                    isLast &&
-                      "sm:col-span-2 sm:mx-auto sm:w-full sm:max-w-md xl:col-span-1 xl:mx-0 xl:max-w-none",
-                  )}
-                  onMouseEnter={() => activate(value.letter)}
-                >
-                  <ClaveValueCard
-                    value={value}
-                    titleParts={titlePartsByLetter[value.letter]}
-                    isActive={isActive}
-                    hasActive={hasActive}
-                    className={
-                      !hasActive
-                        ? "motion-safe:hover:border-agua/30 motion-safe:hover:bg-on-light/[0.07]"
-                        : undefined
-                    }
-                  />
-                </div>
-              )
-            })}
-          </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {philosophy.values.map((value, index) => (
+            <ClaveCard key={value.letter} value={value} index={index} />
+          ))}
         </div>
+
+        <p className="section-eyebrow section-eyebrow-on-light mt-14 text-center md:mt-16">
+          {philosophy.manifestoTitle}
+        </p>
+        <DiaADiaRow />
       </SectionShell>
     </section>
   )

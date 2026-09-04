@@ -1,5 +1,6 @@
 import { chatbotUi } from "@/content/chatbot"
 import { matchFaqReply } from "./faq-map"
+import { matchGreetingIntent } from "./greeting"
 import { matchGuidedIntent } from "./guided-intents"
 import { isExplicitContactIntent, matchIntent } from "./intents"
 import { matchServiceIntent } from "./match-service"
@@ -23,6 +24,9 @@ function makeConcise(reply: ChatReply): ChatReply {
 }
 
 export function respondToQuery(query: string): ChatReply {
+  const greetingReply = matchGreetingIntent(query)
+  if (greetingReply) return makeConcise(greetingReply)
+
   if (isExplicitContactIntent(query)) {
     return {
       source: "intent",
@@ -35,14 +39,17 @@ export function respondToQuery(query: string): ChatReply {
   const guidedReply = matchGuidedIntent(query)
   if (guidedReply) return makeConcise(guidedReply)
 
-  const faqReply = matchFaqReply(query)
-  if (faqReply) return makeConcise(faqReply)
-
+  // Los matchers de servicio/intent van antes que la FAQ: son deterministas (regex sobre
+  // términos concretos) y más fiables que el scoring por palabras sueltas de la FAQ, que
+  // puede "acertar" por una sola palabra genérica compartida con la pregunta equivocada.
   const serviceReply = matchServiceIntent(query)
   if (serviceReply) return makeConcise(serviceReply)
 
   const intentReply = matchIntent(query)
   if (intentReply) return makeConcise(intentReply)
+
+  const faqReply = matchFaqReply(query)
+  if (faqReply) return makeConcise(faqReply)
 
   const hits = searchKnowledge(query, 1)
   if (hits.length > 0) {

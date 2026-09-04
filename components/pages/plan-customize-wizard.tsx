@@ -21,10 +21,12 @@ import {
   empresasHasEmployeesLabel,
   type PlanCustomizeAudience,
 } from "@/content/plan-customize-form"
+import { FieldErrorText } from "@/components/forms/field-error-text"
 import { FieldLabel } from "@/components/forms/field-label"
 import { FormStatusMessage } from "@/components/forms/form-status-message"
 import { FormSubmissionSuccess } from "@/components/forms/form-submission-success"
 import { HoneypotField } from "@/components/forms/honeypot-field"
+import { PlanCustomizePresupuestoPanel } from "@/components/pages/plan-customize-presupuesto-panel"
 import { MarketingButton } from "@/components/ui/marketing-button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -32,14 +34,19 @@ import {
   formSubmitStubDelayMs,
   isFormSubmitStubEnabled,
 } from "@/lib/forms/form-submit-stub"
-import { resolveFormApiErrorMessage, type FormApiPayload } from "@/lib/forms/form-api-response"
+import { resolveFormApiErrorMessage } from "@/lib/forms/form-api-response"
+import type { PlanCustomizeApiPayload } from "@/lib/plan-customize/api-response"
 import {
   canSubmitPlanCustomizeFromClient,
   recordPlanCustomizeClientSubmission,
 } from "@/lib/plan-customize/rate-limit"
-import { getPlanCustomizeStepValidationError } from "@/lib/plan-customize/validate-inquiry"
+import {
+  getPlanCustomizeStepValidationError,
+  type PlanCustomizeFieldKey,
+} from "@/lib/plan-customize/validate-inquiry"
 import { formStepEase } from "@/lib/forms/motion-tokens"
 import { cn } from "@/lib/utils"
+import type { PresupuestoFlash } from "@/src/modules/leads/domain/presupuesto-flash"
 
 const TOTAL_STEPS = 3
 
@@ -75,14 +82,26 @@ type PlanFormValues = {
   name: string
   email: string
   phone: string
+  privacyAccepted: boolean
 }
 
-function isStepComplete(
-  currentStep: number,
-  audience: PlanCustomizeAudience,
-  values: PlanFormValues
-): boolean {
-  return getPlanCustomizeStepValidationError(currentStep, audience, values) === null
+function getPlanCustomizeFieldId(panelId: string, field: PlanCustomizeFieldKey): string {
+  const suffixByField: Record<PlanCustomizeFieldKey, string> = {
+    isRegisteredAutonomo: "registered",
+    willHireEmployees: "hire",
+    isNewConstitution: "constitution",
+    hasEmployees: "has-employees",
+    employeeCount: "employee-count",
+    annualRevenue: "revenue",
+    services: "services",
+    activity: "activity",
+    taxRegion: "tax-group",
+    name: "name",
+    email: "email",
+    phone: "phone",
+    privacyAccepted: "privacy",
+  }
+  return `${panelId}-${suffixByField[field]}`
 }
 
 type SegmentedChoiceProps = {
@@ -91,7 +110,7 @@ type SegmentedChoiceProps = {
   value: YesNoValue
   onChange: (value: YesNoValue) => void
   options: readonly { value: string; label: string }[]
-  invalid?: boolean
+  error?: string
   compact?: boolean
   required?: boolean
 }
@@ -102,21 +121,26 @@ function SegmentedChoice({
   value,
   onChange,
   options,
-  invalid,
+  error,
   compact = true,
   required,
 }: SegmentedChoiceProps) {
+  const invalid = Boolean(error)
+  const errorId = `${id}-error`
   return (
     <div>
       <FieldLabel id={`${id}-label`} required={required}>
         {label}
       </FieldLabel>
       <div
+        id={id}
+        tabIndex={-1}
         role="radiogroup"
         aria-labelledby={`${id}-label`}
         aria-invalid={invalid}
+        aria-describedby={invalid ? errorId : undefined}
         className={cn(
-          "grid grid-cols-2 gap-2",
+          "grid grid-cols-2 gap-2 focus:outline-none",
           compact ? "max-w-[11.5rem]" : "w-full"
         )}
       >
@@ -131,7 +155,11 @@ function SegmentedChoice({
               onClick={() => onChange(option.value as YesNoValue)}
               className={cn(
                 compactChoiceButtonClass,
-                selected ? compactChoiceSelectedClass : compactChoiceIdleClass
+                selected
+                  ? compactChoiceSelectedClass
+                  : invalid
+                    ? "border-red-400/60 text-on-dark hover:border-red-400/70"
+                    : compactChoiceIdleClass
               )}
             >
               {option.label}
@@ -139,6 +167,7 @@ function SegmentedChoice({
           )
         })}
       </div>
+      <FieldErrorText id={errorId}>{error}</FieldErrorText>
     </div>
   )
 }
@@ -242,10 +271,16 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [notes, setNotes] = useState("")
+  const [privacyAccepted, setPrivacyAccepted] = useState(false)
   const [formReady, setFormReady] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [presupuestoFlash, setPresupuestoFlash] = useState<{
+    leadId: number
+    data: PresupuestoFlash
+  } | null>(null)
   const [stepError, setStepError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
     formStartedAtRef.current = Date.now()
@@ -272,6 +307,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       name,
       email,
       phone,
+      privacyAccepted,
     }),
     [
       isRegisteredAutonomo,
@@ -286,17 +322,8 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       name,
       email,
       phone,
+      privacyAccepted,
     ]
-  )
-
-  const isCurrentStepComplete = useMemo(
-    () => isStepComplete(step, audience, formValues),
-    [step, audience, formValues]
-  )
-
-  const isFinalStepComplete = useMemo(
-    () => isStepComplete(TOTAL_STEPS, audience, formValues),
-    [audience, formValues]
   )
 
   // Limpieza del error al cambiar de paso: ajuste de estado durante el render, no en efecto.
@@ -312,10 +339,12 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     setServices((prev) =>
       prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     )
+    clearFieldError("services")
   }
 
   const selectAllServices = () => {
     setServices(serviceOptions.map((option) => option.value))
+    clearFieldError("services")
   }
 
   const empresasEmployeesQuestionLabel = empresasHasEmployeesLabel(isNewConstitution)
@@ -336,14 +365,35 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     setEmail("")
     setPhone("")
     setNotes("")
+    setPrivacyAccepted(false)
     setStepError(null)
+    setFieldErrors({})
   }, [])
+
+  const focusField = (field: PlanCustomizeFieldKey) => {
+    const id = getPlanCustomizeFieldId(panelId, field)
+    const node = document.getElementById(id)
+    if (!node) return
+    const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    node.scrollIntoView({ behavior: motionReduced ? "auto" : "smooth", block: "center" })
+    node.focus({ preventScroll: true })
+  }
+
+  const clearFieldError = (field: PlanCustomizeFieldKey) => {
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+  }
 
   const handleNext = () => {
     if (!formSubmitStub) {
       const error = getPlanCustomizeStepValidationError(step, audience, formValues)
       if (error) {
-        setStepError(error)
+        setFieldErrors((prev) => ({ ...prev, [error.field]: error.message }))
+        focusField(error.field)
         return
       }
     }
@@ -356,10 +406,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
     setStep((prev) => Math.max(prev - 1, 1))
   }
 
-  const revealSuccess = useCallback((detail?: string) => {
-    setSuccessMessage(detail ?? planCustomizeForm.success.body)
-    resetWizard()
-    formStartedAtRef.current = Date.now()
+  const scrollToSection = useCallback(() => {
     const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     window.setTimeout(() => {
       document.getElementById(planCustomizeForm.sectionId)?.scrollIntoView({
@@ -367,13 +414,27 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
         block: "start",
       })
     }, motionReduced ? 0 : 40)
-  }, [resetWizard])
+  }, [])
+
+  const revealSuccess = useCallback((detail?: string) => {
+    setSuccessMessage(detail ?? planCustomizeForm.success.body)
+    resetWizard()
+    formStartedAtRef.current = Date.now()
+    scrollToSection()
+  }, [resetWizard, scrollToSection])
+
+  const revealPresupuesto = useCallback((leadId: number, data: PresupuestoFlash) => {
+    setPresupuestoFlash({ leadId, data })
+    resetWizard()
+    formStartedAtRef.current = Date.now()
+    scrollToSection()
+  }, [resetWizard, scrollToSection])
 
   const handleFormKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key !== "Enter") return
     if (event.target instanceof HTMLTextAreaElement) return
     event.preventDefault()
-    if (step < TOTAL_STEPS && (formSubmitStub || isCurrentStepComplete)) {
+    if (step < TOTAL_STEPS) {
       handleNext()
     }
   }
@@ -385,7 +446,21 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       await new Promise((resolve) => window.setTimeout(resolve, formSubmitStubDelayMs))
       const submitDelay = reducedMotion ? 0 : submitDelayMs
       window.setTimeout(() => {
-        revealSuccess(planCustomizeForm.success.body)
+        if (audience === "autonomos") {
+          revealPresupuesto(1, {
+            tipo: "ALTA",
+            residencia: "Canarias",
+            lineas: [
+              { nombre: "Suscripción mensual asesor autónomo", precio: 55 },
+              { nombre: "Alta RETA Seguridad Social", precio: 50 },
+              { nombre: "Alta económica AEAT", precio: 50 },
+              { nombre: "Alta económica ATC", precio: 30 },
+            ],
+            totalMensual: 185,
+          })
+        } else {
+          revealSuccess(planCustomizeForm.success.body)
+        }
         setIsSubmitting(false)
       }, submitDelay)
       return
@@ -393,7 +468,8 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
 
     const error = getPlanCustomizeStepValidationError(3, audience, formValues)
     if (error) {
-      setStepError(error)
+      setFieldErrors((prev) => ({ ...prev, [error.field]: error.message }))
+      focusField(error.field)
       return
     }
 
@@ -429,12 +505,13 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
           email,
           phone,
           notes,
+          privacyAccepted,
           company,
           formStartedAt: formStartedAtRef.current,
         }),
       })
 
-      const payload = (await response.json()) as FormApiPayload
+      const payload = (await response.json()) as PlanCustomizeApiPayload
 
       const apiError = resolveFormApiErrorMessage(response, payload, {
         rateLimit: planCustomizeForm.messages.rateLimit,
@@ -452,7 +529,11 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
       recordPlanCustomizeClientSubmission()
       const submitDelay = reducedMotion ? 0 : submitDelayMs
       window.setTimeout(() => {
-        revealSuccess(payload.message)
+        if (payload.presupuesto && typeof payload.leadId === "number") {
+          revealPresupuesto(payload.leadId, payload.presupuesto)
+        } else {
+          revealSuccess(payload.message)
+        }
       }, submitDelay)
     } catch {
       setStepError(planCustomizeForm.messages.genericError)
@@ -463,40 +544,47 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
 
   const stepErrorId = stepError ? `${panelId}-form-error` : undefined
 
-  const renderRevenueInput = () => (
-    <div className="max-w-xs">
-      <FieldLabel htmlFor={`${panelId}-revenue`} required>
-        {planCustomizeForm.step1.revenueLabel}
-      </FieldLabel>
-      <p id={`${panelId}-revenue-hint`} className="mb-2 text-xs text-muted-on-dark">
-        {planCustomizeForm.step1.revenueHint}
-      </p>
-      <div
-        className={cn(
-          "flex overflow-hidden rounded-lg border border-agua/35 bg-transparent transition-[border-color] duration-200 focus-within:border-primary/55 motion-reduce:transition-none",
-          stepError && step === 1 && "border-red-400/70"
-        )}
-      >
-        <span
-          className="flex min-h-10 shrink-0 items-center border-r border-agua/35 bg-on-dark/12 px-3 text-sm font-medium text-muted-on-dark"
-          aria-hidden
+  const renderRevenueInput = () => {
+    const revenueInvalid = Boolean(fieldErrors.annualRevenue)
+    return (
+      <div className="max-w-xs">
+        <FieldLabel htmlFor={`${panelId}-revenue`} required>
+          {planCustomizeForm.step1.revenueLabel}
+        </FieldLabel>
+        <p id={`${panelId}-revenue-hint`} className="mb-2 text-xs text-muted-on-dark">
+          {planCustomizeForm.step1.revenueHint}
+        </p>
+        <div
+          className={cn(
+            "flex overflow-hidden rounded-lg border border-agua/35 bg-transparent transition-[border-color] duration-200 focus-within:border-primary/55 motion-reduce:transition-none",
+            revenueInvalid && "border-red-400/70"
+          )}
         >
-          €
-        </span>
-        <Input
-          id={`${panelId}-revenue`}
-          type="text"
-          inputMode="numeric"
-          value={annualRevenue}
-          onChange={(event) => setAnnualRevenue(event.target.value)}
-          placeholder={planCustomizeForm.step1.revenuePlaceholder}
-          className="input-on-dark min-h-10 flex-1 rounded-none border-0 bg-transparent px-3 text-base shadow-none focus-visible:ring-0 md:text-sm"
-          aria-describedby={`${panelId}-revenue-hint`}
-          aria-invalid={Boolean(stepError && step === 1)}
-        />
+          <span
+            className="flex min-h-10 shrink-0 items-center border-r border-agua/35 bg-on-dark/12 px-3 text-sm font-medium text-muted-on-dark"
+            aria-hidden
+          >
+            €
+          </span>
+          <Input
+            id={`${panelId}-revenue`}
+            type="text"
+            inputMode="numeric"
+            value={annualRevenue}
+            onChange={(event) => {
+              setAnnualRevenue(event.target.value)
+              clearFieldError("annualRevenue")
+            }}
+            placeholder={planCustomizeForm.step1.revenuePlaceholder}
+            className="input-on-dark min-h-10 flex-1 rounded-none border-0 bg-transparent px-3 text-base shadow-none focus-visible:ring-0 md:text-sm"
+            aria-describedby={`${panelId}-revenue-hint ${panelId}-revenue-error`}
+            aria-invalid={revenueInvalid}
+          />
+        </div>
+        <FieldErrorText id={`${panelId}-revenue-error`}>{fieldErrors.annualRevenue}</FieldErrorText>
       </div>
-    </div>
-  )
+    )
+  }
 
   const renderStepContent = () => {
     if (step === 1) {
@@ -515,18 +603,24 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                 id={`${panelId}-registered`}
                 label={planCustomizeForm.step1.autonomos.registeredLabel}
                 value={isRegisteredAutonomo}
-                onChange={setIsRegisteredAutonomo}
+                onChange={(value) => {
+                  setIsRegisteredAutonomo(value)
+                  clearFieldError("isRegisteredAutonomo")
+                }}
                 options={planCustomizeYesNo}
-                invalid={Boolean(stepError && step === 1)}
+                error={fieldErrors.isRegisteredAutonomo}
                 required
               />
               <SegmentedChoice
                 id={`${panelId}-hire`}
                 label={planCustomizeForm.step1.autonomos.hireEmployeesLabel}
                 value={willHireEmployees}
-                onChange={setWillHireEmployees}
+                onChange={(value) => {
+                  setWillHireEmployees(value)
+                  clearFieldError("willHireEmployees")
+                }}
                 options={planCustomizeYesNo}
-                invalid={Boolean(stepError && step === 1)}
+                error={fieldErrors.willHireEmployees}
                 required
               />
             </>
@@ -536,9 +630,12 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                 id={`${panelId}-constitution`}
                 label={planCustomizeForm.step1.empresas.newConstitutionLabel}
                 value={isNewConstitution}
-                onChange={setIsNewConstitution}
+                onChange={(value) => {
+                  setIsNewConstitution(value)
+                  clearFieldError("isNewConstitution")
+                }}
                 options={planCustomizeYesNo}
-                invalid={Boolean(stepError && step === 1)}
+                error={fieldErrors.isNewConstitution}
                 required
               />
               <SegmentedChoice
@@ -548,9 +645,10 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                 onChange={(value) => {
                   setHasEmployees(value)
                   if (value !== "yes") setEmployeeCount("")
+                  clearFieldError("hasEmployees")
                 }}
                 options={planCustomizeYesNo}
-                invalid={Boolean(stepError && step === 1)}
+                error={fieldErrors.hasEmployees}
                 required
               />
               {hasEmployees === "yes" ? (
@@ -564,10 +662,18 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                     min={1}
                     inputMode="numeric"
                     value={employeeCount}
-                    onChange={(event) => setEmployeeCount(event.target.value)}
+                    onChange={(event) => {
+                      setEmployeeCount(event.target.value)
+                      clearFieldError("employeeCount")
+                    }}
                     placeholder={planCustomizeForm.step1.empresas.employeeCountPlaceholder}
                     className="input-on-dark min-h-11 max-w-xs text-base md:text-sm"
+                    aria-invalid={Boolean(fieldErrors.employeeCount)}
+                    aria-describedby={`${panelId}-employee-count-error`}
                   />
+                  <FieldErrorText id={`${panelId}-employee-count-error`}>
+                    {fieldErrors.employeeCount}
+                  </FieldErrorText>
                 </div>
               ) : null}
             </>
@@ -605,9 +711,15 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
             </MarketingButton>
           </div>
           <ul
-            className="grid w-full gap-3 sm:grid-cols-2"
+            id={`${panelId}-services`}
+            tabIndex={-1}
+            className={cn(
+              "grid w-full gap-3 rounded-lg sm:grid-cols-2 focus:outline-none",
+              fieldErrors.services && "ring-2 ring-red-400/40"
+            )}
             role="group"
             aria-labelledby={`${panelId}-services-hint`}
+            aria-describedby={`${panelId}-services-error`}
           >
             {serviceOptions.map((option) => {
               const checked = services.includes(option.value)
@@ -636,6 +748,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               )
             })}
           </ul>
+          <FieldErrorText id={`${panelId}-services-error`}>{fieldErrors.services}</FieldErrorText>
         </fieldset>
       )
     }
@@ -656,11 +769,17 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
           <Textarea
             id={`${panelId}-activity`}
             value={activity}
-            onChange={(event) => setActivity(event.target.value)}
+            onChange={(event) => {
+              setActivity(event.target.value)
+              clearFieldError("activity")
+            }}
             placeholder={planCustomizeForm.step3.activityPlaceholder}
             className="input-on-dark min-h-[72px] w-full text-base md:text-sm"
             rows={2}
+            aria-invalid={Boolean(fieldErrors.activity)}
+            aria-describedby={`${panelId}-activity-error`}
           />
+          <FieldErrorText id={`${panelId}-activity-error`}>{fieldErrors.activity}</FieldErrorText>
         </div>
 
         <div>
@@ -668,9 +787,13 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
             {planCustomizeForm.step3.taxRegionLabel}
           </FieldLabel>
           <div
+            id={`${panelId}-tax-group`}
+            tabIndex={-1}
             role="radiogroup"
             aria-labelledby={`${panelId}-tax-label`}
-            className="grid max-w-md grid-cols-2 gap-2"
+            aria-invalid={Boolean(fieldErrors.taxRegion)}
+            aria-describedby={`${panelId}-tax-error`}
+            className="grid max-w-md grid-cols-2 gap-2 focus:outline-none"
           >
             {planCustomizeTaxRegions.map((option) => {
               const selected = taxRegion === option.value
@@ -680,11 +803,18 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                   type="button"
                   role="radio"
                   aria-checked={selected}
-                  onClick={() => setTaxRegion(option.value as TaxRegionValue)}
+                  onClick={() => {
+                    setTaxRegion(option.value as TaxRegionValue)
+                    clearFieldError("taxRegion")
+                  }}
                   className={cn(
                     compactChoiceButtonClass,
                     "text-left",
-                    selected ? compactChoiceSelectedClass : compactChoiceIdleClass
+                    selected
+                      ? compactChoiceSelectedClass
+                      : fieldErrors.taxRegion
+                        ? "border-red-400/60 text-on-dark hover:border-red-400/70"
+                        : compactChoiceIdleClass
                   )}
                 >
                   {option.label}
@@ -692,6 +822,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               )
             })}
           </div>
+          <FieldErrorText id={`${panelId}-tax-error`}>{fieldErrors.taxRegion}</FieldErrorText>
         </div>
 
         <div className="grid w-full gap-4 sm:grid-cols-2">
@@ -702,11 +833,17 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
             <Input
               id={`${panelId}-name`}
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => {
+                setName(event.target.value)
+                clearFieldError("name")
+              }}
               placeholder={planCustomizeForm.step3.namePlaceholder}
               className="input-on-dark min-h-11 w-full text-base md:text-sm"
               autoComplete="name"
+              aria-invalid={Boolean(fieldErrors.name)}
+              aria-describedby={`${panelId}-name-error`}
             />
+            <FieldErrorText id={`${panelId}-name-error`}>{fieldErrors.name}</FieldErrorText>
           </div>
           <div>
             <FieldLabel htmlFor={`${panelId}-email`} required>
@@ -716,11 +853,17 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               id={`${panelId}-email`}
               type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value)
+                clearFieldError("email")
+              }}
               placeholder={planCustomizeForm.step3.emailPlaceholder}
               className="input-on-dark min-h-11 w-full text-base md:text-sm"
               autoComplete="email"
+              aria-invalid={Boolean(fieldErrors.email)}
+              aria-describedby={`${panelId}-email-error`}
             />
+            <FieldErrorText id={`${panelId}-email-error`}>{fieldErrors.email}</FieldErrorText>
           </div>
           <div>
             <FieldLabel htmlFor={`${panelId}-phone`}>{planCustomizeForm.step3.phoneLabel}</FieldLabel>
@@ -728,11 +871,17 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               id={`${panelId}-phone`}
               type="tel"
               value={phone}
-              onChange={(event) => setPhone(event.target.value)}
+              onChange={(event) => {
+                setPhone(event.target.value)
+                clearFieldError("phone")
+              }}
               placeholder={planCustomizeForm.step3.phonePlaceholder}
               className="input-on-dark min-h-11 w-full text-base md:text-sm"
               autoComplete="tel"
+              aria-invalid={Boolean(fieldErrors.phone)}
+              aria-describedby={`${panelId}-phone-error`}
             />
+            <FieldErrorText id={`${panelId}-phone-error`}>{fieldErrors.phone}</FieldErrorText>
           </div>
           <div className="sm:col-span-2">
             <FieldLabel htmlFor={`${panelId}-notes`}>{planCustomizeForm.step3.notesLabel}</FieldLabel>
@@ -746,6 +895,41 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
               maxLength={planCustomizeForm.limits.notesMax}
             />
           </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-3">
+            <input
+              id={`${panelId}-privacy`}
+              type="checkbox"
+              checked={privacyAccepted}
+              onChange={(event) => {
+                setPrivacyAccepted(event.target.checked)
+                clearFieldError("privacyAccepted")
+              }}
+              className={cn(
+                "size-4 shrink-0 rounded border-agua/35 accent-primary",
+                fieldErrors.privacyAccepted && "border-red-400/60 ring-[3px] ring-red-400/40"
+              )}
+              aria-invalid={Boolean(fieldErrors.privacyAccepted)}
+              aria-describedby={`${panelId}-privacy-error`}
+            />
+            <label
+              htmlFor={`${panelId}-privacy`}
+              className="text-sm leading-snug text-muted-on-dark"
+            >
+              {planCustomizeForm.step3.privacyLabel}{" "}
+              <Link
+                href="/privacidad"
+                className="text-primary underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              >
+                (política de privacidad)
+              </Link>
+            </label>
+          </div>
+          <FieldErrorText id={`${panelId}-privacy-error`}>
+            {fieldErrors.privacyAccepted}
+          </FieldErrorText>
         </div>
       </fieldset>
     )
@@ -769,7 +953,18 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
 
       <LazyMotion features={domAnimation} strict>
         <AnimatePresence mode="wait" initial={false}>
-          {successMessage ? (
+          {presupuestoFlash ? (
+            <PlanCustomizePresupuestoPanel
+              key="plan-customize-presupuesto"
+              className={planFormWidthClass}
+              leadId={presupuestoFlash.leadId}
+              presupuesto={presupuestoFlash.data}
+              onResolved={(estado) => {
+                setPresupuestoFlash(null)
+                revealSuccess(planCustomizeForm.confirmarPresupuesto.thankYou[estado].body)
+              }}
+            />
+          ) : successMessage ? (
             <FormSubmissionSuccess
               key="plan-customize-success"
               className={planFormWidthClass}
@@ -856,19 +1051,6 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                 ) : null}
               </AnimatePresence>
 
-              {step === TOTAL_STEPS ? (
-                <p className="mt-4 text-center text-xs text-muted-on-dark">
-                  Al enviar aceptas la{" "}
-                  <Link
-                    href="/privacidad"
-                    className="text-primary underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                  >
-                    política de privacidad
-                  </Link>
-                  .
-                </p>
-              ) : null}
-
               <div className="mt-6 flex min-h-11 flex-wrap items-center gap-3">
                 <AnimatePresence initial={false}>
                   {step > 1 ? (
@@ -904,11 +1086,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                       <MarketingButton
                         type="button"
                         onClick={handleNext}
-                        disabled={
-                          formSubmitStub
-                            ? isSubmitting
-                            : !formReady || !isCurrentStepComplete || isSubmitting
-                        }
+                        disabled={formSubmitStub ? isSubmitting : isSubmitting || !formReady}
                         className="min-h-11"
                       >
                         {planCustomizeForm.steps.next}
@@ -926,11 +1104,7 @@ export function PlanCustomizeWizard({ audience, sectionTitleId }: PlanCustomizeW
                       <MarketingButton
                         type="button"
                         onClick={handleSendRequest}
-                        disabled={
-                          formSubmitStub
-                            ? isSubmitting
-                            : !formReady || !isFinalStepComplete || isSubmitting
-                        }
+                        disabled={formSubmitStub ? isSubmitting : isSubmitting || !formReady}
                         className="min-h-11"
                         aria-busy={isSubmitting}
                       >

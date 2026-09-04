@@ -19,8 +19,7 @@ export const faqPage = {
     "Información clara sobre cómo trabajamos, qué servicios ofrecemos y qué puedes esperar desde la primera consulta.",
   cta: {
     title: "¿No encuentras lo que buscas?",
-    subtitle: "Escríbenos y te respondemos en menos de 24 horas laborables.",
-    label: "Solicitar consulta gratis",
+    label: "Escríbenos",
     href: "/contacto",
   },
   homeTeaser: {

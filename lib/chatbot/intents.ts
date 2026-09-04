@@ -23,7 +23,7 @@ function matchesIntent(query: string, patterns: RegExp[], keywords: string[]): b
         (token) =>
           token === normalizedKeyword ||
           token.startsWith(normalizedKeyword) ||
-          normalizedKeyword.startsWith(token),
+          (token.length >= 4 && normalizedKeyword.startsWith(token)),
       )
     }
     return tokens.some(

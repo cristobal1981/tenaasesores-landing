@@ -5,6 +5,7 @@ import { FieldLabel } from "@/components/forms/field-label"
 type DarkFormFieldProps = {
   name: string
   label: ReactNode
+  labelAddon?: ReactNode
   htmlFor?: string
   required?: boolean
   error?: string
@@ -18,6 +19,7 @@ type DarkFormFieldProps = {
 export function DarkFormField({
   name,
   label,
+  labelAddon,
   htmlFor,
   required,
   error,
@@ -29,9 +31,12 @@ export function DarkFormField({
 
   return (
     <div>
-      <FieldLabel htmlFor={controlId} required={required}>
-        {label}
-      </FieldLabel>
+      <div className="mb-2 flex items-center gap-1.5">
+        <FieldLabel htmlFor={controlId} required={required} className="mb-0">
+          {label}
+        </FieldLabel>
+        {labelAddon}
+      </div>
       {children({
         id: controlId,
         invalid,

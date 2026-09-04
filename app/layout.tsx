@@ -81,8 +81,6 @@ export default function RootLayout({
     >
       <head>
         <GoogleConsentDefaults />
-        <link rel="preconnect" href="https://images.pexels.com" />
-        <link rel="dns-prefetch" href="https://images.pexels.com" />
         {gaId ? (
           <>
             <link rel="preconnect" href="https://www.googletagmanager.com" />
