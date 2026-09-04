@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Política de cookies | tenaasesores",
   description:
-    "Política de cookies de tenaasesores. Tipos de cookies, finalidades, terceros y cómo gestionar tu consentimiento.",
+    "Política de cookies de tenaasesores: tipos de cookies, finalidades, terceros implicados y cómo gestionar o revocar tu consentimiento en cualquier momento.",
   path: "/cookies",
 })
 

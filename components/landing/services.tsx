@@ -1,66 +1,165 @@
 "use client"
 
-import { ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { StaggerContainer, StaggerItem, FloatingElement } from "@/components/animations"
-import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
+import { useEffect, useRef } from "react"
+import { m } from "framer-motion"
+import { useHomeSectionReveal } from "@/components/gsap/use-home-section-reveal"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
-import { ServiceIconBadge } from "@/components/landing/service-icon-badge"
+import { TextLinkWithIcon } from "@/components/ui/text-link"
 import { services } from "@/content/site"
+import { cn } from "@/lib/utils"
+
+type ServiceListItem = (typeof services.items)[number]
+
+const bentoLayout = [
+  "lg:col-start-1 lg:col-span-4 lg:row-start-1 lg:row-span-1",
+  "lg:col-start-5 lg:col-span-2 lg:row-start-1 lg:row-span-2",
+  "lg:col-start-1 lg:col-span-2 lg:row-start-2 lg:row-span-1",
+  "lg:col-start-3 lg:col-span-2 lg:row-start-2 lg:row-span-1",
+] as const
+
+const labelBySlug: Record<string, string> = {
+  fiscal: "Fiscal",
+  contable: "Contable",
+  laboral: "Laboral",
+  constitucion: "Constitución",
+}
+
+const tintBySlug: Record<string, string> = {
+  fiscal: "var(--service-fiscal)",
+  contable: "var(--service-contable)",
+  laboral: "var(--service-laboral)",
+  constitucion: "var(--service-constitucion)",
+}
+
+const cardSurfaceStyle = {
+  backgroundColor: "color-mix(in oklch, var(--on-dark) 4%, var(--background))",
+} as const
+
+function cardGlowStyle(slug: string) {
+  const tint = tintBySlug[slug]
+  return {
+    backgroundImage: `radial-gradient(circle at 85% 12%, color-mix(in srgb, ${tint} 32%, transparent), transparent 65%)`,
+  } as const
+}
+
+const patternStyle = {
+  backgroundImage: "url(/brand/isotipo-desbordado.svg)",
+  backgroundRepeat: "no-repeat",
+} as const
+
+function DetailLink({ slug }: { slug: string }) {
+  return (
+    <TextLinkWithIcon href={`/servicios#${slug}`} className="mt-3 shrink-0 text-sm font-semibold">
+      Ver detalle
+    </TextLinkWithIcon>
+  )
+}
+
+function ServiceCard({ service }: { service: ServiceListItem }) {
+  return (
+    <div className="relative z-10 flex h-full flex-col justify-end p-6 sm:p-7">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-surface-dark from-0% via-surface-dark/80 via-40% to-transparent to-90%"
+      />
+      <h3 className="flex items-center gap-2 text-lg leading-tight font-semibold text-on-dark">
+        <span aria-hidden className="relative flex h-2 w-2 shrink-0">
+          <span
+            className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+            style={{ background: tintBySlug[service.slug] }}
+          />
+          <span
+            className="relative inline-flex h-2 w-2 rounded-full"
+            style={{ background: tintBySlug[service.slug] }}
+          />
+        </span>
+        <span className="sr-only">{labelBySlug[service.slug]}: </span>
+        {service.title}
+      </h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-on-dark">{service.description}</p>
+      <DetailLink slug={service.slug} />
+    </div>
+  )
+}
 
 export function Services() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+  useHomeSectionReveal({ sectionRef })
+
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+
+    const align = () => {
+      const rect = grid.getBoundingClientRect()
+      const patterns = grid.querySelectorAll<HTMLElement>("[data-bento-pattern]")
+      patterns.forEach((pattern) => {
+        const card = pattern.closest<HTMLElement>("[data-bento-card]")
+        if (!card) return
+        const cardRect = card.getBoundingClientRect()
+        pattern.style.backgroundSize = `${rect.width}px ${rect.height}px`
+        pattern.style.backgroundPosition = `${-(cardRect.left - rect.left)}px ${-(cardRect.top - rect.top)}px`
+      })
+    }
+
+    align()
+    window.addEventListener("resize", align)
+    void document.fonts?.ready.then(align)
+    return () => window.removeEventListener("resize", align)
+  }, [])
+
   return (
     <section
+      ref={sectionRef}
       id="servicios"
-      className="relative overflow-hidden bg-background pb-20 md:pb-28"
+      className="section-divider relative overflow-hidden bg-background py-20 md:py-28"
     >
-      <div className="section-fade-line mb-10 md:mb-14" aria-hidden />
-      <div
-        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        aria-hidden
-      >
-        <FloatingElement
-          className="h-[min(85vw,560px)] w-[min(95vw,720px)] rounded-[42%_58%_55%_45%/48%_42%_58%_52%] bg-primary/20 blur-[100px]"
-          duration={14}
-        />
-      </div>
-
       <SectionShell>
-        <MarketingSectionHeading
-          badge={services.badge}
+        <SectionIntro
+          className="mx-auto mb-14"
+          eyebrow={services.badge}
           title={services.title}
           subtitle={services.subtitle}
+          align="center"
+          tone="dark"
+          reveal
         />
 
-        <StaggerContainer
-          className="grid divide-y divide-agua/25 md:grid-cols-2 md:gap-x-12 md:gap-y-12 md:divide-y-0"
-          staggerDelay={0.1}
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:grid-rows-[minmax(12rem,1fr)_minmax(10rem,1fr)] lg:gap-5"
         >
-          {services.items.map((service) => {
-            return (
-              <StaggerItem key={service.title} className="group py-8 md:py-0">
-                <div className="flex gap-5 lg:gap-6">
-                  <ServiceIconBadge slug={service.slug} size="lg" />
-                  <div className="min-w-0 flex-1">
-                    <h3 className="mb-2 text-lg font-semibold text-on-dark lg:text-xl">
-                      {service.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-muted-on-dark lg:text-base">
-                      {service.description}
-                    </p>
-                    <Link
-                      href={`/servicios#${service.slug}`}
-                      className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-on-dark group-hover:gap-3 lg:mt-6"
-                    >
-                      Ver {service.title.toLowerCase()}
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </div>
-                </div>
-              </StaggerItem>
-            )
-          })}
-        </StaggerContainer>
+          {services.items.map((service, index) => (
+            <m.article
+              key={service.title}
+              data-bento-card
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className={cn(
+                "relative min-h-56 overflow-hidden rounded-2xl lg:min-h-0",
+                bentoLayout[index]
+              )}
+              style={cardSurfaceStyle}
+            >
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={cardGlowStyle(service.slug)}
+              />
+              <div
+                aria-hidden
+                data-bento-pattern
+                className="pointer-events-none absolute inset-0 opacity-40"
+                style={patternStyle}
+              />
+              <ServiceCard service={service} />
+            </m.article>
+          ))}
+        </div>
       </SectionShell>
     </section>
   )

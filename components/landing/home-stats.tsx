@@ -14,7 +14,7 @@ export function HomeStats() {
     <div
       ref={sectionRef}
       role="region"
-      className="relative px-2 pb-10 pt-10 md:pb-14 md:pt-12"
+      className="relative px-2 py-6 md:py-8"
       aria-label="Cifras de tenaasesores"
     >
       <div
@@ -23,19 +23,19 @@ export function HomeStats() {
       />
 
       <SectionShell className="relative z-10">
-        <ul className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3 md:gap-8">
+        <ul className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5">
           {homeStats.items.map((stat) => (
             <li key={stat.label} className="text-center">
               <p
-                className="text-stat-on-dark mb-2 font-sans text-[clamp(2rem,4.5vw,2.75rem)] leading-none font-bold tracking-tight tabular-nums"
+                className={`mb-1 font-sans text-[clamp(1.75rem,3.6vw,2.5rem)] leading-none font-bold tracking-tight tabular-nums ${stat.colorClass}`}
                 data-stat-counter
                 data-stat-end={stat.end}
                 data-stat-prefix={stat.prefix}
                 data-stat-suffix={stat.suffix}
               >
-                {formatStatValue(0, stat.prefix, stat.suffix)}
+                {formatStatValue(stat.end, stat.prefix, stat.suffix)}
               </p>
-              <p className="text-sm font-medium text-muted-on-dark md:text-base">{stat.label}</p>
+              <p className="text-xs font-medium text-muted-on-dark md:text-sm">{stat.label}</p>
             </li>
           ))}
         </ul>

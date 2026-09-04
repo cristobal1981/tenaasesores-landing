@@ -14,8 +14,11 @@ export function CookieBanner() {
   const [visible, setVisible] = useState(false)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
 
+  // Diferido a un tick: evita setState síncrono en efecto y el mismatch de hidratación SSR.
   useEffect(() => {
-    setVisible(!hasCookieConsentDecision())
+    if (hasCookieConsentDecision()) return
+    const id = window.setTimeout(() => setVisible(true), 0)
+    return () => window.clearTimeout(id)
   }, [])
 
   const persistChoice = useCallback((analytics: boolean) => {

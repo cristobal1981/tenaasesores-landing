@@ -1,6 +1,6 @@
 ---
 description: API plan personalizado — validación, rate limit y lead Odoo
-globs: app/api/plan-customize/**/*,lib/plan-customize/**/*,components/pages/plan-customize-wizard.tsx,content/plan-customize-form.ts,src/modules/leads/**/*
+globs: app/api/plan-customize/**/*,app/api/confirmar-presupuesto/**/*,lib/plan-customize/**/*,lib/confirmar-presupuesto/**/*,components/pages/plan-customize-wizard.tsx,components/pages/plan-customize-presupuesto-panel.tsx,content/plan-customize-form.ts,src/modules/leads/**/*
 alwaysApply: false
 ---
 
@@ -10,3 +10,5 @@ alwaysApply: false
 2. **Descripción del lead** — `format-plan-customize-description.ts`: bloque estructurado + comentario opcional.
 3. **Seguridad** — Misma origen/rate limit que contacto; honeypot `company`; `formStartedAt`.
 4. **Entrega** — Mismo webhook `ODOO_LEAD_WEBHOOK_URL` con `source: "plan_customize"`.
+5. **Presupuesto flash** — si `presupuesto` en la respuesta de `landing-crm-lead` no es null, el wizard muestra `PlanCustomizePresupuestoPanel` en vez del éxito genérico.
+6. **Confirmación** — `POST /api/confirmar-presupuesto` reenvía la decisión a `CONFIRMAR_PRESUPUESTO_WEBHOOK_URL` con el mismo `ODOO_LEAD_WEBHOOK_SECRET`; rate-limit por IP y por `leadId`.

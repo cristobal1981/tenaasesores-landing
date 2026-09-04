@@ -1,6 +1,12 @@
+import withBundleAnalyzerInit from "@next/bundle-analyzer"
+
+const withBundleAnalyzer = withBundleAnalyzerInit({
+  enabled: process.env.ANALYZE === "true",
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ["192.168.1.116", "192.168.88.18"],
+  allowedDevOrigins: ["192.168.1.116", "192.168.88.18", "192.168.1.53"],
   images: {
     unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
@@ -9,6 +15,47 @@ const nextConfig = {
         hostname: "images.pexels.com",
       },
     ],
+  },
+  async redirects() {
+    // URLs indexadas de un WordPress previo (2015-2020) que hoy devuelven 404.
+    // Todas al home por decisión: no hay blog activo para mapearlas a contenido temático.
+    return [
+      {
+        source: "/conoces-el-termino-screen-scraping",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/la-tributacion-del-crowdfunding",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/portfolio/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/blog/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/website/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/plan",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/crm-comunicacion-autonomo",
+        destination: "/servicios",
+        permanent: true,
+      },
+    ]
   },
   async headers() {
     const isVercelPreview =
@@ -52,4 +99,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default withBundleAnalyzer(nextConfig)

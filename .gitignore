@@ -33,6 +33,9 @@ preview-*.png
 # Sensitive internal docs
 docs/*.pdf
 
+# TypeScript build cache
+*.tsbuildinfo
+
 # OS
 .DS_Store
 Thumbs.db

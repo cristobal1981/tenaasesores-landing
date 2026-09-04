@@ -17,6 +17,8 @@ export type AltaAutonomoSubmissionPayload = {
   nombre?: string
   apellidos?: string
   nif?: string
+  naf?: string
+  fecha_nacimiento?: string
   telefono?: string
   email?: string
   certificado_digital?: string
@@ -31,6 +33,8 @@ export type AltaAutonomoSubmissionPayload = {
   provincia?: string
   codigo_postal?: string
   pais?: string
+  direccion_fiscal?: string
+  direccion_notificacion?: string
   actividad?: string
   ingresos_anuales?: string
   iban?: string
@@ -45,6 +49,8 @@ export type ValidatedAltaAutonomoSubmission = {
   nombre: string
   apellidos: string
   nif: string
+  naf?: string
+  fecha_nacimiento: string
   telefono: string
   email: string
   certificado_digital: "si" | "no"
@@ -59,6 +65,8 @@ export type ValidatedAltaAutonomoSubmission = {
   provincia: string
   codigo_postal: string
   pais: string
+  direccion_fiscal: string
+  direccion_notificacion: string
   actividad: string
   ingresos_anuales: number
   iban: string
@@ -133,6 +141,34 @@ function isValidNifNie(rawValue: string): boolean {
   return expectedLetter === letter
 }
 
+/** El NAF es opcional: una cadena vacía es válida, pero si se indica debe tener el formato correcto. */
+function isValidNaf(rawValue: string): boolean {
+  const value = rawValue.trim()
+  if (!value) return true
+  const digits = value.replace(/\D/g, "")
+  return (
+    digits.length >= altaAutonomoFormContent.limits.nafMin &&
+    digits.length <= altaAutonomoFormContent.limits.nafMax &&
+    digits === value
+  )
+}
+
+function isValidBirthDate(value: string): boolean {
+  if (!isValidDateValue(value)) return false
+
+  const birthDate = new Date(`${value}T00:00:00.000Z`)
+  const now = new Date()
+  let age = now.getUTCFullYear() - birthDate.getUTCFullYear()
+  const hasHadBirthdayThisYear =
+    now.getUTCMonth() > birthDate.getUTCMonth() ||
+    (now.getUTCMonth() === birthDate.getUTCMonth() && now.getUTCDate() >= birthDate.getUTCDate())
+  if (!hasHadBirthdayThisYear) age -= 1
+
+  return (
+    age >= altaAutonomoFormContent.minAgeYears && age <= altaAutonomoFormContent.maxAgeYears
+  )
+}
+
 function isValidSpanishMobilePhone(rawValue: string): boolean {
   const value = normalizePhone(rawValue)
   if (!value.startsWith("+34")) return false
@@ -187,11 +223,157 @@ function parsePositiveInt(value: unknown): number | null {
   return null
 }
 
+export type AltaAutonomoStepValues = {
+  nombre: string
+  apellidos: string
+  nif: string
+  naf: string
+  fechaNacimiento: string
+  telefono: string
+  email: string
+  certificadoDigital: string
+  yaEresAutonomo: string
+  fechaAlta: string
+  fechaDarAlta: string
+  fuisteAutonomo3Anos: string
+  fechaBaja: string
+  fechaEmpezarConNosotros: string
+  direccion: string
+  ciudad: string
+  provincia: string
+  codigoPostal: string
+  pais: string
+  direccionFiscalIgualDomicilio: boolean
+  direccionFiscal: string
+  ciudadFiscal: string
+  provinciaFiscal: string
+  codigoPostalFiscal: string
+  direccionNotificacionIgualFiscal: boolean
+  direccionNotificacion: string
+  ciudadNotificacion: string
+  provinciaNotificacion: string
+  codigoPostalNotificacion: string
+  actividad: string
+  ingresosAnuales: string
+  iban: string
+  comentarios: string
+  privacyAccepted: boolean
+}
+
+export type AltaAutonomoStepValidationError = {
+  field: AltaAutonomoValidationIssueKey
+  message: string
+}
+
+function stepError(
+  field: AltaAutonomoValidationIssueKey
+): AltaAutonomoStepValidationError {
+  return { field, message: altaAutonomoFormContent.validation[field] }
+}
+
+/** Validación por paso del wizard de alta de autónomo. */
+export function getAltaAutonomoStepValidationError(
+  currentStep: number,
+  values: AltaAutonomoStepValues
+): AltaAutonomoStepValidationError | null {
+  if (currentStep === 1) {
+    if (!values.nombre.trim()) return stepError("nombre")
+    if (!values.apellidos.trim()) return stepError("apellidos")
+    if (!isValidNifNie(values.nif)) return stepError("nif")
+    if (!isValidNaf(values.naf)) return stepError("naf")
+    if (!isValidBirthDate(values.fechaNacimiento)) return stepError("fecha_nacimiento")
+    if (!isValidSpanishMobilePhone(values.telefono)) return stepError("telefono")
+    if (!values.email.trim() || !EMAIL_RE.test(values.email.trim())) return stepError("email")
+    return null
+  }
+
+  if (currentStep === 2) {
+    if (!isYesNo(values.certificadoDigital)) return stepError("certificado_digital")
+    if (!isYesNo(values.yaEresAutonomo)) return stepError("ya_eres_autonomo")
+
+    if (values.yaEresAutonomo === "si") {
+      if (!isValidDateValue(values.fechaAlta)) return stepError("fecha_alta")
+    } else if (values.yaEresAutonomo === "no") {
+      if (!isValidDateValue(values.fechaDarAlta)) return stepError("fecha_dar_alta")
+      if (!isYesNo(values.fuisteAutonomo3Anos)) return stepError("fuiste_autonomo_3_anos")
+      if (values.fuisteAutonomo3Anos === "si" && !isValidDateValue(values.fechaBaja)) {
+        return stepError("fecha_baja")
+      }
+    }
+
+    if (!isValidDateValue(values.fechaEmpezarConNosotros)) {
+      return stepError("fecha_empezar_con_nosotros")
+    }
+    return null
+  }
+
+  if (currentStep === 3) {
+    if (!values.direccion.trim() || values.direccion.length > altaAutonomoFormContent.limits.direccionMax) {
+      return stepError("direccion")
+    }
+    if (!values.ciudad.trim()) return stepError("ciudad")
+    if (!parsePositiveInt(values.provincia)) return stepError("provincia")
+    if (!POSTAL_CODE_RE.test(values.codigoPostal)) return stepError("codigo_postal")
+    if (!parsePositiveInt(values.pais)) return stepError("pais")
+
+    if (!values.direccionFiscalIgualDomicilio) {
+      if (!values.direccionFiscal.trim()) return stepError("direccion_fiscal")
+      if (!values.ciudadFiscal.trim()) return stepError("ciudad_fiscal")
+      if (!parsePositiveInt(values.provinciaFiscal)) return stepError("provincia_fiscal")
+      if (!POSTAL_CODE_RE.test(values.codigoPostalFiscal)) return stepError("codigo_postal_fiscal")
+    }
+
+    if (!values.direccionNotificacionIgualFiscal) {
+      if (!values.direccionNotificacion.trim()) return stepError("direccion_notificacion")
+      if (!values.ciudadNotificacion.trim()) return stepError("ciudad_notificacion")
+      if (!parsePositiveInt(values.provinciaNotificacion)) return stepError("provincia_notificacion")
+      if (!POSTAL_CODE_RE.test(values.codigoPostalNotificacion)) {
+        return stepError("codigo_postal_notificacion")
+      }
+    }
+
+    return null
+  }
+
+  if (currentStep === 4) {
+    const actividadTrimmed = values.actividad.trim()
+    if (
+      actividadTrimmed.length < altaAutonomoFormContent.limits.actividadMin ||
+      actividadTrimmed.length > altaAutonomoFormContent.limits.actividadMax
+    ) {
+      return stepError("actividad")
+    }
+
+    const ingresosDigits = values.ingresosAnuales.replace(/\D/g, "")
+    const ingresosAnuales = Number.parseInt(ingresosDigits, 10)
+    if (
+      !Number.isFinite(ingresosAnuales) ||
+      ingresosDigits.length === 0 ||
+      ingresosAnuales < altaAutonomoFormContent.minAnnualIncomeEur
+    ) {
+      return stepError("ingresos_anuales")
+    }
+
+    if (!isValidSpanishIban(values.iban)) return stepError("iban")
+
+    if (values.comentarios.length > altaAutonomoFormContent.limits.comentariosMax) {
+      return stepError("comentarios")
+    }
+
+    if (!values.privacyAccepted) return stepError("privacidad")
+
+    return null
+  }
+
+  return null
+}
+
 /** Required fields filled (no format checks). Used to enable submit. */
 export function isAltaAutonomoFormComplete(input: AltaAutonomoSubmissionPayload): boolean {
   const nombre = toTrimmedString(input.nombre)
   const apellidos = toTrimmedString(input.apellidos)
   const nif = toTrimmedString(input.nif)
+  const fechaNacimiento = toTrimmedString(input.fecha_nacimiento)
   const telefono = toTrimmedString(input.telefono)
   const email = toTrimmedString(input.email)
   const certificadoDigital = toTrimmedString(input.certificado_digital)
@@ -210,9 +392,8 @@ export function isAltaAutonomoFormComplete(input: AltaAutonomoSubmissionPayload)
   const ingresosAnualesRaw = toTrimmedString(input.ingresos_anuales)
   const iban = toTrimmedString(input.iban)
 
-  if (!nombre || !apellidos || !nif || !hasPhoneDigits(telefono) || !email) {
-    return false
-  }
+  if (!nombre || !apellidos || !nif || !fechaNacimiento) return false
+  if (!hasPhoneDigits(telefono) || !email) return false
   if (!isYesNo(certificadoDigital) || !isYesNo(yaEresAutonomo)) {
     return false
   }
@@ -225,9 +406,11 @@ export function isAltaAutonomoFormComplete(input: AltaAutonomoSubmissionPayload)
   }
 
   if (!fechaEmpezarConNosotros) return false
-  if (!direccion || !ciudad || !provincia || !codigoPostal || !pais || !actividad) {
-    return false
-  }
+  if (!direccion || !ciudad || !provincia || !codigoPostal || !pais) return false
+  if (!toTrimmedString(input.direccion_fiscal)) return false
+  if (!toTrimmedString(input.direccion_notificacion)) return false
+
+  if (!actividad) return false
   if (ingresosAnualesRaw.replace(/\D/g, "").length === 0) return false
   if (!iban) return false
   if (input.privacidad !== true) return false
@@ -246,6 +429,8 @@ export function getAltaAutonomoValidationIssues(
   const nombre = toTrimmedString(input.nombre)
   const apellidos = toTrimmedString(input.apellidos)
   const nif = toTrimmedString(input.nif)
+  const naf = toTrimmedString(input.naf)
+  const fechaNacimiento = toTrimmedString(input.fecha_nacimiento)
   const telefono = toTrimmedString(input.telefono)
   const email = toTrimmedString(input.email).toLowerCase()
   const certificadoDigital = toTrimmedString(input.certificado_digital)
@@ -260,6 +445,8 @@ export function getAltaAutonomoValidationIssues(
   const provincia = toTrimmedString(input.provincia)
   const codigoPostal = toTrimmedString(input.codigo_postal)
   const pais = toTrimmedString(input.pais)
+  const direccionFiscal = toTrimmedString(input.direccion_fiscal)
+  const direccionNotificacion = toTrimmedString(input.direccion_notificacion)
   const actividad = toTrimmedString(input.actividad)
   const ingresosAnualesRaw = toTrimmedString(input.ingresos_anuales)
   const iban = toTrimmedString(input.iban)
@@ -270,6 +457,8 @@ export function getAltaAutonomoValidationIssues(
     pushIssue("apellidos")
   }
   if (!isValidNifNie(nif)) pushIssue("nif")
+  if (!isValidNaf(naf)) pushIssue("naf")
+  if (!isValidBirthDate(fechaNacimiento)) pushIssue("fecha_nacimiento")
   if (!isValidSpanishMobilePhone(telefono)) pushIssue("telefono")
   if (!email || email.length > altaAutonomoFormContent.limits.emailMax || !EMAIL_RE.test(email)) {
     pushIssue("email")
@@ -300,6 +489,20 @@ export function getAltaAutonomoValidationIssues(
   if (!parsePositiveInt(provincia)) pushIssue("provincia")
   if (!POSTAL_CODE_RE.test(codigoPostal)) pushIssue("codigo_postal")
   if (!parsePositiveInt(pais)) pushIssue("pais")
+
+  if (
+    !direccionFiscal ||
+    direccionFiscal.length > altaAutonomoFormContent.limits.direccionCompletaMax
+  ) {
+    pushIssue("direccion_fiscal")
+  }
+  if (
+    !direccionNotificacion ||
+    direccionNotificacion.length > altaAutonomoFormContent.limits.direccionCompletaMax
+  ) {
+    pushIssue("direccion_notificacion")
+  }
+
   if (
     !actividad ||
     actividad.length < altaAutonomoFormContent.limits.actividadMin ||
@@ -372,6 +575,8 @@ export function validateAltaAutonomoSubmission(
       nombre: toTrimmedString(input.nombre),
       apellidos: toTrimmedString(input.apellidos),
       nif: normalizeUpperCompact(toTrimmedString(input.nif)),
+      naf: toTrimmedString(input.naf) || undefined,
+      fecha_nacimiento: toTrimmedString(input.fecha_nacimiento),
       telefono: normalizePhone(toTrimmedString(input.telefono)),
       email: toTrimmedString(input.email).toLowerCase(),
       certificado_digital: toTrimmedString(input.certificado_digital) as "si" | "no",
@@ -390,6 +595,8 @@ export function validateAltaAutonomoSubmission(
       provincia: toTrimmedString(input.provincia),
       codigo_postal: toTrimmedString(input.codigo_postal),
       pais: toTrimmedString(input.pais),
+      direccion_fiscal: toTrimmedString(input.direccion_fiscal),
+      direccion_notificacion: toTrimmedString(input.direccion_notificacion),
       actividad: toTrimmedString(input.actividad),
       ingresos_anuales: ingresosAnuales,
       iban: normalizeIban(toTrimmedString(input.iban)),

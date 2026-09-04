@@ -10,9 +10,9 @@ function getPrefersReducedMotion(): boolean {
 export function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = useState(getPrefersReducedMotion)
 
+  // El valor inicial ya lo aporta el inicializador de useState; aquí solo suscripción a cambios.
   useLayoutEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
-    setReduced(mq.matches)
     const onChange = (event: MediaQueryListEvent) => setReduced(event.matches)
     mq.addEventListener("change", onChange)
     return () => mq.removeEventListener("change", onChange)

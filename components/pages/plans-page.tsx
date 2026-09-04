@@ -10,13 +10,12 @@ export function PlansPage({ audience }: { audience: PlansAudience }) {
   return (
     <main className="min-h-screen bg-background">
       <DarkPageHero
-        badge={plans.badge}
+        eyebrow={plans.badge}
         title={plans.title}
-        titleLine2Tone="primary"
         lead={plans.subtitle}
         align="center"
-        padding="spacious"
         gradient="strong"
+        className="border-b-0"
       />
 
       <PlansPageClient audience={audience} />

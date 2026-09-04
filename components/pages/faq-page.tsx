@@ -5,8 +5,9 @@ import { FaqAccordionList } from "@/components/faq/faq-accordion-list"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { DarkPageHero } from "@/components/layout/dark-page-hero"
 import { SectionShell } from "@/components/layout/section-shell"
+import { ChipScrollRow } from "@/components/ui/chip-scroll-row"
 import { faqPage, faqSections } from "@/content/faq"
-import { useFaqSectionSpy } from "@/lib/faq/use-faq-section-spy"
+import { useSectionScrollSpy } from "@/lib/scroll/use-section-scroll-spy"
 import { cn } from "@/lib/utils"
 
 const mobilePillClass =
@@ -14,46 +15,48 @@ const mobilePillClass =
 
 export function FaqPage() {
   const sectionIds = useMemo(() => faqSections.map((section) => section.slug), [])
-  const { activeId, scrollToSection } = useFaqSectionSpy({ sectionIds })
+  const { activeId, scrollToSection } = useSectionScrollSpy({ sectionIds })
 
   return (
     <main className="min-h-screen">
       <DarkPageHero
-        badge={faqPage.badge}
+        eyebrow={faqPage.badge}
         title={faqPage.title}
         lead={faqPage.subtitle}
         align="left"
-        titleLine2Tone="primary"
       />
 
-      <div className="sticky top-16 z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden md:top-20">
+      <div className="sticky top-[var(--site-header-height)] z-40 border-b border-agua/20 bg-surface-light/95 backdrop-blur-md lg:hidden">
         <SectionShell innerClassName="py-3">
-          <nav
-            className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            aria-label="Secciones de preguntas frecuentes"
-          >
-            {faqSections.map((section) => {
-              const isActive = activeId === section.slug
-              return (
-                <a
-                  key={section.slug}
-                  href={`#${section.slug}`}
-                  aria-current={isActive ? "location" : undefined}
-                  onClick={(event) => {
-                    event.preventDefault()
-                    scrollToSection(section.slug)
-                  }}
-                  className={cn(
-                    mobilePillClass,
-                    isActive
-                      ? "border-primary/40 bg-white text-accent-on-light shadow-sm"
-                      : "border-on-light/15 bg-white text-muted-on-light hover:border-primary/30 hover:text-on-light"
-                  )}
-                >
-                  {section.title}
-                </a>
-              )
-            })}
+          <nav aria-label="Secciones de preguntas frecuentes">
+            <ChipScrollRow
+              className="gap-2"
+              edgeFrom="from-surface-light"
+              chevronClassName="text-muted-on-light"
+            >
+              {faqSections.map((section) => {
+                const isActive = activeId === section.slug
+                return (
+                  <a
+                    key={section.slug}
+                    href={`#${section.slug}`}
+                    aria-current={isActive ? "location" : undefined}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      scrollToSection(section.slug)
+                    }}
+                    className={cn(
+                      mobilePillClass,
+                      isActive
+                        ? "border-primary/40 bg-white text-accent-on-light shadow-sm"
+                        : "border-on-light/15 bg-white text-muted-on-light hover:border-primary/30 hover:text-on-light"
+                    )}
+                  >
+                    {section.title}
+                  </a>
+                )
+              })}
+            </ChipScrollRow>
           </nav>
         </SectionShell>
       </div>
@@ -132,12 +135,7 @@ export function FaqPage() {
         </SectionShell>
       </section>
 
-      <CtaBrisaBand
-        title={faqPage.cta.title}
-        subtitle={faqPage.cta.subtitle}
-        label={faqPage.cta.label}
-        href={faqPage.cta.href}
-      />
+      <CtaBrisaBand title={faqPage.cta.title} label={faqPage.cta.label} href={faqPage.cta.href} />
     </main>
   )
 }

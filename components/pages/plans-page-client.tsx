@@ -60,6 +60,9 @@ function PlanTierPrice({ tier }: { tier: PlanTier }) {
     return (
       <>
         <p className="mb-1 text-4xl font-bold text-on-dark">
+          {"pricePrefix" in tier && tier.pricePrefix ? (
+            <span className="mr-2 text-base font-semibold text-primary">{tier.pricePrefix}</span>
+          ) : null}
           {tier.price}
           <span className="ml-1 text-xl text-muted-on-dark">€</span>
           <span className="ml-2 text-base font-medium text-muted-on-dark">/{tier.period}</span>
@@ -111,7 +114,7 @@ export function PlansPageClient({ audience }: { audience: PlansAudience }) {
 
   return (
     <>
-    <section className="py-16 md:py-20">
+    <section className="pt-8 pb-16 md:pt-10 md:pb-20">
       <SectionShell>
         <StaggerContainer
           className={cn(

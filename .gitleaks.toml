@@ -1,0 +1,18 @@
+title = "landing-site gitleaks"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlisted patterns and paths"
+paths = [
+  '''\.env\.example$''',
+  '''pnpm-lock\.yaml$''',
+  '''scripts/ci/check-secrets\.mjs$''',
+  '''cspell\.json$''',
+]
+
+regexes = [
+  '''LANDING_ONBOARDING_API_SECRET=\s*$''',
+  '''SYNTIA_APP_URL=\s*$''',
+]

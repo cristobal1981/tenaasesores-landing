@@ -5,6 +5,7 @@ export type ContactInquiryPayload = {
   phone?: string
   email: string
   message: string
+  privacyAccepted?: boolean
   company?: string
   formStartedAt?: number
 }
@@ -23,6 +24,7 @@ export type ContactValidationErrorCode =
   | "phone"
   | "email"
   | "message"
+  | "privacy"
   | "invalid_body"
 
 export type ContactValidationResult =
@@ -33,6 +35,11 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_ALLOWED_RE = /^\+?[\d\s().-]+$/
 const PHONE_DIGITS_MIN = 9
 const PHONE_DIGITS_MAX = 15
+
+export function isValidEmail(rawEmail: string): boolean {
+  const email = rawEmail.trim()
+  return Boolean(email) && email.length <= contactForm.limits.emailMax && EMAIL_RE.test(email)
+}
 
 export function isLikelyValidPhone(phoneRaw: string): boolean {
   const value = phoneRaw.trim()
@@ -81,7 +88,7 @@ export function validateContactInquiry(
     return { ok: false, code: "phone" }
   }
 
-  if (!email || email.length > contactForm.limits.emailMax || !EMAIL_RE.test(email)) {
+  if (!isValidEmail(email)) {
     return { ok: false, code: "email" }
   }
 
@@ -90,6 +97,10 @@ export function validateContactInquiry(
     message.length > contactForm.limits.messageMax
   ) {
     return { ok: false, code: "message" }
+  }
+
+  if (input.privacyAccepted !== true) {
+    return { ok: false, code: "privacy" }
   }
 
   return {

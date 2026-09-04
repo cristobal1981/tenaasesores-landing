@@ -1,70 +1,61 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Eye, ShieldCheck, Zap } from "lucide-react"
+import { useRef } from "react"
+import { ArrowRight } from "lucide-react"
 import { MarketingButton } from "@/components/ui/marketing-button"
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
-import {
-  HoldedPartnerStrip,
-  OdooCredential,
-  OdooSteps,
-} from "@/components/landing/odoo-partners"
-import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
+import { useHomeSectionReveal } from "@/components/gsap/use-home-section-reveal"
+import { OdooSteps, PartnersDossier } from "@/components/landing/odoo-partners"
+import { SectionIntro } from "@/components/layout/section-intro"
 import { SectionShell } from "@/components/layout/section-shell"
 import { odoo } from "@/content/site"
 
-const benefitIcons = [Eye, ShieldCheck, Zap]
-
 export function Odoo() {
+  const sectionRef = useRef<HTMLElement>(null)
+  useHomeSectionReveal({ sectionRef, stagger: 0.1 })
+
   return (
     <section
+      ref={sectionRef}
       id="odoo"
-      className="section-divider relative overflow-hidden bg-surface-dark py-20 md:py-28"
+      className="section-divider relative overflow-hidden bg-surface-dark py-24 md:py-32"
     >
       <SectionShell>
-        <MarketingSectionHeading
-          badge={odoo.badge}
+        <SectionIntro
+          className="mx-auto mb-16"
+          eyebrow={odoo.badge}
           title={odoo.title}
           subtitle={odoo.subtitle}
-          className="mb-14 max-w-2xl"
+          align="center"
+          tone="dark"
+          reveal
         />
 
-        <OdooCredential />
+        <div data-home-reveal className="mb-20">
+          <PartnersDossier />
+        </div>
 
-        <StaggerContainer
-          className="mb-16 grid gap-8 md:grid-cols-3 md:gap-10"
-          staggerDelay={0.1}
+        <div data-home-reveal className="mb-16">
+          <OdooSteps className="mx-auto max-w-4xl" />
+        </div>
+
+        <div
+          data-home-reveal
+          className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
         >
-          {odoo.benefits.map((benefit, index) => {
-            const Icon = benefitIcons[index]
-            return (
-              <StaggerItem key={benefit.title}>
-                <div className="flex items-start justify-center gap-3 text-left md:flex-col md:items-center md:text-center">
-                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary md:mt-0 md:h-6 md:w-6" />
-                  <div>
-                    <h3 className="mb-2 font-bold text-on-dark">{benefit.title}</h3>
-                    <p className="text-sm leading-relaxed text-muted-on-dark md:text-base">
-                      {benefit.description}
-                    </p>
-                  </div>
-                </div>
-              </StaggerItem>
-            )
-          })}
-        </StaggerContainer>
-
-        <OdooSteps className="mb-12" />
-
-        <FadeIn className="text-center">
           <MarketingButton asChild size="lg">
             <Link href="/contacto">
               {odoo.cta}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </MarketingButton>
-        </FadeIn>
-
-        <HoldedPartnerStrip />
+          <MarketingButton asChild size="lg" marketingVariant="secondary">
+            <Link href="/implementacion-odoo">
+              Ver cómo lo implementamos
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </MarketingButton>
+        </div>
       </SectionShell>
     </section>
   )

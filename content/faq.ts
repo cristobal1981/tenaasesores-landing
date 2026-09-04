@@ -19,8 +19,7 @@ export const faqPage = {
     "Información clara sobre cómo trabajamos, qué servicios ofrecemos y qué puedes esperar desde la primera consulta.",
   cta: {
     title: "¿No encuentras lo que buscas?",
-    subtitle: "Escríbenos y te respondemos en menos de 24 horas laborables.",
-    label: "Solicitar consulta gratis",
+    label: "Escríbenos",
     href: "/contacto",
   },
   homeTeaser: {
@@ -95,7 +94,7 @@ export const faqSections: readonly FaqSection[] = [
       {
         question: "¿Qué plan me conviene si soy autónomo?",
         answer:
-          "Depende de tu operativa. El plan Base cubre necesidades esenciales con un precio orientativo desde 69 €/mes. Si necesitas más alcance — laboral, Odoo o mayor volumen —, el plan Personalizado se adapta a tu caso. En la página de autónomos puedes comparar qué incluye cada uno.",
+          "Depende de tu operativa. El plan Base cubre necesidades esenciales desde 55 €/mes. Si necesitas más alcance — laboral, Odoo o mayor volumen —, el plan Personalizado se adapta a tu caso. En la página de autónomos puedes comparar qué incluye cada uno.",
       },
       {
         question: "¿Y si tengo una empresa o pyme?",

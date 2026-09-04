@@ -1,11 +1,13 @@
 import { faqSections } from "@/content/faq"
-import { site } from "@/content/site"
+import { legalEntity } from "@/content/legal"
+import { contact, services, site } from "@/content/site"
 
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": ["ProfessionalService", "AccountingService"],
     name: site.name,
+    alternateName: legalEntity.businessName,
     description: site.description,
     url: site.url,
     email: site.email,
@@ -16,10 +18,25 @@ export function organizationSchema() {
     },
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Tenerife",
-      addressRegion: "Canarias",
+      streetAddress: "Calle El Toscal, nº 29, 1º pta 7",
+      addressLocality: "Los Realejos",
+      addressRegion: "Santa Cruz de Tenerife",
       addressCountry: "ES",
     },
+    image: `${site.url}/imgs/oficina.webp`,
+    priceRange: "55€–150€+/mes",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 28.400333,
+      longitude: -16.574472,
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "15:00",
+    },
+    sameAs: contact.socials.map((social) => social.href),
   }
 }
 
@@ -40,6 +57,24 @@ export function faqPageSchema() {
     "@type": "FAQPage",
     mainEntity,
   }
+}
+
+export function servicesSchema() {
+  return services.mainServices.map((service) => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.intro,
+    provider: {
+      "@type": "ProfessionalService",
+      name: site.name,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "España",
+    },
+    url: `${site.url}/servicios#${service.slug}`,
+  }))
 }
 
 export function breadcrumbSchema(items: { name: string; path: string }[]) {

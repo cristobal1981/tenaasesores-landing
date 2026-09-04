@@ -1,5 +1,5 @@
 import { intentDefinitions } from "@/content/chatbot"
-import { contact, contactHref, odoo, plansByAudience, services, site, team } from "@/content/site"
+import { contactHref, odoo, plansByAudience, site, team } from "@/content/site"
 import { formatPlanTierPriceLabel } from "@/lib/chatbot/plan-tier-summary"
 import { planCustomizeForm } from "@/content/plan-customize-form"
 import { normalizeText } from "./normalize"
@@ -23,7 +23,7 @@ function matchesIntent(query: string, patterns: RegExp[], keywords: string[]): b
         (token) =>
           token === normalizedKeyword ||
           token.startsWith(normalizedKeyword) ||
-          normalizedKeyword.startsWith(token),
+          (token.length >= 4 && normalizedKeyword.startsWith(token)),
       )
     }
     return tokens.some(

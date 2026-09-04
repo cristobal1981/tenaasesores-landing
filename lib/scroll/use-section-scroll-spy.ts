@@ -4,11 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 const SCROLL_SPY_OFFSET_PX = 120
 
-type UseFaqSectionSpyOptions = {
+type UseSectionScrollSpyOptions = {
   sectionIds: readonly string[]
 }
 
-export function useFaqSectionSpy({ sectionIds }: UseFaqSectionSpyOptions) {
+export function useSectionScrollSpy({ sectionIds }: UseSectionScrollSpyOptions) {
   const [activeId, setActiveId] = useState(sectionIds[0] ?? "")
   const initialHashHandled = useRef(false)
 
@@ -30,16 +30,21 @@ export function useFaqSectionSpy({ sectionIds }: UseFaqSectionSpyOptions) {
     setActiveId((previous) => (previous === currentId ? previous : currentId))
   }, [sectionIds])
 
-  useEffect(() => {
+  // Reset al cambiar las secciones: ajuste de estado durante el render, no en efecto.
+  const [prevSectionIds, setPrevSectionIds] = useState(sectionIds)
+  if (prevSectionIds !== sectionIds) {
+    setPrevSectionIds(sectionIds)
     setActiveId(sectionIds[0] ?? "")
-    updateActiveSection()
-  }, [sectionIds, updateActiveSection])
+  }
 
   useEffect(() => {
+    // Cálculo inicial en rAF: la regla prohíbe setState síncrono en el cuerpo del efecto.
+    const raf = window.requestAnimationFrame(updateActiveSection)
     window.addEventListener("scroll", updateActiveSection, { passive: true })
     window.addEventListener("resize", updateActiveSection, { passive: true })
 
     return () => {
+      window.cancelAnimationFrame(raf)
       window.removeEventListener("scroll", updateActiveSection)
       window.removeEventListener("resize", updateActiveSection)
     }

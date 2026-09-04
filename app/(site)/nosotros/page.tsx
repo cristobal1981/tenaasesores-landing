@@ -5,9 +5,9 @@ import { breadcrumbSchema } from "@/lib/seo/structured-data"
 import { pageMetadata } from "@/lib/seo/metadata"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Equipo de asesoría online | tenaasesores",
+  title: "Equipo y oficina en Tenerife | tenaasesores",
   description:
-    "Conoce al equipo de tenaasesores: seis profesionales online con trato directo en fiscal, contable, laboral y Odoo.",
+    "Conoce al equipo de tenaasesores, con oficina en Los Realejos, Tenerife: seis profesionales online en fiscal, contable, laboral y Odoo.",
   path: "/nosotros",
 })
 

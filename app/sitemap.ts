@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority:
       path === ""
         ? 1
-        : path === "/contacto" || path === "/servicios"
+        : path === "/contacto" || path === "/servicios" || path === "/implementacion-odoo"
           ? 0.9
           : path.startsWith("/aviso-legal") ||
               path.startsWith("/privacidad") ||

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import {
   HomeHeroBand,
+  HomeStats,
   LogoMarquee,
   Services,
   Odoo,
@@ -8,30 +9,29 @@ import {
   // Testimonials,
 } from "@/src/modules/landing/ui"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
-import { faqPage } from "@/content/faq"
+import { homeFinalCta } from "@/content/site"
 import { pageMetadata } from "@/lib/seo/metadata"
 
 export const metadata: Metadata = pageMetadata({
   title: "Asesoría fiscal y contable online | tenaasesores",
   description:
-    "Asesoría online para autónomos y pymes: fiscal, contable y laboral con Odoo, trato directo y primera consulta gratuita.",
+    "Asesoría online para autónomos y pymes: fiscal, contable y laboral con Odoo y Holded, respuesta máxima en 24h, trato directo y primera consulta gratuita.",
   path: "/",
 })
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <HomeHeroBand />
-      <Services />
+      <section className="section-divider-bottom flex flex-col">
+        <HomeHeroBand />
+        <HomeStats />
+      </section>
+      <LogoMarquee variant="embedded" />
       <Philosophy />
+      <Services />
       <Odoo />
       {/* <Testimonials /> — oculto hasta tener testimonios reales publicables */}
-      <CtaBrisaBand
-        title={faqPage.homeTeaser.title}
-        subtitle={faqPage.homeTeaser.subtitle}
-        label={faqPage.homeTeaser.label}
-        href={faqPage.homeTeaser.href}
-      />
+      <CtaBrisaBand title={homeFinalCta.title} label={homeFinalCta.label} />
     </main>
   )
 }
