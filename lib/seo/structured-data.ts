@@ -23,6 +23,13 @@ export function organizationSchema() {
       addressRegion: "Santa Cruz de Tenerife",
       addressCountry: "ES",
     },
+    image: `${site.url}/imgs/oficina.webp`,
+    priceRange: "55€–150€+/mes",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 28.400333,
+      longitude: -16.574472,
+    },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],

@@ -9,8 +9,8 @@ export function useActiveSectionHash(sectionIds: readonly string[]) {
 
   useEffect(() => {
     if (sectionIds.length === 0) {
-      setActiveHash("")
-      return
+      const raf = window.requestAnimationFrame(() => setActiveHash(""))
+      return () => window.cancelAnimationFrame(raf)
     }
 
     const updateActiveHash = () => {

@@ -105,7 +105,7 @@ export function Footer() {
                 {site.phone.display}
               </TextLink>
               <TextLink
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(legalEntity.address)}`}
+                href={legalEntity.mapsHref}
                 className="inline-flex items-center gap-2 text-sm text-muted-on-dark"
               >
                 <MapPin className="size-4 shrink-0" aria-hidden />

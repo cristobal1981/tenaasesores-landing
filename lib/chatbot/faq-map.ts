@@ -1,6 +1,7 @@
 import { faqContact } from "@/content/site"
 import { faqHref, faqSections } from "@/content/faq"
 import { normalizeText, tokenize } from "./normalize"
+import { filterSearchTokens } from "./stopwords"
 import type { ChatReply } from "./types"
 
 type FaqEntry = {
@@ -67,10 +68,12 @@ function isProceduralFaqEntry(entry: FaqEntry): boolean {
 
 function computeScore(queryTokens: string[], entry: FaqEntry): number {
   const bag = normalizeText(`${entry.question} ${entry.aliases.join(" ")}`)
+  const bagWords = new Set(bag.split(" "))
   let score = 0
-  for (const token of queryTokens) {
-    if (token.length <= 2) continue
-    if (bag.includes(token)) score += token.length >= 5 ? 2 : 1
+  // Palabras de relleno ("puedo", "que"...) se descartan aquí: en una frase completa
+  // casi siempre coinciden con alguna pregunta de la FAQ sin aportar significado real.
+  for (const token of filterSearchTokens(queryTokens)) {
+    if (bagWords.has(token)) score += token.length >= 5 ? 2 : 1
   }
   if (queryTokens.length > 0 && normalizeText(entry.question) === queryTokens.join(" ")) {
     score += 3

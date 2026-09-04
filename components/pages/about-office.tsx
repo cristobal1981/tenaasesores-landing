@@ -9,8 +9,8 @@ const infoIconWrapClassName =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/35 bg-primary/10 text-primary"
 
 export function AboutOffice() {
-  const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(legalEntity.address)}&output=embed`
-  const mapSearchHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(legalEntity.address)}`
+  const mapEmbedSrc = `https://www.google.com/maps?cid=${legalEntity.mapsCid}&output=embed`
+  const mapSearchHref = legalEntity.mapsHref
 
   return (
     <section id="oficina" className="relative overflow-hidden border-t border-agua/30 bg-background py-16 md:py-24">

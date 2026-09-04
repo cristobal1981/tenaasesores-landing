@@ -25,7 +25,7 @@ export function matchServiceIntent(query: string): ChatReply | null {
     }
   }
 
-  const tokens = tokenize(query)
+  const tokens = tokenize(query).filter((t) => t.length >= 4)
   for (const service of services.mainServices) {
     if (tokens.some((t) => service.slug.includes(t) || t.includes(service.slug))) {
       return {
