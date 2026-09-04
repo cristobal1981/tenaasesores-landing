@@ -116,6 +116,15 @@ export function getPlanCustomizeStepValidationError(
       if (!parseYesNo(values.willHireEmployees)) {
         return { field: "willHireEmployees", message: planCustomizeForm.validation.hireEmployees }
       }
+      if (values.willHireEmployees === "yes") {
+        const count = Number.parseInt(values.employeeCount, 10)
+        if (!Number.isFinite(count) || count < 1) {
+          return {
+            field: "employeeCount",
+            message: planCustomizeForm.validation.employeeCountAutonomo,
+          }
+        }
+      }
     } else {
       if (!parseYesNo(values.isNewConstitution)) {
         return { field: "isNewConstitution", message: planCustomizeForm.validation.newConstitution }
@@ -255,7 +264,8 @@ export function validatePlanCustomizeInquiry(
   }
 
   const employeeCount =
-    audience === "empresas" && hasEmployees === "yes"
+    (audience === "empresas" && hasEmployees === "yes") ||
+    (audience === "autonomos" && willHireEmployees === "yes")
       ? Number.parseInt(stepValues.employeeCount, 10)
       : undefined
 
