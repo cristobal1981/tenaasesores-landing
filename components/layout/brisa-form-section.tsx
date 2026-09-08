@@ -97,7 +97,7 @@ type DarkFormPanelProps = {
 
 export function DarkFormPanel({ children, className }: DarkFormPanelProps) {
   return (
-    <div className={cn("relative bg-surface-dark p-6 sm:p-8 md:p-9", className)}>
+    <div className={cn("relative bg-surface-dark p-6 sm:p-8 md:p-9 subpixel-antialiased", className)}>
       <div
         aria-hidden
         className="pointer-events-none absolute -top-20 right-6 h-52 w-52 rounded-full bg-primary/20 blur-3xl"

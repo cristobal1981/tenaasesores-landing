@@ -55,49 +55,21 @@ export const navItems = [
   {
     label: "Inicio",
     href: "/",
-    panel: {
-      items: [
-        {
-          label: "Inicio",
-          href: "/",
-          description: "Vuelve a la portada y descubre nuestra propuesta completa.",
-        },
-        {
-          label: "Cómo trabajamos",
-          href: "/#como-trabajamos",
-          description:
-            "Nuestra filosofía en 5 principios: cercanía, llaneza, agilidad, valor y experiencia.",
-        },
-        {
-          label: "Qué resolvemos",
-          href: "/#servicios",
-          description:
-            "Un mismo equipo coordina áreas clave para que tengas menos fricción y más claridad.",
-        },
-        {
-          label: "Odoo y Holded · Partners oficiales",
-          href: "/#odoo",
-          description: "Tecnología cuando aporta control, velocidad y menos trabajo manual.",
-        },
-      ],
-      faqHref: "/faq#empezar",
-    },
   },
   {
     label: "Servicios",
-    href: "/servicios",
     panel: {
       items: [
         {
-          label: "Nuestro valor diferencial",
-          href: "/servicios#valor-diferencial",
-          description: "Portal de cliente, cumplimiento digital y formación para tu equipo.",
+          label: "Servicios",
+          href: "/servicios",
+          description: "Fiscal, contable, laboral y constitución de empresas.",
         },
-        ...serviceItems.map((service) => ({
-          label: service.title,
-          href: `/servicios#${service.slug}`,
-          description: service.description,
-        })),
+        {
+          label: "Fiscalidad canaria",
+          href: "/fiscalidad-canaria",
+          description: "IGIC, REF y Zona Especial Canaria (ZEC) al 4% en Impuesto de Sociedades.",
+        },
       ],
       faqHref: "/faq#servicios",
     },
@@ -105,29 +77,6 @@ export const navItems = [
   {
     label: "Odoo",
     href: "/implementacion-odoo",
-    panel: {
-      items: [
-        {
-          label: "Implementación de Odoo",
-          href: "/implementacion-odoo",
-          description:
-            "El proceso completo: auditoría, migración, facturación y acompañamiento continuo.",
-        },
-        {
-          label: "Cómo lo implementamos, fase a fase",
-          href: "/implementacion-odoo#fases",
-          description:
-            "Seguimiento visual de cada fase, de la auditoría inicial al acompañamiento continuo.",
-        },
-        {
-          label: "Por qué así",
-          href: "/implementacion-odoo#beneficios",
-          description:
-            "Lo que ganas con esta forma de trabajar: rentabilidad real, acceso Enterprise y supervisión profesional.",
-        },
-      ],
-      faqHref: "/faq#odoo",
-    },
   },
   {
     label: "Planes",
@@ -151,23 +100,17 @@ export const navItems = [
   },
   {
     label: "Nosotros",
-    href: "/nosotros",
     panel: {
       items: [
         {
-          label: "Sobre Tenaasesores",
-          href: "/nosotros#sobre-tenaasesores",
-          description: "Equipo ágil con acceso directo a profesionales, sin call center.",
+          label: "Nosotros",
+          href: "/nosotros",
+          description: "Seis profesionales especializados en fiscal, contable y laboral, sin call center.",
         },
         {
-          label: "Nuestro equipo",
-          href: "/nosotros#equipo",
-          description: "Seis profesionales especializados en fiscal, contable y laboral.",
-        },
-        {
-          label: "Nuestra oficina",
-          href: "/nosotros#oficina",
-          description: "Sede en Los Realejos, Tenerife, con alcance nacional en remoto.",
+          label: "Asesoría en Tenerife",
+          href: "/asesoria-contable-tenerife",
+          description: "Sede en Los Realejos, con cobertura en toda la isla y alcance nacional en remoto.",
         },
       ],
       faqHref: "/faq#equipo",
@@ -424,8 +367,8 @@ export const services = {
         },
         {
           title: "Fiscalidad canaria (IGIC, REF, ZEC)",
-          description:
-            "Gestionamos tus modelos de IGIC y te orientamos en las particularidades del Régimen Económico y Fiscal de Canarias, incluida la Zona Especial Canaria (ZEC) cuando tu actividad pueda beneficiarse.",
+          description: "El IGIC, el REF y la Zona Especial Canaria tienen su propia página, con todos los detalles.",
+          href: "/fiscalidad-canaria",
         },
       ],
       benefits: [
@@ -811,6 +754,7 @@ export const footer = {
     "Asesoramiento y consultoría empresarial online: contabilidad en tiempo real, fiscal y laboral para autónomos, pymes y empresas digitales.",
   services: [
     { label: "Gestión fiscal", href: "/servicios#fiscal" },
+    { label: "Fiscalidad canaria", href: "/fiscalidad-canaria" },
     { label: "Gestión contable", href: "/servicios#contable" },
     { label: "Gestión laboral", href: "/servicios#laboral" },
     { label: "Constitución", href: "/servicios#constitucion" },
@@ -823,6 +767,7 @@ export const footer = {
     { label: "Servicios", href: "/servicios" },
     { label: "Implementación de Odoo", href: "/implementacion-odoo" },
     { label: "Nosotros", href: "/nosotros" },
+    { label: "Asesoría en Tenerife", href: "/asesoria-contable-tenerife" },
     // { label: "Testimonios", href: "/#testimonios" }, // testimonialsEnabled
     { label: "Contacto", href: "/contacto" },
     { label: "FAQ", href: "/faq" },

@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 import { site } from "@/content/site"
 
 export const defaultOgImage = {
-  url: "/brand/android-chrome-512x512.png",
-  width: 512,
-  height: 512,
-  alt: "tenaasesores — asesoría online",
+  url: "/og-tenaasesores-1200x630.png",
+  width: 1200,
+  height: 630,
+  alt: "tenaasesores — asesoría fiscal, contable y laboral online",
 } as const
 
 type PageMetadataInput = {
@@ -64,10 +64,12 @@ export function pageMetadata({
 export const indexablePaths = [
   "",
   "/servicios",
+  "/fiscalidad-canaria",
   "/implementacion-odoo",
   "/plan-autonomos",
   "/plan-empresas",
   "/nosotros",
+  "/asesoria-contable-tenerife",
   "/faq",
   "/contacto",
   "/aviso-legal",

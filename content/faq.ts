@@ -84,6 +84,16 @@ export const faqSections: readonly FaqSection[] = [
         answer:
           "Sí. Como entidad colaboradora con organizaciones acreditadas, te ayudamos a aprovechar los créditos de la Seguridad Social destinados a la capacitación de tus empleados.",
       },
+      {
+        question: "¿Tengo que declarar IGIC aunque facture poco?",
+        answer:
+          "Si eres autónomo y tu volumen de operaciones no supera los 50.000€ al año, puedes estar exento por la franquicia del minorista. Si lo superas, el modelo 420 se presenta cada trimestre, sin importar cuánto factures.",
+      },
+      {
+        question: "¿Puede beneficiarse mi empresa de la ZEC?",
+        answer:
+          "Depende de tu actividad, la inversión que puedas hacer y los puestos de trabajo que puedas crear. Te lo valoramos en la primera consulta.",
+      },
     ],
   },
   {
