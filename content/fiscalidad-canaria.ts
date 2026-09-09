@@ -22,7 +22,7 @@ export const fiscalidadCanaria = {
       {
         title: "IGIC: el impuesto indirecto propio de Canarias",
         description:
-          "Presentamos tu modelo 420 cada trimestre (abril, julio, octubre) y el resumen anual en enero. El tipo depende de tu actividad: el general es del 7% y el reducido, del 3%; también hay tipos incrementados para ciertos productos y servicios. Si eres autónomo y tu volumen de operaciones no supera los 50.000€ al año, puedes estar exento por la franquicia del minorista.",
+          "Presentamos tu modelo 420 cada trimestre (abril, julio, octubre) o de forma mensual y el resumen anual en enero. El tipo depende de tu actividad: el general es del 7% y el reducido, del 3%; también hay tipos incrementados para ciertos productos y servicios. Si eres autónomo y tu volumen de operaciones no supera los límites legales, puedes estar exento por la franquicia del minorista.",
       },
       {
         title: "REF: el Régimen Económico y Fiscal de Canarias",
