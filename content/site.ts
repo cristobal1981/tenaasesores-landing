@@ -19,7 +19,7 @@ export const site = {
     href: "tel:+34922388192",
   },
   hours: {
-    weekdays: "9:00 - 15:00",
+    weekdays: "8:30 - 15:30",
     weekend: "Cerrado",
   },
 } as const
@@ -606,7 +606,7 @@ export const about = {
     title: "Nuestra oficina en Los Realejos, Tenerife",
     description:
       "Trabajamos en remoto con clientes de toda España, pero tenemos una oficina física en Los Realejos para quien prefiere una reunión en persona.",
-    hoursLabel: "Lunes a viernes, 9:00 - 15:00",
+    hoursLabel: "Lunes a viernes, 8:30 - 15:30",
   },
 } as const
 

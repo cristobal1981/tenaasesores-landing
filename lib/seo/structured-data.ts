@@ -34,8 +34,8 @@ export function organizationSchema() {
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "15:00",
+      opens: "08:30",
+      closes: "15:30",
     },
     sameAs: contact.socials.map((social) => social.href),
   }

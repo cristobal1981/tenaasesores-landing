@@ -168,7 +168,7 @@ export const faqSections: readonly FaqSection[] = [
       {
         question: "¿Cuál es vuestro horario de atención?",
         answer:
-          "De lunes a viernes, de 9:00 a 15:00. Fuera de ese horario puedes escribirnos y te respondemos en el siguiente día laborable.",
+          "De lunes a viernes, de 8:30 a 15:30. Fuera de ese horario puedes escribirnos y te respondemos en el siguiente día laborable.",
       },
     ],
   },
