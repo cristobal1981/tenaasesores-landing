@@ -1,4 +1,4 @@
-import { altaAutonomoFormContent } from "@/content/alta-autonomo-form"
+import { altaAutonomoFormContent, altaAutonomoMutuaOptions } from "@/content/alta-autonomo-form"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const POSTAL_CODE_RE = /^\d{5}$/
@@ -11,6 +11,7 @@ const NIE_PREFIX = new Map<string, string>([
 ])
 
 const YES_NO_SET = new Set(["si", "no"])
+const MUTUA_VALUES = new Set<string>(altaAutonomoMutuaOptions.map((option) => option.value))
 
 export type AltaAutonomoSubmissionPayload = {
   token?: string
@@ -28,6 +29,7 @@ export type AltaAutonomoSubmissionPayload = {
   fuiste_autonomo_3_anos?: string
   fecha_baja?: string
   fecha_empezar_con_nosotros?: string
+  mutua?: string
   direccion?: string
   ciudad?: string
   provincia?: string
@@ -60,6 +62,7 @@ export type ValidatedAltaAutonomoSubmission = {
   fuiste_autonomo_3_anos?: "si" | "no"
   fecha_baja?: string
   fecha_empezar_con_nosotros: string
+  mutua: string
   direccion: string
   ciudad: string
   provincia: string
@@ -169,6 +172,23 @@ function isValidBirthDate(value: string): boolean {
   )
 }
 
+/** Fecha (YYYY-MM-DD, UTC) resultante de sumar `days` días naturales a la fecha UTC de `baseMs`. */
+function addUtcDays(baseMs: number, days: number): string {
+  const base = new Date(baseMs)
+  const utcMidnight = Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate())
+  return new Date(utcMidnight + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
+
+/** La fecha debe tener formato válido y ser al menos `minLeadDays` días naturales posterior a `now`. */
+function isValidLeadDate(value: string, minLeadDays: number, now: number): boolean {
+  if (!isValidDateValue(value)) return false
+  return value >= addUtcDays(now, minLeadDays)
+}
+
+function isValidMutua(value: string): boolean {
+  return MUTUA_VALUES.has(value.trim())
+}
+
 function isValidSpanishMobilePhone(rawValue: string): boolean {
   const value = normalizePhone(rawValue)
   if (!value.startsWith("+34")) return false
@@ -238,6 +258,7 @@ export type AltaAutonomoStepValues = {
   fuisteAutonomo3Anos: string
   fechaBaja: string
   fechaEmpezarConNosotros: string
+  mutua: string
   direccion: string
   ciudad: string
   provincia: string
@@ -274,7 +295,8 @@ function stepError(
 /** Validación por paso del wizard de alta de autónomo. */
 export function getAltaAutonomoStepValidationError(
   currentStep: number,
-  values: AltaAutonomoStepValues
+  values: AltaAutonomoStepValues,
+  now = Date.now()
 ): AltaAutonomoStepValidationError | null {
   if (currentStep === 1) {
     if (!values.nombre.trim()) return stepError("nombre")
@@ -294,14 +316,18 @@ export function getAltaAutonomoStepValidationError(
     if (values.yaEresAutonomo === "si") {
       if (!isValidDateValue(values.fechaAlta)) return stepError("fecha_alta")
     } else if (values.yaEresAutonomo === "no") {
-      if (!isValidDateValue(values.fechaDarAlta)) return stepError("fecha_dar_alta")
+      if (!isValidLeadDate(values.fechaDarAlta, altaAutonomoFormContent.minLeadDays, now)) {
+        return stepError("fecha_dar_alta")
+      }
       if (!isYesNo(values.fuisteAutonomo3Anos)) return stepError("fuiste_autonomo_3_anos")
       if (values.fuisteAutonomo3Anos === "si" && !isValidDateValue(values.fechaBaja)) {
         return stepError("fecha_baja")
       }
     }
 
-    if (!isValidDateValue(values.fechaEmpezarConNosotros)) {
+    if (!isValidMutua(values.mutua)) return stepError("mutua")
+
+    if (!isValidLeadDate(values.fechaEmpezarConNosotros, altaAutonomoFormContent.minLeadDays, now)) {
       return stepError("fecha_empezar_con_nosotros")
     }
     return null
@@ -383,6 +409,7 @@ export function isAltaAutonomoFormComplete(input: AltaAutonomoSubmissionPayload)
   const fuisteAutonomo3Anos = toTrimmedString(input.fuiste_autonomo_3_anos)
   const fechaBaja = toTrimmedString(input.fecha_baja)
   const fechaEmpezarConNosotros = toTrimmedString(input.fecha_empezar_con_nosotros)
+  const mutua = toTrimmedString(input.mutua)
   const direccion = toTrimmedString(input.direccion)
   const ciudad = toTrimmedString(input.ciudad)
   const provincia = toTrimmedString(input.provincia)
@@ -405,7 +432,7 @@ export function isAltaAutonomoFormComplete(input: AltaAutonomoSubmissionPayload)
     if (fuisteAutonomo3Anos === "si" && !fechaBaja) return false
   }
 
-  if (!fechaEmpezarConNosotros) return false
+  if (!fechaEmpezarConNosotros || !mutua) return false
   if (!direccion || !ciudad || !provincia || !codigoPostal || !pais) return false
   if (!toTrimmedString(input.direccion_fiscal)) return false
   if (!toTrimmedString(input.direccion_notificacion)) return false
@@ -419,7 +446,8 @@ export function isAltaAutonomoFormComplete(input: AltaAutonomoSubmissionPayload)
 }
 
 export function getAltaAutonomoValidationIssues(
-  input: AltaAutonomoSubmissionPayload
+  input: AltaAutonomoSubmissionPayload,
+  now = Date.now()
 ): AltaAutonomoValidationIssue[] {
   const issues: AltaAutonomoValidationIssue[] = []
   const pushIssue = (field: AltaAutonomoValidationIssueKey) => {
@@ -440,6 +468,7 @@ export function getAltaAutonomoValidationIssues(
   const fuisteAutonomo3Anos = toTrimmedString(input.fuiste_autonomo_3_anos)
   const fechaBaja = toTrimmedString(input.fecha_baja)
   const fechaEmpezarConNosotros = toTrimmedString(input.fecha_empezar_con_nosotros)
+  const mutua = toTrimmedString(input.mutua)
   const direccion = toTrimmedString(input.direccion)
   const ciudad = toTrimmedString(input.ciudad)
   const provincia = toTrimmedString(input.provincia)
@@ -470,7 +499,9 @@ export function getAltaAutonomoValidationIssues(
   if (yaEresAutonomo === "si") {
     if (!fechaAlta || !isValidDateValue(fechaAlta)) pushIssue("fecha_alta")
   } else if (yaEresAutonomo === "no") {
-    if (!fechaDarAlta || !isValidDateValue(fechaDarAlta)) pushIssue("fecha_dar_alta")
+    if (!isValidLeadDate(fechaDarAlta, altaAutonomoFormContent.minLeadDays, now)) {
+      pushIssue("fecha_dar_alta")
+    }
     if (!isYesNo(fuisteAutonomo3Anos)) {
       pushIssue("fuiste_autonomo_3_anos")
     } else if (fuisteAutonomo3Anos === "si" && (!fechaBaja || !isValidDateValue(fechaBaja))) {
@@ -478,7 +509,9 @@ export function getAltaAutonomoValidationIssues(
     }
   }
 
-  if (!fechaEmpezarConNosotros || !isValidDateValue(fechaEmpezarConNosotros)) {
+  if (!isValidMutua(mutua)) pushIssue("mutua")
+
+  if (!isValidLeadDate(fechaEmpezarConNosotros, altaAutonomoFormContent.minLeadDays, now)) {
     pushIssue("fecha_empezar_con_nosotros")
   }
 
@@ -559,7 +592,7 @@ export function validateAltaAutonomoSubmission(
     return { ok: false, code: "invalid_body" }
   }
 
-  const issues = getAltaAutonomoValidationIssues(input)
+  const issues = getAltaAutonomoValidationIssues(input, now)
   if (issues.length > 0) {
     return { ok: false, code: "invalid_body", issues }
   }
@@ -590,6 +623,7 @@ export function validateAltaAutonomoSubmission(
           ? toTrimmedString(input.fecha_baja)
           : undefined,
       fecha_empezar_con_nosotros: toTrimmedString(input.fecha_empezar_con_nosotros),
+      mutua: toTrimmedString(input.mutua),
       direccion: toTrimmedString(input.direccion),
       ciudad: toTrimmedString(input.ciudad),
       provincia: toTrimmedString(input.provincia),

@@ -16,6 +16,7 @@ export type AltaAutonomoFormDraft = {
   fuisteAutonomo3Anos: "" | "si" | "no"
   fechaBaja: string
   fechaEmpezarConNosotros: string
+  mutua: string
   direccion: string
   ciudad: string
   provincia: string
@@ -70,6 +71,7 @@ function parseDraft(raw: unknown): AltaAutonomoFormDraft | null {
     fechaBaja: typeof data.fechaBaja === "string" ? data.fechaBaja : "",
     fechaEmpezarConNosotros:
       typeof data.fechaEmpezarConNosotros === "string" ? data.fechaEmpezarConNosotros : "",
+    mutua: typeof data.mutua === "string" ? data.mutua : "",
     direccion: typeof data.direccion === "string" ? data.direccion : "",
     ciudad: typeof data.ciudad === "string" ? data.ciudad : "",
     provincia: typeof data.provincia === "string" ? data.provincia : "",

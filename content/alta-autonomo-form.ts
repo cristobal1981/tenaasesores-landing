@@ -3,12 +3,43 @@ export const altaAutonomoYesNoOptions = [
   { value: "no", label: "No" },
 ] as const
 
+export const altaAutonomoMutuaOptions = [
+  { value: "sin_preferencia", label: "Sin preferencia" },
+  { value: "A.S.E.P.E.Y.O.", label: "A.S.E.P.E.Y.O." },
+  { value: "EGARSAT", label: "EGARSAT" },
+  { value: "EMPRESA COLABORADORA", label: "EMPRESA COLABORADORA" },
+  { value: "EMPRESA EXCLUIDA DE IT", label: "EMPRESA EXCLUIDA DE IT" },
+  { value: "F.R.E.M.A.P.", label: "F.R.E.M.A.P." },
+  { value: "FRATERNIDAD-MUPRESPA", label: "FRATERNIDAD-MUPRESPA" },
+  { value: "I.N.S.S.", label: "I.N.S.S." },
+  { value: "IBERMUTUA", label: "IBERMUTUA" },
+  { value: "INSTITUTO SOCIAL DE LA MARINA", label: "INSTITUTO SOCIAL DE LA MARINA" },
+  { value: "M.A.C. MUTUA DE ACCIDENTES CANARIA", label: "M.A.C. MUTUA DE ACCIDENTES CANARIA" },
+  {
+    value: "M.A.Z. MUTUA DE ACCIDENTES DE ZARAGOZA",
+    label: "M.A.Z. MUTUA DE ACCIDENTES DE ZARAGOZA",
+  },
+  { value: "MC MUTUAL", label: "MC MUTUAL" },
+  { value: "MUTUA BALEAR", label: "MUTUA BALEAR" },
+  { value: "MUTUA DE ANDALUCIA Y CEUTA-CESMA", label: "MUTUA DE ANDALUCIA Y CEUTA-CESMA" },
+  { value: "MUTUA INTERCOMARCAL", label: "MUTUA INTERCOMARCAL" },
+  { value: "MUTUA MONTAÑESA", label: "MUTUA MONTAÑESA" },
+  { value: "MUTUA NAVARRA", label: "MUTUA NAVARRA" },
+  { value: "MUTUA UNIVERSAL MUGENAT", label: "MUTUA UNIVERSAL MUGENAT" },
+  { value: "MUTUALIA", label: "MUTUALIA" },
+  { value: "SOLIMAT", label: "SOLIMAT" },
+  { value: "UMIVALE", label: "UMIVALE" },
+  { value: "UMIVALE ACTIVA", label: "UMIVALE ACTIVA" },
+  { value: "UNIÓN DE MUTUAS UNIMAT", label: "UNIÓN DE MUTUAS UNIMAT" },
+] as const
+
 export const altaAutonomoFormContent = {
   sectionId: "solicitud-alta-autonomo-form",
   pathPrefix: "/solicitud-alta-autonomo",
   minAnnualIncomeEur: 10000,
   minAgeYears: 18,
   maxAgeYears: 100,
+  minLeadDays: 2,
   fields: {
     honeypotLabel: "Deja este campo vacio",
     nombre: "Nombre",
@@ -25,6 +56,7 @@ export const altaAutonomoFormContent = {
     fuiste_autonomo_3_anos: "¿Has sido autónomo en los últimos 3 años?",
     fecha_baja: "Fecha de baja",
     fecha_empezar_con_nosotros: "¿Cuándo quieres empezar con nosotros?",
+    mutua: "Mutua",
     direccion: "Dirección donde realizarás la actividad",
     ciudad: "Ciudad",
     provincia: "Provincia",
@@ -82,6 +114,21 @@ export const altaAutonomoFormContent = {
       triggerLabel: "¿Qué es el NAF?",
       title: "Número de Afiliación de la Seguridad Social",
       body: "Es el número que te identifica ante la Seguridad Social durante toda tu vida laboral. Si ya has trabajado antes, ya lo tienes asignado: puedes consultarlo en tu Informe de Vida Laboral o en tu tarjeta de la Seguridad Social.",
+    },
+    direccion: {
+      triggerLabel: "¿Qué dirección es esta?",
+      title: "Domicilio de la actividad",
+      body: "Es el lugar donde ejerces la actividad: un local, una oficina o tu propia vivienda si trabajas desde casa. Hacienda la usa para el alta censal.",
+    },
+    direccion_fiscal: {
+      triggerLabel: "¿Qué es la dirección fiscal?",
+      title: "Dirección fiscal",
+      body: "Es el domicilio que consta ante Hacienda para tu actividad. Normalmente coincide con el de la actividad, salvo que gestiones el negocio desde otro sitio.",
+    },
+    direccion_notificacion: {
+      triggerLabel: "¿Qué es la dirección de notificación?",
+      title: "Dirección de notificación",
+      body: "Aquí llegan las notificaciones oficiales de Hacienda y la Seguridad Social. Por defecto coincide con la fiscal, pero puedes indicar otra si lo prefieres.",
     },
   },
   actions: {
@@ -178,10 +225,11 @@ export const altaAutonomoFormContent = {
     certificado_digital: "Indica si tienes certificado digital.",
     ya_eres_autonomo: "Indica si ya eres autónomo.",
     fecha_alta: "Indica la fecha de alta actual.",
-    fecha_dar_alta: "Indica cuándo quieres darte de alta.",
+    fecha_dar_alta: "Indica una fecha de alta prevista con al menos 2 días de margen desde hoy.",
     fuiste_autonomo_3_anos: "Indica si has sido autónomo en los últimos 3 años.",
     fecha_baja: "Indica la fecha de baja.",
-    fecha_empezar_con_nosotros: "Indica cuándo quieres empezar con nosotros.",
+    fecha_empezar_con_nosotros: "Indica una fecha con al menos 2 días de margen desde hoy.",
+    mutua: "Selecciona una mutua.",
     direccion: "Indica tu dirección.",
     ciudad: "Indica tu ciudad.",
     provincia: "Selecciona una provincia válida.",
@@ -251,3 +299,4 @@ export const altaAutonomoFormContent = {
 } as const
 
 export type AltaAutonomoYesNoValue = (typeof altaAutonomoYesNoOptions)[number]["value"]
+export type AltaAutonomoMutuaValue = (typeof altaAutonomoMutuaOptions)[number]["value"]
