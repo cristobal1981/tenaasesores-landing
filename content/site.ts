@@ -283,9 +283,9 @@ const empresasTiers = [
 export const plansByAudience = {
   autonomos: {
     ...plansBase,
-    title: ["Plan para autónomos", "que quieren claridad mensual"],
+    title: ["Plan para autónomos", "sin complicaciones"],
     subtitle:
-      "Base con precio claro o plan personalizado — nuestra opción recomendada si tu caso no encaja en un paquete fijo.",
+      "Contabilidad mensual para autónomos con precio claro: plan Base fijo, o personalizado si tu operativa no encaja en un paquete estándar. Es la opción que solemos recomendar en ese caso.",
     tiers: autonomosTiers,
     customizeFormAnchor: "personalizar-plan",
     planNote:
@@ -382,7 +382,7 @@ export const services = {
       slug: "contable",
       title: "Gestión contable",
       intro:
-        "Una contabilidad clara y bien gestionada es clave para la estabilidad y el crecimiento de cualquier negocio. Ofrecemos un servicio integral de gestión y control contable para que puedas centrarte en lo que realmente importa: hacer crecer tu empresa.",
+        "Apoyo contable y fiscal para pymes: llevamos el registro, los informes financieros y el cumplimiento normativo al día, para que puedas centrarte en el negocio.",
       sections: [
         {
           title: "Registro y organización contable",
