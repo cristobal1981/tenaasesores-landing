@@ -171,7 +171,6 @@ function AltaAutonomoStepTransition({
             animate={{ opacity: 1, y: 0 }}
             exit={motionDisabled ? undefined : { opacity: 0, y: -6, transition: stepExitMotion }}
             transition={motionDisabled ? { duration: 0 } : stepMotion}
-            style={{ willChange: motionDisabled ? undefined : "opacity, transform" }}
           >
             {children}
           </m.div>
