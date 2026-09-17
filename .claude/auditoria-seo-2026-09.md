@@ -11,13 +11,14 @@
 - **60 clics / 888 impresiones** en ~11 semanas de datos reales. CTR global 6,76%. Posición media ponderada 20,2.
 - **~97% de los clics son de marca** ("tena asesores" y variantes). De las ~100 consultas del export, solo 3 generaron algún clic — todas de marca.
 - Las consultas con intención comercial real (fiscalidad autónomos, contabilidad, ubicación) tienen impresiones pero posición 40-95: invisibles en la práctica. No es un problema de indexación, es ausencia de contenido dedicado a esas búsquedas.
-- **La posición media empeora cada mes** desde el relanzamiento: 9,4 (16-30 jun) → 20,8 (jul) → 26,7 (ago). Tres periodos consecutivos de deterioro, no ruido puntual.
+- **La posición media empeora cada mes** desde el relanzamiento: 9,4 (16-30 jun) → 20,8 (jul) → 26,7 (ago). Tres periodos consecutivos de deterioro, no ruido puntual. Es compatible con el patrón típico de "luna de miel" post-relanzamiento (Google da posiciones provisionales generosas a un dominio nuevo mientras lo evalúa, y las corrige a la baja en 2-3 meses), agravado por dos causas raíz concretas: la falta de contenido de intención (ver Crítico #1) y el antiguo sitio de Odoo, que sigue vivo compitiendo por la marca (ver Crítico #2).
 
 ## Hallazgos
 
 | Severidad | Hallazgo | Evidencia | Recomendación |
 |---|---|---|---|
 | Crítico | Cero cobertura de contenido para las búsquedas con intención real | "apoyo contable y fiscal para pymes" (26 impr., pos. 67), "asesoramiento contable preciso tenerife" (8 impr., pos. 56,6), "contable los realejos" (4 impr., pos. 41) sin página dedicada | Crear páginas específicas por intención (ver plan de acción) |
+| Crítico | El antiguo sitio de Odoo (`tena-asesores-y-abogados-slp.odoo.com`) sigue vivo y compitiendo por la marca | Responde 200, con `<title>Home \| TENA ASESORES Y ABOGADOS SLP</title>` y `<link rel="canonical">` autorreferenciado (verificado en vivo 2026-09-08). Antes tenía `tenaasesores.es` como dominio propio; se le quitó al lanzar la web en Next.js, pero el sitio web de Odoo (no el backend/login, que sí sigue en uso) no se desactivó. Dos sitios reclamando ser "Tena Asesores" reparte/confunde la señal de marca (~97% de los clics son de marca) y puede explicar parte de la caída de posición mes a mes | Desinstalar la app "Sitio Web" en esa instancia de Odoo (el login/backend no depende de ella); si no es posible, vaciar sus páginas + `noindex` + quitar el canonical autorreferenciado + `Disallow: /` en su robots.txt. Después verificar esa URL en Search Console y solicitar eliminación de índice. Revisar también Google Business Profile/directorios que puedan seguir apuntando a ese dominio |
 | Alto | El diferencial fiscal canario (IGIC/REF/ZEC) está enterrado en un párrafo de `/servicios#fiscal` | Ningún title/H1/meta menciona Canarias, IGIC o ZEC | Página propia de fiscalidad canaria |
 | Alto | Posición media empeorando mes a mes desde el relanzamiento | 9,4 → 20,8 → 26,7 | Vigilancia mensual + contenido/enlaces antes de que se consolide la caída |
 | Medio | GSC todavía reporta URLs del sitio Odoo anterior (`/about-us`, `/contactus`, `/appointment`...) | Los redirects 308 ya funcionan en vivo (verificado); es indexación previa sin consolidar | Validar URLs canónicas en Search Console |
@@ -51,9 +52,11 @@
 
 ## Plan de acción — páginas nuevas propuestas
 
-**1. `/asesoria-contable-tenerife`** — cubre el clúster geográfico ("contable tenerife", "contable los realejos"...). Zona de cobertura real (Los Realejos, Puerto de la Cruz, La Orotava + resto de España en remoto), NAP visible en texto (no solo en schema), teaser de equipo, CTA a `/contacto`. Enlazada desde el panel "Nosotros" del nav (sustituye el ancla `#oficina`), footer y `/servicios`.
+**1. `/asesoria-contable-tenerife`** — **CONSTRUIDA (2026-09-08).** Cubre el clúster geográfico ("contable tenerife", "contable los realejos"...). Zona de cobertura (chips de municipios + "Tenerife"), NAP visible en texto con mapa, teaser de equipo con link a `/nosotros#equipo`, FAQ embebida (sección "Equipo y zona" de `content/faq.ts`), CTA a `/contacto`. Enlazada desde el desplegable "Nosotros" del nav, footer y `/nosotros` (tarjeta destacada). `/nosotros` se dejó solo con cultura + equipo, sin duplicar la info de ubicación (ver `about-office.tsx`, eliminado).
 
-**2. `/fiscalidad-canaria`** — cubre IGIC/REF/ZEC (hoy solo un párrafo en `/servicios#fiscal`). Bloques: IGIC (modelos, periodicidad), REF (implicaciones), ZEC (requisitos). CTA dual a `/plan-autonomos` / `/plan-empresas`. Enlazada desde el panel "Servicios" del nav, `/servicios#fiscal`, `/plan-empresas` y `/plan-autonomos`.
+**2. `/fiscalidad-canaria`** — **CONSTRUIDA (2026-09-08).** Cubre IGIC/REF/ZEC (hoy solo un párrafo en `/servicios#fiscal`). Tres bloques con datos verificados por búsqueda web: IGIC (modelo 420 trimestral, tipos 7%/3%/incrementados), REF (RIC, hasta 90% de reducción del beneficio no distribuido), ZEC (Impuesto de Sociedades al 4%, requisitos de inversión y empleo). FAQ embebida (sección "Servicios" de `content/faq.ts`, ampliada con 2 preguntas nuevas). CTA único a `/contacto` (se descartó el CTA doble a planes de la propuesta original: la ZEC solo aplica a empresas con Impuesto de Sociedades, no a autónomos, así que un botón doble sería engañoso). Enlazada desde el desplegable "Servicios" del nav, footer y el teaser que sustituyó el párrafo largo en `/servicios#fiscal`.
+
+Nota: no se incluyó el plazo de inscripción ZEC (31/12/2026 según fuentes externas) por decisión del usuario, al no estar verificado internamente y haberse ampliado varias veces en el pasado.
 
 **3. Refuerzo de contenido (sin página nueva)** en `/servicios#contable` y `/plan-autonomos` con la fraseología literal de "apoyo contable y fiscal para pymes" / "contabilidad mensual para autónomos" (hoy el copy es más abstracto).
 
@@ -61,10 +64,18 @@ Cambios técnicos que implica: añadir ambas rutas a `indexablePaths` en `lib/se
 
 Se descartó forzar "Tenerife"/"Canarias" en el title y H1 del **home**: el posicionamiento de marca es deliberadamente nacional ("sede en Tenerife, alcance nacional"). La señal geográfica vive en la página local nueva, no en la página que compite a nivel nacional.
 
-**Estado — ya implementado (fuera de esta auditoría, sesión del mismo día):**
+**4. Desactivar el sitio web de Odoo antiguo** (`tena-asesores-y-abogados-slp.odoo.com`) — tarea fuera del repo, en el panel de Odoo. No se puede redirigir el dominio completo porque esa instancia sigue en uso para el login/backend; la acción es desinstalar la app "Sitio Web" de Odoo (o, si no es posible, vaciar sus páginas + `noindex` + quitar el canonical autorreferenciado + `Disallow: /`), verificar esa URL en Search Console y pedir su eliminación del índice.
+
+**Estado — ya implementado:**
 - Schema `ProfessionalService` ampliado con `geo`, `image` y `priceRange` (`lib/seo/structured-data.ts`).
 - Enlaces "ver en Maps" del footer y `/nosotros` apuntan a la ficha real de Google Business en vez de a una búsqueda genérica por dirección.
-- Pendiente: las dos páginas nuevas (`/asesoria-contable-tenerife`, `/fiscalidad-canaria`) y la validación de URLs canónicas en Search Console.
+- `/asesoria-contable-tenerife` y `/fiscalidad-canaria` (punto 1 y 2 del plan de acción, ver detalle arriba).
+- Política de megamenú actualizada: los desplegables del nav ahora solo aparecen para temas con ≥2 páginas reales (Planes, Nosotros, Servicios); "Inicio" y "Odoo" pasaron a links simples.
+
+**Pendiente:**
+- La validación de URLs canónicas en Search Console.
+- La desactivación del sitio web de Odoo antiguo (punto 4, acción fuera del repo).
+- Refuerzo de contenido en `/servicios#contable` y `/plan-autonomos` con la fraseología literal de las consultas de intención (punto 3, no abordado todavía).
 
 ## Metodología
 

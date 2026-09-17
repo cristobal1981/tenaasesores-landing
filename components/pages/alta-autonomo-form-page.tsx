@@ -25,7 +25,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { BrisaFormCard, BrisaFormSection, DarkFormPanel } from "@/components/layout/brisa-form-section"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
-import { altaAutonomoFormContent, altaAutonomoYesNoOptions } from "@/content/alta-autonomo-form"
+import {
+  altaAutonomoFormContent,
+  altaAutonomoMutuaOptions,
+  altaAutonomoYesNoOptions,
+} from "@/content/alta-autonomo-form"
 import { legalRoutes } from "@/content/legal"
 import {
   getAltaAutonomoStepValidationError,
@@ -57,6 +61,7 @@ const STEP_FIELDS: Record<number, string[]> = {
     "fuiste_autonomo_3_anos",
     "fecha_baja",
     "fecha_empezar_con_nosotros",
+    "mutua",
   ],
   3: [
     "direccion",
@@ -171,7 +176,6 @@ function AltaAutonomoStepTransition({
             animate={{ opacity: 1, y: 0 }}
             exit={motionDisabled ? undefined : { opacity: 0, y: -6, transition: stepExitMotion }}
             transition={motionDisabled ? { duration: 0 } : stepMotion}
-            style={{ willChange: motionDisabled ? undefined : "opacity, transform" }}
           >
             {children}
           </m.div>
@@ -207,6 +211,7 @@ export function AltaAutonomoFormPage({
   const [fuisteAutonomo3Anos, setFuisteAutonomo3Anos] = useState<"" | "si" | "no">("")
   const [fechaBaja, setFechaBaja] = useState("")
   const [fechaEmpezarConNosotros, setFechaEmpezarConNosotros] = useState("")
+  const [mutua, setMutua] = useState("sin_preferencia")
   const [direccion, setDireccion] = useState("")
   const [ciudad, setCiudad] = useState("")
   const [provincia, setProvincia] = useState("")
@@ -266,6 +271,7 @@ export function AltaAutonomoFormPage({
         setFuisteAutonomo3Anos(draft.fuisteAutonomo3Anos)
         setFechaBaja(draft.fechaBaja)
         setFechaEmpezarConNosotros(draft.fechaEmpezarConNosotros)
+        setMutua(draft.mutua || "sin_preferencia")
         setDireccion(draft.direccion)
         setCiudad(draft.ciudad)
         setProvincia(isStoredOdooId(draft.provincia) ? draft.provincia : "")
@@ -320,6 +326,7 @@ export function AltaAutonomoFormPage({
       fuisteAutonomo3Anos,
       fechaBaja,
       fechaEmpezarConNosotros,
+      mutua,
       direccion,
       ciudad,
       provincia,
@@ -357,6 +364,7 @@ export function AltaAutonomoFormPage({
       fuisteAutonomo3Anos,
       fechaBaja,
       fechaEmpezarConNosotros,
+      mutua,
       direccion,
       ciudad,
       provincia,
@@ -405,6 +413,12 @@ export function AltaAutonomoFormPage({
     return () => window.clearTimeout(timer)
   }, [successMessage])
 
+  const minLeadDateValue = useMemo(() => {
+    const now = new Date()
+    const min = new Date(now.getFullYear(), now.getMonth(), now.getDate() + altaAutonomoFormContent.minLeadDays)
+    return `${min.getFullYear()}-${String(min.getMonth() + 1).padStart(2, "0")}-${String(min.getDate()).padStart(2, "0")}`
+  }, [])
+
   const stepValues: AltaAutonomoStepValues = useMemo(
     () => ({
       nombre,
@@ -421,6 +435,7 @@ export function AltaAutonomoFormPage({
       fuisteAutonomo3Anos,
       fechaBaja,
       fechaEmpezarConNosotros,
+      mutua,
       direccion,
       ciudad,
       provincia,
@@ -457,6 +472,7 @@ export function AltaAutonomoFormPage({
       fuisteAutonomo3Anos,
       fechaBaja,
       fechaEmpezarConNosotros,
+      mutua,
       direccion,
       ciudad,
       provincia,
@@ -595,6 +611,7 @@ export function AltaAutonomoFormPage({
       fuiste_autonomo_3_anos: fuisteAutonomo3Anos,
       fecha_baja: fechaBaja,
       fecha_empezar_con_nosotros: fechaEmpezarConNosotros,
+      mutua,
       direccion,
       ciudad,
       provincia,
@@ -625,6 +642,7 @@ export function AltaAutonomoFormPage({
       fuisteAutonomo3Anos,
       fechaBaja,
       fechaEmpezarConNosotros,
+      mutua,
       direccion,
       ciudad,
       provincia,
@@ -1019,6 +1037,7 @@ export function AltaAutonomoFormPage({
                       type="date"
                       className="input-on-dark"
                       value={fechaDarAlta}
+                      min={minLeadDateValue}
                       onChange={(event) => {
                         setFechaDarAlta(event.target.value)
                         clearFieldError("fecha_dar_alta")
@@ -1085,6 +1104,33 @@ export function AltaAutonomoFormPage({
           ) : null}
 
           <DarkFormField
+            name="mutua"
+            label={altaAutonomoFormContent.fields.mutua}
+            required
+            error={fieldErrors.mutua}
+          >
+            {({ id, invalid, describedBy }) => (
+              <select
+                id={id}
+                className={darkSelectClassName}
+                value={mutua}
+                onChange={(event) => {
+                  setMutua(event.target.value)
+                  clearFieldError("mutua")
+                }}
+                aria-invalid={invalid}
+                aria-describedby={describedBy}
+              >
+                {altaAutonomoMutuaOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </DarkFormField>
+
+          <DarkFormField
             name="fecha_empezar_con_nosotros"
             label={altaAutonomoFormContent.fields.fecha_empezar_con_nosotros}
             required
@@ -1096,6 +1142,7 @@ export function AltaAutonomoFormPage({
                 type="date"
                 className="input-on-dark"
                 value={fechaEmpezarConNosotros}
+                min={minLeadDateValue}
                 onChange={(event) => {
                   setFechaEmpezarConNosotros(event.target.value)
                   clearFieldError("fecha_empezar_con_nosotros")
@@ -1122,6 +1169,14 @@ export function AltaAutonomoFormPage({
           <DarkFormField
             name="direccion"
             label={altaAutonomoFormContent.fields.direccion}
+            labelAddon={
+              <FieldHelpTooltip
+                label={altaAutonomoFormContent.help.direccion.triggerLabel}
+                title={altaAutonomoFormContent.help.direccion.title}
+              >
+                {altaAutonomoFormContent.help.direccion.body}
+              </FieldHelpTooltip>
+            }
             required
             error={fieldErrors.direccion}
           >
@@ -1276,6 +1331,12 @@ export function AltaAutonomoFormPage({
             >
               {altaAutonomoFormContent.fields.direccion_fiscal_igual_domicilio}
             </label>
+            <FieldHelpTooltip
+              label={altaAutonomoFormContent.help.direccion_fiscal.triggerLabel}
+              title={altaAutonomoFormContent.help.direccion_fiscal.title}
+            >
+              {altaAutonomoFormContent.help.direccion_fiscal.body}
+            </FieldHelpTooltip>
           </div>
 
           {!direccionFiscalIgualDomicilio ? (
@@ -1404,6 +1465,12 @@ export function AltaAutonomoFormPage({
             >
               {altaAutonomoFormContent.fields.direccion_notificacion_igual_fiscal}
             </label>
+            <FieldHelpTooltip
+              label={altaAutonomoFormContent.help.direccion_notificacion.triggerLabel}
+              title={altaAutonomoFormContent.help.direccion_notificacion.title}
+            >
+              {altaAutonomoFormContent.help.direccion_notificacion.body}
+            </FieldHelpTooltip>
           </div>
 
           {!direccionNotificacionIgualFiscal ? (

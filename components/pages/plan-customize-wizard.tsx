@@ -239,7 +239,6 @@ function PlanStepTransition({
                 : { opacity: 0, y: -6, transition: stepExitMotion }
             }
             transition={motionDisabled ? { duration: 0 } : stepMotion}
-            style={{ willChange: motionDisabled ? undefined : "opacity, transform" }}
           >
             {children}
           </m.div>

@@ -1,4 +1,5 @@
 import { faqSections } from "@/content/faq"
+import { fiscalidadCanaria } from "@/content/fiscalidad-canaria"
 import { legalEntity } from "@/content/legal"
 import { contact, services, site } from "@/content/site"
 
@@ -33,8 +34,8 @@ export function organizationSchema() {
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "15:00",
+      opens: "08:30",
+      closes: "15:30",
     },
     sameAs: contact.socials.map((social) => social.href),
   }
@@ -75,6 +76,24 @@ export function servicesSchema() {
     },
     url: `${site.url}/servicios#${service.slug}`,
   }))
+}
+
+export function fiscalidadCanariaServiceSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Fiscalidad canaria: IGIC, REF y ZEC",
+    description: fiscalidadCanaria.meta.description,
+    provider: {
+      "@type": "ProfessionalService",
+      name: site.name,
+    },
+    areaServed: {
+      "@type": "State",
+      name: "Canarias",
+    },
+    url: `${site.url}/fiscalidad-canaria`,
+  }
 }
 
 export function breadcrumbSchema(items: { name: string; path: string }[]) {

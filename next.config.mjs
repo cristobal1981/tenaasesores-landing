@@ -55,6 +55,11 @@ const nextConfig = {
         destination: "/servicios",
         permanent: true,
       },
+      {
+        source: "/form-comunicacion-autonomo",
+        destination: "/servicios",
+        permanent: true,
+      },
     ]
   },
   async headers() {

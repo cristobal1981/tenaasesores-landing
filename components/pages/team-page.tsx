@@ -1,13 +1,15 @@
 "use client"
 
 import Image from "next/image"
-import { StaggerContainer, StaggerItem } from "@/components/animations"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
 import { AboutHero } from "@/components/pages/about-hero"
-import { AboutOffice } from "@/components/pages/about-office"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { TeamCardGeometries } from "@/components/pages/team-card-geometries"
+import { MarketingButton } from "@/components/ui/marketing-button"
 import { team } from "@/content/site"
 import { LinkedInIcon } from "@/components/icons/linkedin-icon"
 import { cn } from "@/lib/utils"
@@ -83,7 +85,36 @@ export function TeamPage() {
         </SectionShell>
       </section>
 
-      <AboutOffice />
+      <section className="border-t border-agua/30 bg-background py-16 md:py-24">
+        <SectionShell>
+          <FadeIn className="flex flex-col items-start gap-6 rounded-3xl border border-agua/35 bg-gradient-to-br from-card/95 via-card to-agua/15 p-8 sm:flex-row sm:items-center sm:justify-between md:p-10">
+            <div>
+              <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+                Zona de cobertura
+              </p>
+              <h2 className="mt-2 text-xl font-semibold text-on-dark sm:text-2xl">
+                Nuestra ubicación tiene su propia página
+              </h2>
+              <p className="mt-2 max-w-[48ch] text-base leading-relaxed text-muted-on-dark">
+                Dirección, teléfono, horario y las zonas de Tenerife donde trabajamos: todo vive
+                en la página de asesoría en Tenerife.
+              </p>
+            </div>
+            <MarketingButton
+              asChild
+              size="lg"
+              variant="outline"
+              marketingVariant="secondary"
+              className="shrink-0"
+            >
+              <Link href="/asesoria-contable-tenerife">
+                Ver asesoría en Tenerife
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </MarketingButton>
+          </FadeIn>
+        </SectionShell>
+      </section>
 
       <CtaBrisaBand
         eyebrow={team.cta.eyebrow}

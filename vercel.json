@@ -21,18 +21,8 @@
       "permanent": true
     },
     {
-      "source": "/blog/noticias-2",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/our-services",
       "destination": "/servicios",
-      "permanent": true
-    },
-    {
-      "source": "/blog",
-      "destination": "/",
       "permanent": true
     },
     {
@@ -42,11 +32,6 @@
     },
     {
       "source": "/onboarding",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/website/info",
       "destination": "/",
       "permanent": true
     },

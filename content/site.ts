@@ -19,7 +19,7 @@ export const site = {
     href: "tel:+34922388192",
   },
   hours: {
-    weekdays: "9:00 - 15:00",
+    weekdays: "8:30 - 15:30",
     weekend: "Cerrado",
   },
 } as const
@@ -55,49 +55,21 @@ export const navItems = [
   {
     label: "Inicio",
     href: "/",
-    panel: {
-      items: [
-        {
-          label: "Inicio",
-          href: "/",
-          description: "Vuelve a la portada y descubre nuestra propuesta completa.",
-        },
-        {
-          label: "Cómo trabajamos",
-          href: "/#como-trabajamos",
-          description:
-            "Nuestra filosofía en 5 principios: cercanía, llaneza, agilidad, valor y experiencia.",
-        },
-        {
-          label: "Qué resolvemos",
-          href: "/#servicios",
-          description:
-            "Un mismo equipo coordina áreas clave para que tengas menos fricción y más claridad.",
-        },
-        {
-          label: "Odoo y Holded · Partners oficiales",
-          href: "/#odoo",
-          description: "Tecnología cuando aporta control, velocidad y menos trabajo manual.",
-        },
-      ],
-      faqHref: "/faq#empezar",
-    },
   },
   {
     label: "Servicios",
-    href: "/servicios",
     panel: {
       items: [
         {
-          label: "Nuestro valor diferencial",
-          href: "/servicios#valor-diferencial",
-          description: "Portal de cliente, cumplimiento digital y formación para tu equipo.",
+          label: "Servicios",
+          href: "/servicios",
+          description: "Fiscal, contable, laboral y constitución de empresas.",
         },
-        ...serviceItems.map((service) => ({
-          label: service.title,
-          href: `/servicios#${service.slug}`,
-          description: service.description,
-        })),
+        {
+          label: "Fiscalidad canaria",
+          href: "/fiscalidad-canaria",
+          description: "IGIC, REF y Zona Especial Canaria (ZEC) al 4% en Impuesto de Sociedades.",
+        },
       ],
       faqHref: "/faq#servicios",
     },
@@ -105,29 +77,6 @@ export const navItems = [
   {
     label: "Odoo",
     href: "/implementacion-odoo",
-    panel: {
-      items: [
-        {
-          label: "Implementación de Odoo",
-          href: "/implementacion-odoo",
-          description:
-            "El proceso completo: auditoría, migración, facturación y acompañamiento continuo.",
-        },
-        {
-          label: "Cómo lo implementamos, fase a fase",
-          href: "/implementacion-odoo#fases",
-          description:
-            "Seguimiento visual de cada fase, de la auditoría inicial al acompañamiento continuo.",
-        },
-        {
-          label: "Por qué así",
-          href: "/implementacion-odoo#beneficios",
-          description:
-            "Lo que ganas con esta forma de trabajar: rentabilidad real, acceso Enterprise y supervisión profesional.",
-        },
-      ],
-      faqHref: "/faq#odoo",
-    },
   },
   {
     label: "Planes",
@@ -151,23 +100,17 @@ export const navItems = [
   },
   {
     label: "Nosotros",
-    href: "/nosotros",
     panel: {
       items: [
         {
-          label: "Sobre Tenaasesores",
-          href: "/nosotros#sobre-tenaasesores",
-          description: "Equipo ágil con acceso directo a profesionales, sin call center.",
+          label: "Nosotros",
+          href: "/nosotros",
+          description: "Seis profesionales especializados en fiscal, contable y laboral, sin call center.",
         },
         {
-          label: "Nuestro equipo",
-          href: "/nosotros#equipo",
-          description: "Seis profesionales especializados en fiscal, contable y laboral.",
-        },
-        {
-          label: "Nuestra oficina",
-          href: "/nosotros#oficina",
-          description: "Sede en Los Realejos, Tenerife, con alcance nacional en remoto.",
+          label: "Asesoría en Tenerife",
+          href: "/asesoria-contable-tenerife",
+          description: "Sede en Los Realejos, con cobertura en toda la isla y alcance nacional en remoto.",
         },
       ],
       faqHref: "/faq#equipo",
@@ -340,9 +283,9 @@ const empresasTiers = [
 export const plansByAudience = {
   autonomos: {
     ...plansBase,
-    title: ["Plan para autónomos", "que quieren claridad mensual"],
+    title: ["Plan para autónomos", "sin complicaciones"],
     subtitle:
-      "Base con precio claro o plan personalizado — nuestra opción recomendada si tu caso no encaja en un paquete fijo.",
+      "Contabilidad mensual para autónomos con precio claro: plan Base fijo, o personalizado si tu operativa no encaja en un paquete estándar. Es la opción que solemos recomendar en ese caso.",
     tiers: autonomosTiers,
     customizeFormAnchor: "personalizar-plan",
     planNote:
@@ -424,8 +367,8 @@ export const services = {
         },
         {
           title: "Fiscalidad canaria (IGIC, REF, ZEC)",
-          description:
-            "Gestionamos tus modelos de IGIC y te orientamos en las particularidades del Régimen Económico y Fiscal de Canarias, incluida la Zona Especial Canaria (ZEC) cuando tu actividad pueda beneficiarse.",
+          description: "El IGIC, el REF y la Zona Especial Canaria tienen su propia página, con todos los detalles.",
+          href: "/fiscalidad-canaria",
         },
       ],
       benefits: [
@@ -439,7 +382,7 @@ export const services = {
       slug: "contable",
       title: "Gestión contable",
       intro:
-        "Una contabilidad clara y bien gestionada es clave para la estabilidad y el crecimiento de cualquier negocio. Ofrecemos un servicio integral de gestión y control contable para que puedas centrarte en lo que realmente importa: hacer crecer tu empresa.",
+        "Apoyo contable y fiscal para pymes: llevamos el registro, los informes financieros y el cumplimiento normativo al día, para que puedas centrarte en el negocio.",
       sections: [
         {
           title: "Registro y organización contable",
@@ -663,7 +606,7 @@ export const about = {
     title: "Nuestra oficina en Los Realejos, Tenerife",
     description:
       "Trabajamos en remoto con clientes de toda España, pero tenemos una oficina física en Los Realejos para quien prefiere una reunión en persona.",
-    hoursLabel: "Lunes a viernes, 9:00 - 15:00",
+    hoursLabel: "Lunes a viernes, 8:30 - 15:30",
   },
 } as const
 
@@ -811,6 +754,7 @@ export const footer = {
     "Asesoramiento y consultoría empresarial online: contabilidad en tiempo real, fiscal y laboral para autónomos, pymes y empresas digitales.",
   services: [
     { label: "Gestión fiscal", href: "/servicios#fiscal" },
+    { label: "Fiscalidad canaria", href: "/fiscalidad-canaria" },
     { label: "Gestión contable", href: "/servicios#contable" },
     { label: "Gestión laboral", href: "/servicios#laboral" },
     { label: "Constitución", href: "/servicios#constitucion" },
@@ -823,6 +767,7 @@ export const footer = {
     { label: "Servicios", href: "/servicios" },
     { label: "Implementación de Odoo", href: "/implementacion-odoo" },
     { label: "Nosotros", href: "/nosotros" },
+    { label: "Asesoría en Tenerife", href: "/asesoria-contable-tenerife" },
     // { label: "Testimonios", href: "/#testimonios" }, // testimonialsEnabled
     { label: "Contacto", href: "/contacto" },
     { label: "FAQ", href: "/faq" },

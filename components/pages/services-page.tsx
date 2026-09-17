@@ -9,6 +9,7 @@ import { MarketingSectionHeading } from "@/components/layout/marketing-section-h
 import { SectionShell } from "@/components/layout/section-shell"
 import { ChecklistItem } from "@/components/ui/checklist-item"
 import { ChipScrollRow } from "@/components/ui/chip-scroll-row"
+import { TextLinkWithIcon } from "@/components/ui/text-link"
 import { services } from "@/content/site"
 import { cn } from "@/lib/utils"
 
@@ -174,6 +175,11 @@ export function ServicesPage() {
                     <p className="text-sm leading-relaxed text-muted-on-dark">
                       {block.description}
                     </p>
+                    {"href" in block ? (
+                      <TextLinkWithIcon href={block.href} className="mt-2 text-sm">
+                        Ver más
+                      </TextLinkWithIcon>
+                    ) : null}
                   </StaggerItem>
                 ))}
               </StaggerContainer>
