@@ -1,4 +1,5 @@
 import withBundleAnalyzerInit from "@next/bundle-analyzer"
+import { withPayload } from "@payloadcms/next/withPayload"
 
 const withBundleAnalyzer = withBundleAnalyzerInit({
   enabled: process.env.ANALYZE === "true",
@@ -36,7 +37,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/blog/:path*",
+        source: "/blog/noticias-2",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/blog/2",
         destination: "/",
         permanent: true,
       },
@@ -104,4 +110,4 @@ const nextConfig = {
   },
 }
 
-export default withBundleAnalyzer(nextConfig)
+export default withPayload(withBundleAnalyzer(nextConfig))
