@@ -25,6 +25,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
     },
+    // Aísla las tablas de Payload en su propio schema: este Postgres es
+    // compartido con syntia-app, que ya tiene su propia tabla public.users.
+    schemaName: "payload",
   }),
   // Desajuste de tipos entre las sobrecargas de sharp y SharpDependency
   // (issue conocido en la comunidad de Payload); el runtime es compatible.
