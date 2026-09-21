@@ -5,11 +5,11 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
 import { AboutHero } from "@/components/pages/about-hero"
+import { CoverageDispatchMap } from "@/components/pages/coverage-dispatch-map"
 import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
 import { TeamCardGeometries } from "@/components/pages/team-card-geometries"
-import { MarketingButton } from "@/components/ui/marketing-button"
 import { team } from "@/content/site"
 import { LinkedInIcon } from "@/components/icons/linkedin-icon"
 import { cn } from "@/lib/utils"
@@ -87,31 +87,32 @@ export function TeamPage() {
 
       <section className="border-t border-agua/30 bg-background py-16 md:py-24">
         <SectionShell>
-          <FadeIn className="flex flex-col items-start gap-6 rounded-3xl border border-agua/35 bg-gradient-to-br from-card/95 via-card to-agua/15 p-8 sm:flex-row sm:items-center sm:justify-between md:p-10">
-            <div>
-              <p className="text-xs font-semibold tracking-wide text-primary uppercase">
-                Zona de cobertura
-              </p>
-              <h2 className="mt-2 text-xl font-semibold text-on-dark sm:text-2xl">
-                Nuestra ubicación tiene su propia página
-              </h2>
-              <p className="mt-2 max-w-[48ch] text-base leading-relaxed text-muted-on-dark">
-                Dirección, teléfono, horario y las zonas de Tenerife donde trabajamos: todo vive
-                en la página de asesoría en Tenerife.
-              </p>
-            </div>
-            <MarketingButton
-              asChild
-              size="lg"
-              variant="outline"
-              marketingVariant="secondary"
-              className="shrink-0"
+          <FadeIn>
+            <Link
+              href="/asesoria-contable-tenerife"
+              className="group grid gap-8 rounded-2xl transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-4 focus-visible:ring-offset-background lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-center lg:gap-14"
             >
-              <Link href="/asesoria-contable-tenerife">
-                Ver asesoría en Tenerife
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </MarketingButton>
+              <div>
+                <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+                  Zona de cobertura
+                </p>
+                <h2 className="mt-2 text-xl font-semibold text-on-dark sm:text-2xl">
+                  Presenciales en Tenerife, online en toda España
+                </h2>
+                <p className="mt-2 max-w-[48ch] text-base leading-relaxed text-muted-on-dark">
+                  Autónomos y pymes de toda España, con reunión presencial para quien está en la
+                  isla y seguimiento online para el resto.
+                </p>
+                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                  Ver asesoría en Tenerife
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </div>
+
+              <div className="rounded-2xl transition-transform duration-500 ease-out group-hover:-translate-y-1">
+                <CoverageDispatchMap showLabels={false} />
+              </div>
+            </Link>
           </FadeIn>
         </SectionShell>
       </section>
