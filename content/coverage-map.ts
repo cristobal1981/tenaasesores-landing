@@ -36,6 +36,9 @@ const nodeCoordinates: Record<string, { x: number; y: number }> = {
   Granada: { x: 403.8, y: 405.2 },
   "Islas Baleares": { x: 682.2, y: 269.2 },
   "Las Palmas": { x: 133.2, y: 505.7 },
+  Vigo: { x: 175.5, y: 109.6 },
+  "La Palma": { x: 40.5, y: 480.2 },
+  Lanzarote: { x: 208.4, y: 467.4 },
 }
 
 export const coverageMapRoutes = asesoriaContableTenerife.coverage.areas

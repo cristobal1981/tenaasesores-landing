@@ -25,6 +25,8 @@ function bezierPath(x0: number, y0: number, x2: number, y2: number, bow = 0.22) 
 // posición por defecto (centrada, encima del nodo).
 const LABEL_OFFSETS: Record<string, { dx: number; dy: number; anchor: "start" | "middle" | "end" }> = {
   "Las Palmas": { dx: 12, dy: 4, anchor: "start" },
+  "La Palma": { dx: 0, dy: -12, anchor: "middle" },
+  Lanzarote: { dx: -8, dy: -8, anchor: "end" },
 }
 const DEFAULT_LABEL_OFFSET = { dx: 0, dy: -12, anchor: "middle" as const }
 
@@ -99,6 +101,7 @@ export function CoverageDispatchMap({ showLabels = true }: CoverageDispatchMapPr
           return (
             <g
               key={route.name}
+              className="cursor-crosshair"
               onMouseEnter={() => setHovered(route.name)}
               onMouseLeave={() => setHovered(null)}
             >
@@ -134,6 +137,7 @@ export function CoverageDispatchMap({ showLabels = true }: CoverageDispatchMapPr
 
         <g
           aria-labelledby={showLabels ? originLabelId : undefined}
+          className="cursor-crosshair"
           onMouseEnter={() => setHovered(HUB_HOVER)}
           onMouseLeave={() => setHovered(null)}
         >
@@ -157,7 +161,7 @@ export function CoverageDispatchMap({ showLabels = true }: CoverageDispatchMapPr
             <text
               id={originLabelId}
               x={coverageMapOrigin.x - 10}
-              y={coverageMapOrigin.y + 4}
+              y={coverageMapOrigin.y + 12}
               textAnchor="end"
               className="fill-on-dark text-[13px] font-semibold tracking-wide sm:text-[14px]"
             >

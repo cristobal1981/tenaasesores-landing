@@ -25,6 +25,9 @@ export const asesoriaContableTenerife = {
       "Islas Baleares",
       "Murcia",
       "Granada",
+      "Vigo",
+      "La Palma",
+      "Lanzarote",
     ],
   },
   services: {
