@@ -84,7 +84,7 @@ export function ServicesPage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Valor diferencial */}
-      <section id="valor-diferencial" className="bg-surface-light py-20 md:py-28">
+      <section id="valor-diferencial" className="bg-surface-light pt-16 pb-20 md:pt-20 md:pb-28">
         <SectionShell>
           <MarketingSectionHeading
             badge={valueDifferential.badge}

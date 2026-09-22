@@ -4,6 +4,7 @@ import { CtaBrisaBand } from "@/components/landing/cta-brisa-band"
 import { DarkPageHero } from "@/components/layout/dark-page-hero"
 import { FaqAccordionList } from "@/components/faq/faq-accordion-list"
 import { FadeIn, FloatingElement } from "@/components/animations"
+import { CoverageDispatchMap } from "@/components/pages/coverage-dispatch-map"
 import { LocationDetails } from "@/components/pages/location-details"
 import { MarketingSectionHeading } from "@/components/layout/marketing-section-heading"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -28,6 +29,14 @@ export function AsesoriaContableTenerifePage() {
         align="center"
         className="border-b-0"
       />
+
+      <section className="border-t border-agua/30 bg-background py-12 md:py-16">
+        <SectionShell>
+          <FadeIn>
+            <CoverageDispatchMap />
+          </FadeIn>
+        </SectionShell>
+      </section>
 
       <section
         id="cobertura"

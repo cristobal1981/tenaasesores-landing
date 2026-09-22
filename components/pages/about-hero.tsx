@@ -30,7 +30,7 @@ export function AboutHero() {
     <section
       ref={sectionRef}
       id="sobre-tenaasesores"
-      className="relative overflow-hidden bg-surface-dark pt-20 pb-16 md:pt-28 md:pb-20"
+      className="relative overflow-hidden bg-surface-dark py-16 md:py-20"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <FloatingElement

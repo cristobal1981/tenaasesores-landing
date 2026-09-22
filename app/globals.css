@@ -613,6 +613,23 @@
   animation: chat-typing-dot 1.1s ease-in-out infinite;
 }
 
+/* Coverage dispatch map (/asesoria-contable-tenerife) — subtle marching-dash flow on each route. */
+@keyframes route-dash {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+.route-line {
+  stroke-dasharray: 2 7;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .route-line {
+    animation: route-dash 3.2s linear infinite;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -626,6 +643,10 @@
   }
 
   .animate-ping {
+    animation: none;
+  }
+
+  .route-line {
     animation: none;
   }
 

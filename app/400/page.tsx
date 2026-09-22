@@ -9,8 +9,6 @@ export default function BadRequestPage() {
       code={page.code}
       title={page.title}
       description={page.description}
-      image={page.image}
-      imageAlt={page.imageAlt}
       primaryHref={page.primaryHref}
       primaryLabel={page.primaryLabel}
     />
