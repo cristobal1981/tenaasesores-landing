@@ -1,7 +1,3 @@
-import { asesoriaContableTenerife } from "@/content/asesoria-contable-tenerife"
-
-const ORIGIN_NAME = "Santa Cruz de Tenerife" as const
-
 // Silueta de España (comunidades autónomas peninsulares + Baleares, sin Ceuta/Melilla)
 // y de Canarias, proyectadas (Mercator) y simplificadas a partir del topojson del
 // Instituto Geográfico Nacional (paquete "es-atlas", MIT). viewBox: 0 0 900 560.
@@ -41,9 +37,9 @@ const nodeCoordinates: Record<string, { x: number; y: number }> = {
   Lanzarote: { x: 208.4, y: 467.4 },
 }
 
-export const coverageMapRoutes = asesoriaContableTenerife.coverage.areas
-  .filter((area) => area !== ORIGIN_NAME)
-  .flatMap((name) => {
-    const coords = nodeCoordinates[name]
-    return coords ? [{ name, ...coords }] : []
-  })
+// Independiente de coverage.areas (los chips agrupan "Islas Canarias" en uno solo
+// para no saturar de pastillas la sección; el mapa sigue mostrando cada nodo real).
+export const coverageMapRoutes = Object.entries(nodeCoordinates).map(([name, coords]) => ({
+  name,
+  ...coords,
+}))

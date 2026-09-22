@@ -15,19 +15,16 @@ export const asesoriaContableTenerife = {
     description:
       "Trabajamos con autónomos y pymes de toda España: reunión presencial en Tenerife para quien la prefiere, seguimiento online para el resto, sin importar la provincia.",
     areas: [
-      "Santa Cruz de Tenerife",
+      "Islas Canarias",
       "Madrid",
       "Barcelona",
       "Valencia",
       "Sevilla",
       "Málaga",
-      "Las Palmas",
       "Islas Baleares",
       "Murcia",
       "Granada",
       "Vigo",
-      "La Palma",
-      "Lanzarote",
     ],
   },
   services: {
