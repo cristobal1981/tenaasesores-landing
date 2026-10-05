@@ -82,7 +82,7 @@ export const intentDefinitions: IntentDefinition[] = [
   {
     id: "team",
     patterns: [/equipo/, /quienes/, /profesional/, /persona/],
-    keywords: ["equipo", "nosotros", "profesionales", "cristobal", "ariana"],
+    keywords: ["equipo", "nosotros", "profesionales", "cristobal", "ariana", "alba"],
   },
   {
     id: "plans",

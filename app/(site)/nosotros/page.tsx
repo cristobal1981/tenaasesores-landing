@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo/metadata"
 export const metadata: Metadata = pageMetadata({
   title: "Nuestro equipo | tenaasesores",
   description:
-    "Conoce al equipo de tenaasesores: seis profesionales especializados en fiscal, contable, laboral y Odoo, con acceso directo, sin call center.",
+    "Conoce al equipo de tenaasesores: siete profesionales especializados en fiscal, contable, laboral y Odoo, con acceso directo, sin call center.",
   path: "/nosotros",
 })
 

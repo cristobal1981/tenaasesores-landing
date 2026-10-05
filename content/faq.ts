@@ -163,7 +163,7 @@ export const faqSections: readonly FaqSection[] = [
       {
         question: "¿Con quién hablaré si contrato?",
         answer:
-          "Somos un equipo de seis profesionales con trato directo. Conoces a las personas que gestionan tu caso, sin intermediarios ni call center.",
+          "Somos un equipo de siete profesionales con trato directo. Conoces a las personas que gestionan tu caso, sin intermediarios ni call center.",
       },
       {
         question: "¿Cuál es vuestro horario de atención?",

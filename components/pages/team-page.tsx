@@ -11,7 +11,6 @@ import { MarketingSectionHeading } from "@/components/layout/marketing-section-h
 import { SectionShell } from "@/components/layout/section-shell"
 import { TeamCardGeometries } from "@/components/pages/team-card-geometries"
 import { team } from "@/content/site"
-import { LinkedInIcon } from "@/components/icons/linkedin-icon"
 import { cn } from "@/lib/utils"
 
 export function TeamPage() {
@@ -66,13 +65,6 @@ export function TeamPage() {
                     <div className="min-w-0">
                       <h3 className="text-xl leading-tight font-semibold text-on-dark">{member.name}</h3>
                       <p className="mt-1 text-sm font-medium text-primary">{member.role}</p>
-                      <button
-                        type="button"
-                        className="mt-3 inline-flex text-primary transition-colors hover:text-primary/80 focus-visible:outline-none"
-                        aria-label={`LinkedIn de ${member.name}`}
-                      >
-                        <LinkedInIcon className="h-[22px] w-[22px]" />
-                      </button>
                     </div>
                   </div>
 
