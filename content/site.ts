@@ -492,7 +492,7 @@ export const team = {
   badge: "Nuestro equipo",
   title: ["Personas reales,", "trato directo."],
   subtitle:
-    "Seis profesionales especializados en fiscal, contable y laboral. Pon cara a quien lleva tu expediente cada mes.",
+    "Siete profesionales especializados en fiscal, contable y laboral. Pon cara a quien lleva tu expediente cada mes.",
   members: [
     {
       name: "Cristóbal",
@@ -529,6 +529,12 @@ export const team = {
       role: "Tecnología y procesos",
       photo: "/team/guillermo.avif",
       bio: "Automatización, integraciones y buenas prácticas en Odoo. Menos tareas manuales, más tiempo para lo importante.",
+    },
+    {
+      name: "Alba",
+      role: "Implementación Odoo",
+      photo: "/team/alba.avif",
+      bio: "Implanta Odoo en los negocios de la asesoría y ayuda con la contabilidad dentro del sistema: configuración, puesta en marcha y acompañamiento día a día.",
     },
   ],
   cta: {
@@ -599,7 +605,7 @@ export const about = {
   stats: [
     { end: 150, prefix: "+", suffix: "", label: "Clientes activos" },
     { end: 24, prefix: "", suffix: "h", label: "Respuesta garantizada" },
-    { end: 6, prefix: "", suffix: "", label: "Profesionales en equipo" },
+    { end: 7, prefix: "", suffix: "", label: "Profesionales en equipo" },
     { end: 0, prefix: "", suffix: "", label: "Permanencias" },
   ],
   office: {

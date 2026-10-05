@@ -38,7 +38,7 @@ export const asesoriaContableTenerife = {
     badge: "Por qué un despacho de Tenerife",
     title: ["15 años", "asesorando en la isla"],
     description:
-      "Somos seis personas. Cristóbal, el socio fundador, lleva más de 15 años asesorando pymes y autónomos en Tenerife, hoy también a distancia por toda España. Cero permanencia: puedes irte cuando quieras, sin penalización. Respuesta garantizada en 24h.",
+      "Somos siete personas. Cristóbal, el socio fundador, lleva más de 15 años asesorando pymes y autónomos en Tenerife, hoy también a distancia por toda España. Cero permanencia: puedes irte cuando quieras, sin penalización. Respuesta garantizada en 24h.",
     cta: { label: "Conoce al equipo que lleva tu expediente", href: "/nosotros#equipo" },
   },
   cta: {
