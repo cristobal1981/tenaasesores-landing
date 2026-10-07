@@ -2,8 +2,7 @@
 
 import { useEffect } from "react"
 import { Host_Grotesk, Archivo } from "next/font/google"
-import { ErrorScreen } from "@/components/errors/error-screen"
-import { errorPages } from "@/content/errors"
+import { ErrorStage } from "@/components/errors/error-stage"
 import "./globals.css"
 
 const hostGrotesk = Host_Grotesk({
@@ -31,23 +30,13 @@ export default function GlobalError({
     console.error(error)
   }, [error])
 
-  const page = errorPages[500]
-
   return (
     <html
       lang="es"
       className={`${hostGrotesk.variable} ${archivo.variable} bg-background`}
     >
       <body className={`${archivo.className} antialiased`}>
-        <ErrorScreen
-          code={page.code}
-          title={page.title}
-          description={page.description}
-          primaryHref={page.primaryHref}
-          primaryLabel={page.primaryLabel}
-          onRetry={reset}
-          supportRef={error.digest}
-        />
+        <ErrorStage variant="fatal" onRetry={reset} digest={error.digest} />
       </body>
     </html>
   )

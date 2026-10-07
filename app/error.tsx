@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { ErrorScreen } from "@/components/errors/error-screen"
-import { errorPages } from "@/content/errors"
+import { ErrorStage } from "@/components/errors/error-stage"
 
 export default function Error({
   error,
@@ -15,17 +14,5 @@ export default function Error({
     console.error(error)
   }, [error])
 
-  const page = errorPages[500]
-
-  return (
-    <ErrorScreen
-      code={page.code}
-      title={page.title}
-      description={page.description}
-      primaryHref={page.primaryHref}
-      primaryLabel={page.primaryLabel}
-      onRetry={reset}
-      supportRef={error.digest}
-    />
-  )
+  return <ErrorStage variant="500" onRetry={reset} digest={error.digest} />
 }

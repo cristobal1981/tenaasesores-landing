@@ -1,16 +1,5 @@
-import { ErrorScreen } from "@/components/errors/error-screen"
-import { errorPages } from "@/content/errors"
+import { ErrorStage } from "@/components/errors/error-stage"
 
 export default function NotFound() {
-  const page = errorPages[404]
-
-  return (
-    <ErrorScreen
-      code={page.code}
-      title={page.title}
-      description={page.description}
-      primaryHref={page.primaryHref}
-      primaryLabel={page.primaryLabel}
-    />
-  )
+  return <ErrorStage variant="404" />
 }
