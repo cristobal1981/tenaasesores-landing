@@ -82,10 +82,6 @@ export function ErrorStage({ variant, onRetry, digest }: ErrorStageProps) {
           </span>
 
           <div className="relative mx-[0.05em]">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-[96%] left-1/2 h-[0.2em] w-[1.15em] -translate-x-1/2 rounded-[50%] bg-secondary/55"
-            />
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
@@ -94,6 +90,11 @@ export function ErrorStage({ variant, onRetry, digest }: ErrorStageProps) {
                 className="sappo-ripple pointer-events-none absolute top-[100%] left-1/2 h-[0.34em] w-[1.9em] -translate-x-1/2 -translate-y-1/4 rounded-[50%] border border-turquesa/60"
               />
             ))}
+
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-[96%] left-1/2 h-[0.2em] w-[1.15em] -translate-x-1/2 rounded-[50%] bg-secondary"
+            />
 
             <span ref={hopRef} className="sappo-hop block">
               <button
