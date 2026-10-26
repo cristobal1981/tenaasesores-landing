@@ -97,6 +97,27 @@ function mapUpstreamError(status: number, payloadError?: string): string {
   return "upstream_unavailable"
 }
 
+/** Respuestas normales del flujo (el enlace no sirve o el formulario es inválido): no son un fallo del servicio. */
+const EXPECTED_ERRORS = new Set(["expired", "used", "revoked", "not_found", "validation"])
+
+/**
+ * Deja en el log por qué falló la llamada a Syntia (estado y código, con el host al que se
+ * llamó). Nunca se registra la URL completa (lleva el token), ni cabeceras, ni el secreto.
+ */
+function logUpstreamFailure(
+  operation: "validate" | "submit",
+  baseUrl: string,
+  details: Record<string, unknown>
+) {
+  let host = baseUrl
+  try {
+    host = new URL(baseUrl).host
+  } catch {
+    // baseUrl mal formada: se registra tal cual para que se vea.
+  }
+  console.error(`[alta-autonomo] ${operation} upstream failure`, { host, ...details })
+}
+
 export async function validateAltaAutonomoOnboardingToken(
   token: string
 ): Promise<SyntiaTokenValidationResult> {
@@ -129,6 +150,14 @@ export async function validateAltaAutonomoOnboardingToken(
 
   if (!response.ok || response.status === 204 || !payload?.ok || !hasCatalog) {
     const error = mapUpstreamError(response.status, payload?.error)
+    if (!EXPECTED_ERRORS.has(error)) {
+      logUpstreamFailure("validate", baseUrl, {
+        status: response.status,
+        error,
+        hasPayload: payload !== null,
+        hasCatalog,
+      })
+    }
     return {
       ok: false,
       status: response.status,
@@ -177,10 +206,18 @@ export async function submitAltaAutonomoOnboarding(
   const payload = await readJsonBody<SubmitApiResponse>(response)
 
   if (!response.ok || response.status === 204 || !payload) {
+    const error = mapUpstreamError(response.status, payload?.error)
+    if (!EXPECTED_ERRORS.has(error)) {
+      logUpstreamFailure("submit", baseUrl, {
+        status: response.status,
+        error,
+        hasPayload: payload !== null,
+      })
+    }
     return {
       ok: false,
       status: response.status,
-      error: mapUpstreamError(response.status, payload?.error),
+      error,
       fieldErrors: payload?.fieldErrors,
     }
   }
