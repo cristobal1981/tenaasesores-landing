@@ -306,7 +306,7 @@ export const legalPages = {
         id: "derechos",
         title: "8. Derechos de las personas interesadas",
         paragraphs: [
-          "Puedes ejercer los derechos de **acceso, rectificación, supresión, oposición, limitación y portabilidad** escribiendo a **info@tenaasesores.es**, adjuntando copia de un documento que acredite tu identidad.",
+          "Puedes ejercer los derechos de **acceso, rectificación, supresión, oposición, limitación y portabilidad** escribiendo a **contacto@tenaasesores.es**, adjuntando copia de un documento que acredite tu identidad.",
           "Si retiras el consentimiento, *ello no afectará a la licitud del tratamiento* basado en el consentimiento previo a su retirada.",
         ],
       },
