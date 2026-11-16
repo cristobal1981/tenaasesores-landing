@@ -12,7 +12,7 @@ export const site = {
     "Asesoramiento y consultoría empresarial online. Servicios profesionales especializados en empresas digitales: fiscalidad, contabilidad, laboral y constitución de empresas.",
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.tenaasesores.es",
   location: "Oficina en Los Realejos, Tenerife",
-  email: "info@tenaasesores.es",
+  email: "contacto@tenaasesores.es",
   technicalEmail: "tecnico@tenaasesores.es",
   phone: {
     display: "+34 922 38 81 92",
